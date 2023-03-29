@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.mib.lib_auth.repository.SessionRepository
-import com.mib.sage.R
+import com.mib.sage_user.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,7 +23,7 @@ class MainActivity : FragmentActivity() {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.colorAccent)
         setContentView(R.layout.activity_main)
         setupNavGraph()
     }
@@ -63,11 +63,12 @@ class MainActivity : FragmentActivity() {
 
         val isLoggedIn = !sessionRepository.getAccessToken().isNullOrBlank()
 //        val skipValueProposition = !homePref.shouldShowValueProposition
-        navGraph.startDestination = if (isLoggedIn) {
-            R.id.homeFragment
-        } else {
-            R.id.loginFragment
-        }
+        navGraph.startDestination = R.id.homeFragment
+//        if (isLoggedIn) {
+//            R.id.homeFragment
+//        } else {
+//            R.id.loginFragment
+//        }
 
         navHostFragment.navController.graph = navGraph
     }

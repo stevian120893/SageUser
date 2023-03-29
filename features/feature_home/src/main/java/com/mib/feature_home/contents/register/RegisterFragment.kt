@@ -18,8 +18,6 @@ import com.mib.feature_home.R
 import com.mib.feature_home.contents.register.RegisterViewModel.Companion.EVENT_UPDATE_BANK
 import com.mib.feature_home.contents.register.RegisterViewModel.Companion.EVENT_UPDATE_LOCATION
 import com.mib.feature_home.databinding.FragmentRegisterBinding
-import com.mib.feature_home.domain.model.Bank
-import com.mib.feature_home.domain.model.Location
 import com.mib.feature_home.utils.createEasyImage
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +31,6 @@ import pl.aprilapps.easyphotopicker.DefaultCallback
 import pl.aprilapps.easyphotopicker.EasyImage
 import pl.aprilapps.easyphotopicker.MediaFile
 import pl.aprilapps.easyphotopicker.MediaSource
-import retrofit2.http.Part
 
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<RegisterViewModel>(0) {
@@ -58,8 +55,8 @@ class RegisterFragment : BaseFragment<RegisterViewModel>(0) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getLocations()
-        viewModel.getBanks()
+//        viewModel.getLocations()
+//        viewModel.getBanks()
     }
 
     override fun onCreateView(
@@ -139,49 +136,49 @@ class RegisterFragment : BaseFragment<RegisterViewModel>(0) {
     }
 
     private fun observeLiveData(context: Context) {
-        viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-            when(state.event) {
-                EVENT_UPDATE_LOCATION -> {
-                    locationsAdapter = ArrayAdapter<String>(
-                        context,
-                        android.R.layout.simple_spinner_item,
-                        state.locations?.map { "${it.code} - ${it.name}" } ?: emptyList()
-                    )
-                    locationsAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    binding.snLocation.adapter = locationsAdapter
-                    setLocationSpinnerListener(state.locations)
-                }
-                EVENT_UPDATE_BANK -> {
-                    banksAdapter = ArrayAdapter<String>(
-                        context,
-                        android.R.layout.simple_spinner_item,
-                        state.banks?.map { "${it.code} - ${it.name}" } ?: emptyList()
-                    )
-                    banksAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    binding.snBank.adapter = banksAdapter
-                    setBankSpinnerListener(state.banks)
-                }
-            }
-        }
+//        viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
+//            when(state.event) {
+//                EVENT_UPDATE_LOCATION -> {
+//                    locationsAdapter = ArrayAdapter<String>(
+//                        context,
+//                        android.R.layout.simple_spinner_item,
+//                        state.locations?.map { "${it.code} - ${it.name}" } ?: emptyList()
+//                    )
+//                    locationsAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    binding.snLocation.adapter = locationsAdapter
+//                    setLocationSpinnerListener(state.locations)
+//                }
+//                EVENT_UPDATE_BANK -> {
+//                    banksAdapter = ArrayAdapter<String>(
+//                        context,
+//                        android.R.layout.simple_spinner_item,
+//                        state.banks?.map { "${it.code} - ${it.name}" } ?: emptyList()
+//                    )
+//                    banksAdapter?.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//                    binding.snBank.adapter = banksAdapter
+//                    setBankSpinnerListener(state.banks)
+//                }
+//            }
+//        }
     }
 
-    private fun setLocationSpinnerListener(locations: List<Location>?) {
-        binding.snLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.updateSelectedLocation(locations?.get(position)?.code.orEmpty())
-            }
-        }
-    }
-
-    private fun setBankSpinnerListener(banks: List<Bank>?) {
-        binding.snBank.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                viewModel.updateSelectedBank(banks?.get(position)?.code.orEmpty())
-            }
-        }
-    }
+//    private fun setLocationSpinnerListener(locations: List<Location>?) {
+//        binding.snLocation.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//            override fun onNothingSelected(parent: AdapterView<*>?) {}
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                viewModel.updateSelectedLocation(locations?.get(position)?.code.orEmpty())
+//            }
+//        }
+//    }
+//
+//    private fun setBankSpinnerListener(banks: List<Bank>?) {
+//        binding.snBank.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+//            override fun onNothingSelected(parent: AdapterView<*>?) {}
+//            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                viewModel.updateSelectedBank(banks?.get(position)?.code.orEmpty())
+//            }
+//        }
+//    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

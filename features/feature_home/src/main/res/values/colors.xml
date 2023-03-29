@@ -10,8 +10,9 @@
     <color name="semi_white">#F8F7F7</color>
     <color name="red">#E04F5F</color>
     <color name="red_bright">#FF0303</color>
+    <color name="default_dot">#D0DAAC</color>
 
-    <color name="textColorPrimary">#38475B</color>
+    <color name="textColorPrimary">#404040</color>
     <color name="textColorSecondary">#778390</color>
     <color name="textColorThird">#BABFB6</color>
     <color name="textColorGray">#9E9E9E</color>
@@ -30,4 +31,9 @@
     <color name="color_status_approved">#22C73C</color>
 
     <color name="color_bg_gray">#F2F2F2</color>
+
+    <color name="iconActive">#3D3D3D</color>
+    <color name="iconActiveDarker">#2E2E2E</color>
+    <color name="iconActiveLighter">#8D8D8D</color>
+    <color name="iconDisabled">#B6B6B6</color>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/home_bottom_menu_home" />
+    <item
+        android:id="@+id/navigation_promo"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/home_bottom_menu_promo" />
+    <item
+        android:id="@+id/navigation_order_history"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/home_bottom_menu_order_history" />
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_copy"
+        android:title="@string/home_bottom_menu_profile" />
+
+</menu>

@@ -1,9 +1,9 @@
 package com.mib.feature_home.repository
 
-import com.mib.feature_home.domain.model.Bank
+import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.Home
-import com.mib.feature_home.domain.model.Location
-import com.mib.feature_home.domain.model.auth.VerificationCode
+import com.mib.feature_home.domain.model.ProductsItemPaging
+import com.mib.feature_home.domain.model.SubcategoriesItemPaging
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
 import com.mib.feature_home.service.HomeService
@@ -17,15 +17,80 @@ class HomeRepositoryImpl(
 ): HomeRepository {
     private val service by lazy(service)
 
-    override suspend fun get(): Pair<Home?, String?> {
-        val result = service.get()
+    override suspend fun getHomeContent(): Pair<Home?, String?> {
+        val result = service.getHomeContent()
         return when (result) {
             is NetworkResponse.Success -> {
-                val item = result.value.toDomainModel()
+                val item = result.value.data?.toDomainModel()
                 item to null
             }
             else -> {
                 null to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun getCategories(cursor: String?): Pair<CategoriesItemPaging, String?> {
+        val result = service.getCategories(cursor)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
+                val nextCursor = result.value.meta?.nextCursor
+                CategoriesItemPaging(
+                    items,
+                    nextCursor
+                ) to null
+            }
+            else -> {
+                CategoriesItemPaging(
+                    emptyList(),
+                    null
+                ) to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun getSubcategories(cursor: String?, categoryCode: String?): Pair<SubcategoriesItemPaging, String?> {
+        val result = service.getSubcategories(cursor, categoryCode)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
+                val nextCursor = result.value.meta?.nextCursor
+                SubcategoriesItemPaging(
+                    items,
+                    nextCursor
+                ) to null
+            }
+            else -> {
+                SubcategoriesItemPaging(
+                    emptyList(),
+                    null
+                ) to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun getProducts(
+        cursor: String?,
+        categoryCode: String?,
+        subcategoryCode: String?,
+        searchKey: String?
+    ): Pair<ProductsItemPaging, String?> {
+        val result = service.getProducts(cursor, categoryCode, subcategoryCode, searchKey)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
+                val nextCursor = result.value.meta?.nextCursor
+                ProductsItemPaging(
+                    items,
+                    nextCursor
+                ) to null
+            }
+            else -> {
+                ProductsItemPaging(
+                    emptyList(),
+                    null
+                ) to result.getErrorMessage()
             }
         }
     }
@@ -72,32 +137,6 @@ class HomeRepositoryImpl(
             }
             else -> {
                 null to result.getErrorMessage()
-            }
-        }
-    }
-
-    override suspend fun getLocations(): Pair<List<Location>?, String?> {
-        val result = service.getLocations()
-        return when (result) {
-            is NetworkResponse.Success -> {
-                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
-                items to null
-            }
-            else -> {
-                emptyList<Location>() to result.getErrorMessage()
-            }
-        }
-    }
-
-    override suspend fun getBanks(): Pair<List<Bank>?, String?> {
-        val result = service.getBanks()
-        return when (result) {
-            is NetworkResponse.Success -> {
-                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
-                items to null
-            }
-            else -> {
-                emptyList<Bank>() to result.getErrorMessage()
             }
         }
     }

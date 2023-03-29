@@ -49,7 +49,7 @@ ext {
     appVersionCode = generateVersionCode()
     appVersionName = generateVersionName()
     appName = "sage_android"
-    appId = "com.mib.sage"
+    appId = "com.mib.sage_user"
 }
 
 tasks.register('checkVersion') {

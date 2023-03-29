@@ -11,10 +11,8 @@ import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_auth.usecase.LoginUseCase
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
-import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
-import com.mib.lib_navigation.ProfileNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -26,7 +24,6 @@ import kotlinx.coroutines.withContext
 class LoginViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineContext,
     @MainDispatcher private val mainDispatcher: CoroutineContext,
-    private val profileNavigation: ProfileNavigation,
     private val homeNavigation: HomeNavigation,
     private val loginUseCase: LoginUseCase,
     val loadingDialog: LoadingDialogNavigation
@@ -64,15 +61,15 @@ class LoginViewModel @Inject constructor(
     }
 
     fun goToRegisterScreen(navController: NavController) {
-        homeNavigation.goToRegisterScreen(
-            navController = navController
-        )
+//        homeNavigation.goToRegisterScreen(
+//            navController = navController
+//        )
     }
 
     private fun goToHomeScreen(navController: NavController) {
-        profileNavigation.goToHomeScreen(
-            navController = navController
-        )
+//        profileNavigation.goToHomeScreen(
+//            navController = navController
+//        )
     }
 
     private fun isFormValid(

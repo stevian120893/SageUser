@@ -1,6 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="ResourceName">
 
+    <!--    Home-->
+    <string name="home_bottom_menu_home">Home</string>
+    <string name="home_bottom_menu_promo">Promo</string>
+    <string name="home_bottom_menu_order_history">Riwayat</string>
+    <string name="home_bottom_menu_profile">Profile</string>
+    <string name="home_text_back_button_exit">Press back again to exit</string>
+    <string name="home_text_category">Kategori</string>
+    <string name="home_search">Cari tukang..</string>
+    <string name="home_see_all">Lihat Semua</string>
+
+
+<!--    admin-->
 <!--    home menu-->
     <string name="home_menu_profile">Profil</string>
     <string name="home_tukang">Tukang</string>

@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
-import com.mib.feature_home.databinding.AdapterProductsItemBinding
+import com.mib.feature_home.databinding.AdapterProductItemBinding
 import com.mib.feature_home.domain.model.Product
 import java.math.BigDecimal
 
@@ -20,7 +20,7 @@ class ProductsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder  {
         return if (viewType == VIEW_TYPE_ITEM) {
-            val itemBinding = AdapterProductsItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val itemBinding = AdapterProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             ProductItemHolder(parent.context, itemBinding, onItemClickListener)
         } else {
             val itemBinding = AdapterLoadingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -47,17 +47,17 @@ class ProductsAdapter(
 
     class ProductItemHolder(
         private val context: Context,
-        private val itemBinding: AdapterProductsItemBinding,
+        private val itemBinding: AdapterProductItemBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(product: Product) {
-            Glide.with(context).load(product.productImageUrl).into(itemBinding.ivProductImage)
+            Glide.with(context).load(product.productImageUrl).into(itemBinding.ivProduct)
             itemBinding.tvProductName.text = product.productName
-            itemBinding.tvDescription.text = product.productDescription
+//            itemBinding.tvDescription.text = product.productDescription
 
-            itemBinding.ivEdit.setOnClickListener {
-                adapterListener.onClick(product)
-            }
+//            itemBinding.ivEdit.setOnClickListener {
+//                adapterListener.onClick(product)
+//            }
         }
     }
 
@@ -91,8 +91,8 @@ class ProductsAdapter(
         fun onClick(product: Product)
     }
 
-    fun addList(subcategories: MutableList<Product>?) {
-        itemList.addAll(subcategories ?: emptyList())
+    fun addList(products: MutableList<Product>?) {
+        itemList.addAll(products ?: emptyList())
         notifyDataSetChanged()
     }
 

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:70852067844:android:4e7038f6c502e2c5ac6b51",
         "android_client_info": {
-          "package_name": "com.mib.sage"
+          "package_name": "com.mib.sage_user"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "70852067844-mjd8kk0cgjvbka7i3k15t2n4bb5t8gco.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.mib.sage",
+            "package_name": "com.mib.sage_user",
             "certificate_hash": "fb104ef6cca8c0d23f82c3087594ca21200e9dd3"
           }
         },

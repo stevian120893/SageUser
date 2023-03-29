@@ -5,7 +5,9 @@ import com.mib.feature_home.dto.response.SubcategoryResponse
 
 fun SubcategoryResponse.toDomainModel(): Subcategory {
     return Subcategory(
+        categoryCode = this.categoryCode.orEmpty(),
         subcategoryId = this.subcategoryId.orEmpty(),
-        subcategoryName = this.subcategoryName.orEmpty()
+        subcategoryName = this.subcategoryName.orEmpty(),
+        status = this.status.orEmpty()
     )
 }

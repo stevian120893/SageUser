@@ -86,8 +86,8 @@ class AppUtils {
             rv.itemAnimator = DefaultItemAnimator()
         }
 
-        fun firstSetRecyclerViewGrid(context: Context, rv: RecyclerView) {
-            val gridLayoutManager = GridLayoutManager(context, 3)
+        fun firstSetRecyclerViewGrid(context: Context, rv: RecyclerView, spanCount: Int) {
+            val gridLayoutManager = GridLayoutManager(context, spanCount)
 
             rv.setHasFixedSize(true)
             rv.setItemViewCacheSize(20)

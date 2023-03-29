@@ -2,7 +2,7 @@ package com.mib.feature_home.domain.model
 
 import java.math.BigDecimal
 
-class Product(
+class Product (
     val categoryCode: String,
     val categoryName: String,
     val subcategoryCode: String,
@@ -12,6 +12,6 @@ class Product(
     val productDescription: String,
     val productImageUrl: String,
     val price: BigDecimal,
-    val yearsOfExperience: Int,
+    val serviceYearsExperience: Int,
     val status: String
 )

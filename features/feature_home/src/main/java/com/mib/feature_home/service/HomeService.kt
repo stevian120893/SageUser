@@ -2,8 +2,11 @@ package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.dto.response.BankResponse
+import com.mib.feature_home.dto.response.CategoryResponse
 import com.mib.feature_home.dto.response.HomeResponse
 import com.mib.feature_home.dto.response.LocationResponse
+import com.mib.feature_home.dto.response.ProductResponse
+import com.mib.feature_home.dto.response.SubcategoryResponse
 import com.mib.feature_home.dto.response.VerificationCodeResponse
 import com.mib.lib_api.dto.ApiResponse
 import com.mib.lib_api.dto.NetworkResponse
@@ -15,10 +18,30 @@ import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Query
 
 interface HomeService {
-    @GET("/jokes/random")
-    suspend fun get(): NetworkResponse<HomeResponse>
+    @GET("/site/home")
+    suspend fun getHomeContent(): NetworkResponse<ApiResponse<HomeResponse>>
+
+    @GET("/category/list")
+    suspend fun getCategories(
+        @Query("page") cursor: String?
+    ): NetworkResponse<ApiResponse<List<CategoryResponse>>>
+
+    @GET("/subcategory/list")
+    suspend fun getSubcategories(
+        @Query("page") cursor: String?,
+        @Query("category_code") categoryCode: String?,
+    ): NetworkResponse<ApiResponse<List<SubcategoryResponse>>>
+
+    @GET("/product/list")
+    suspend fun getProducts(
+        @Query("page") cursor: String?,
+        @Query("category_code") categoryCode: String?,
+        @Query("subcategory_code") subcategoryCode: String?,
+        @Query("search") search: String?,
+    ): NetworkResponse<ApiResponse<List<ProductResponse>>>
 
     @Multipart
     @POST("/auth/register")

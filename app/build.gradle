@@ -15,12 +15,12 @@ android {
         manifestPlaceholders
         buildConfigField "String", "STAGING_HOST", "\"$stagingHost\""
 
-        applicationId "com.mib.sage"
+        applicationId "com.mib.sage_user"
         minSdk builds.minSdk
         targetSdk builds.compileSdk
         versionCode appVersionCode
         versionName appVersionName
-        manifestPlaceholders['appAuthRedirectScheme'] = 'com.mib.sage'
+        manifestPlaceholders['appAuthRedirectScheme'] = 'com.mib.sage_user'
         ndk {
             // Filter for architectures supported by Flutter.
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64', 'x86'

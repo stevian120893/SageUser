@@ -26,6 +26,6 @@ class ApiAppConfig(
 
     companion object {
         const val PRODUCTION_BASE_URL = "https://api.chucknorris.io"
-        const val PREPRODUCTION_BASE_URL = "https://dev.apimerchant.sageku.com"
+        const val PREPRODUCTION_BASE_URL = "https://dev.api.sageku.com"
     }
 }

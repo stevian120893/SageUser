@@ -15,7 +15,7 @@ fun ProductResponse.toDomainModel(): Product {
         productDescription = this.productDescription.orEmpty(),
         productImageUrl = this.productImageUrl.orEmpty(),
         price = this.price ?: BigDecimal.ZERO,
-        yearsOfExperience = this.serviceYearsExperience  ?: 0,
-        status = this.status.orEmpty()
+        serviceYearsExperience = this.serviceYearsExperience ?: 0,
+        status = this.status.orEmpty(),
     )
 }

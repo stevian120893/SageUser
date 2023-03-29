@@ -5,10 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.R
-import com.mib.feature_home.domain.model.Bank
-import com.mib.feature_home.domain.model.Location
-import com.mib.feature_home.usecase.GetBanksUseCase
-import com.mib.feature_home.usecase.GetLocationsUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
 import com.mib.feature_home.usecase.auth.SendCodeUseCase
 import com.mib.feature_home.utils.AppUtils
@@ -19,7 +15,6 @@ import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
-import com.mib.lib_navigation.ProfileNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,10 +28,7 @@ import pl.aprilapps.easyphotopicker.EasyImage
 class RegisterViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineContext,
     @MainDispatcher private val mainDispatcher: CoroutineContext,
-    private val profileNavigation: ProfileNavigation,
     private val homeNavigation: HomeNavigation,
-    private val getLocationsUseCase: GetLocationsUseCase,
-    private val getBanksUseCase: GetBanksUseCase,
     private val registerUseCase: RegisterUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     val loadingDialogNavigation: LoadingDialogNavigation
@@ -47,41 +39,6 @@ class RegisterViewModel @Inject constructor(
     private var selectedLocationCode: String? = null
     private var selectedBankCode: String? = null
     private var passwordHash: String? = null
-
-    fun getLocations() {
-        viewModelScope.launch(ioDispatcher) {
-            val result = getLocationsUseCase()
-
-            loadingDialogNavigation.dismiss()
-            withContext(mainDispatcher) {
-                result.first?.let {
-                    state = state.copy(
-                        event = EVENT_UPDATE_LOCATION,
-                        locations = it
-                    )
-                }
-                result.second?.let {
-                }
-            }
-        }
-    }
-
-    fun getBanks() {
-        viewModelScope.launch(ioDispatcher) {
-            val result = getBanksUseCase()
-
-            withContext(mainDispatcher) {
-                result.first?.let {
-                    state = state.copy(
-                        event = EVENT_UPDATE_BANK,
-                        banks = it
-                    )
-                }
-                result.second?.let {
-                }
-            }
-        }
-    }
 
     fun updateSelectedLocation(locationCode: String) {
         selectedLocationCode = locationCode
@@ -164,15 +121,15 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun goToHomeScreen(navController: NavController) {
-        profileNavigation.goToHomeScreen(
-            navController = navController
-        )
+//        profileNavigation.goToHomeScreen(
+//            navController = navController
+//        )
     }
 
     fun goToLoginScreen(navController: NavController) {
-        homeNavigation.goToLoginScreen(
-            navController = navController
-        )
+//        homeNavigation.goToLoginScreen(
+//            navController = navController
+//        )
     }
 
     private fun isFormValid(
@@ -192,8 +149,6 @@ class RegisterViewModel @Inject constructor(
 
     data class ViewState(
         var event: Int? = null,
-        var locations: List<Location>? = null,
-        var banks: List<Bank>? = null
     ) : BaseViewState
 
     companion object {

@@ -37,5 +37,6 @@ dependencies {
     implementation "$appDependencies.sdp"
     implementation "$appDependencies.facebookShimmer"
     implementation "$appDependencies.swipeRefreshLayout"
+    implementation "$appDependencies.tbuonomo"
     implementation "$appDependencies.zelory"
 }
