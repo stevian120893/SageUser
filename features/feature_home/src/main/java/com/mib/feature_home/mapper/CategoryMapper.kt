@@ -5,8 +5,9 @@ import com.mib.feature_home.dto.response.CategoryResponse
 
 fun CategoryResponse.toDomainModel(): Category {
     return Category(
-        categoryId = this.categoryId.orEmpty(),
+        categoryCode = this.categoryCode.orEmpty(),
         categoryName = this.categoryName.orEmpty(),
-        status = this.status.orEmpty()
+        status = this.status.orEmpty(),
+        imageUrl = this.imageUrl.orEmpty()
     )
 }

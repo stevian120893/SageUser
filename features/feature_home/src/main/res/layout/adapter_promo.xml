@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rlHomeBanner"
+    android:id="@+id/rlPromo"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.cardview.widget.CardView
@@ -13,14 +13,14 @@
         android:layout_marginLeft="@dimen/_5sdp"
         android:layout_marginRight="@dimen/_5sdp">
         <ImageView
-            android:id="@+id/ivBanner"
+            android:id="@+id/ivPromo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_120sdp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             android:background="@color/color_bg_gray" />
         <TextView
-            android:id="@+id/tvBanner"
+            android:id="@+id/tvPromo"
             android:layout_width="@dimen/_200sdp"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_14sdp"

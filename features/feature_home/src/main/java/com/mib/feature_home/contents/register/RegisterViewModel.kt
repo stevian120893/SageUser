@@ -36,16 +36,11 @@ class RegisterViewModel @Inject constructor(
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
-    private var selectedLocationCode: String? = null
-    private var selectedBankCode: String? = null
     private var passwordHash: String? = null
+    private var gender: String? = null
 
-    fun updateSelectedLocation(locationCode: String) {
-        selectedLocationCode = locationCode
-    }
-
-    fun updateSelectedBank(bankCode: String) {
-        selectedBankCode = bankCode
+    fun updateGender(gender: String) {
+        this.gender = gender
     }
 
     fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
@@ -57,13 +52,11 @@ class RegisterViewModel @Inject constructor(
         email: String,
         password: String,
         name: String,
-        bankAccountNumber: String,
+        phone: String,
         code: String,
-        profileFile: MultipartBody.Part?,
-        ktpFile: MultipartBody.Part?,
-        ktpPersonFile: MultipartBody.Part?
+        profileFile: MultipartBody.Part?
     ) {
-        if(!isFormValid(email, password, name, selectedLocationCode, selectedBankCode, bankAccountNumber)) {
+        if(!isFormValid(email, password, name, phone, gender, code)) {
             toastEvent.postValue(fragment.context?.getString(R.string.shared_res_please_fill_blank_space))
             return
         }
@@ -75,12 +68,9 @@ class RegisterViewModel @Inject constructor(
                     email,
                     it,
                     name,
-                    selectedLocationCode.toString(),
+                    phone,
+                    gender.orEmpty(),
                     profileFile,
-                    ktpFile,
-                    ktpPersonFile,
-                    selectedBankCode.toString(),
-                    bankAccountNumber,
                     code
                 )
 
@@ -90,8 +80,8 @@ class RegisterViewModel @Inject constructor(
                         toastEvent.postValue(fragment.context?.getString(R.string.register_succeed))
                         goToHomeScreen(fragment.findNavController())
                     }
-                    result.second?.let {
-                        toastEvent.postValue(it)
+                    result.second?.let { errMsg ->
+                        toastEvent.postValue(errMsg)
                     }
                 }
             }
@@ -121,39 +111,35 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun goToHomeScreen(navController: NavController) {
-//        profileNavigation.goToHomeScreen(
-//            navController = navController
-//        )
+        homeNavigation.goToHomeScreen(
+            navController = navController
+        )
     }
 
     fun goToLoginScreen(navController: NavController) {
-//        homeNavigation.goToLoginScreen(
-//            navController = navController
-//        )
+        homeNavigation.goToLoginScreen(
+            navController = navController
+        )
     }
 
     private fun isFormValid(
         email: String,
         password: String? = null,
         name: String? = null,
-        locationCode: String? = null,
-        bankCode: String? = null,
-        bankAccountNumber: String? = null
+        phone: String? = null,
+        gender: String? = null,
+        code: String? = null
     ): Boolean {
-        passwordHash = password?.let { AppUtils.encode(KEY_HASH_PASSWORD, it) }
-        return email.isNotBlank() && password?.isNotBlank() == true && name?.isNotBlank() == true
-                && locationCode?.isNotBlank() == true && bankCode?.isNotBlank() == true
-                && bankAccountNumber?.isNotBlank() == true
-                && !passwordHash.isNullOrBlank()
+        if(!password.isNullOrBlank()) {
+            passwordHash = AppUtils.encode(KEY_HASH_PASSWORD, password)
+        } else {
+            return false
+        }
+
+        return email.isNotBlank() && name?.isNotBlank() == true && phone?.isNotBlank() == true && gender?.isNotBlank() == true && code?.isNotBlank() == true && !passwordHash.isNullOrBlank()
     }
 
     data class ViewState(
         var event: Int? = null,
     ) : BaseViewState
-
-    companion object {
-        internal const val NO_EVENT = 0
-        internal const val EVENT_UPDATE_LOCATION = 1
-        internal const val EVENT_UPDATE_BANK = 2
-    }
 }

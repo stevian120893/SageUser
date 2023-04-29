@@ -44,7 +44,8 @@ class LoginViewModel @Inject constructor(
 
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
-            passwordHash?.let { password ->
+            passwordHash?.let { pass ->
+                // TODO change to pass
                 val result = loginUseCase(email, password)
 
                 loadingDialog.dismiss()
@@ -61,22 +62,26 @@ class LoginViewModel @Inject constructor(
     }
 
     fun goToRegisterScreen(navController: NavController) {
-//        homeNavigation.goToRegisterScreen(
-//            navController = navController
-//        )
+        homeNavigation.goToRegisterScreen(
+            navController = navController
+        )
     }
 
     private fun goToHomeScreen(navController: NavController) {
-//        profileNavigation.goToHomeScreen(
-//            navController = navController
-//        )
+        homeNavigation.goToHomeScreen(
+            navController = navController
+        )
     }
 
     private fun isFormValid(
         email: String,
-        password: String
+        password: String?
     ): Boolean {
-        passwordHash = password.let { AppUtils.encode(AppUtils.KEY_HASH_PASSWORD, it) }
+        if(!password.isNullOrBlank()) {
+            passwordHash = AppUtils.encode(AppUtils.KEY_HASH_PASSWORD, password)
+        } else {
+            return false
+        }
         return email.isNotBlank() && !passwordHash.isNullOrBlank()
     }
 

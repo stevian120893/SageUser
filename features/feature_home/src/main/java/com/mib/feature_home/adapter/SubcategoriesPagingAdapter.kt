@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
 import com.mib.feature_home.databinding.AdapterSubcategoriesItemBinding
@@ -19,7 +20,7 @@ class SubcategoriesPagingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder  {
         return if (viewType == VIEW_TYPE_ITEM) {
             val itemBinding = AdapterSubcategoriesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            SubcategoryItemHolder(itemBinding, onItemClickListener)
+            SubcategoryItemHolder(parent.context, itemBinding, onItemClickListener)
         } else {
             val itemBinding = AdapterLoadingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             LoadingViewHolder(itemBinding)
@@ -44,11 +45,13 @@ class SubcategoriesPagingAdapter(
     }
 
     class SubcategoryItemHolder(
+        private val context: Context,
         private val itemBinding: AdapterSubcategoriesItemBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(subcategory: Subcategory) {
             itemBinding.tvSubcategory.text = subcategory.subcategoryName
+            Glide.with(context).load(subcategory.imageUrl).into(itemBinding.ivSubcategory)
 
             itemBinding.llAdapterParent.setOnClickListener {
                 adapterListener.onClick(subcategory)
@@ -65,7 +68,7 @@ class SubcategoriesPagingAdapter(
     }
 
     fun addLoadingFooter() {
-        itemList.add(Subcategory("", "", "", ""))
+        itemList.add(Subcategory("", "", "", "", ""))
         notifyItemInserted(itemList.size-1)
     }
 

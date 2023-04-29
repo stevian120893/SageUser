@@ -8,6 +8,7 @@ fun SubcategoryResponse.toDomainModel(): Subcategory {
         categoryCode = this.categoryCode.orEmpty(),
         subcategoryId = this.subcategoryId.orEmpty(),
         subcategoryName = this.subcategoryName.orEmpty(),
-        status = this.status.orEmpty()
+        status = this.status.orEmpty(),
+        imageUrl = this.imageUrl.orEmpty()
     )
 }

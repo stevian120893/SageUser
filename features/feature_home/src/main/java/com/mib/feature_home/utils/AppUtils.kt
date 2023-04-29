@@ -2,10 +2,14 @@ package com.mib.feature_home.utils
 
 import android.content.*
 import android.content.res.Resources
+import android.location.Address
+import android.location.Geocoder
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -31,6 +35,27 @@ import okhttp3.internal.and
 class AppUtils {
 
     companion object {
+
+        fun isGPSEnabled(mContext: Context): Boolean {
+            val lm: LocationManager =
+                mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            return lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        }
+
+        fun getCompleteAddress(context: Context, latitude: Double, longitude: Double): String {
+            val geocoder = Geocoder(context, Locale.getDefault())
+            val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+
+            return addresses?.get(0)?.getAddressLine(0).orEmpty()
+        }
+
+        fun goToAppSettings(context: Context) {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            val uri: Uri = Uri.fromParts("package", context.packageName, null)
+            intent.data = uri
+            context.startActivity(intent)
+        }
+
         fun isNetworkAvailable(context: Context): Boolean {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

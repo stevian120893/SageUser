@@ -27,7 +27,5 @@ class ProfileResponse (
     val isAcceptBankTransfer: Boolean?,
     @SerializedName("referral_code")
     val referralCode: String?,
-    @SerializedName("tier")
-    val tier: TierResponse?
-
 )
+

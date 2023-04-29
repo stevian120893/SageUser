@@ -1,13 +1,11 @@
 package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.VerificationCodeRequest
-import com.mib.feature_home.dto.response.BankResponse
 import com.mib.feature_home.dto.response.CategoryResponse
 import com.mib.feature_home.dto.response.HomeResponse
-import com.mib.feature_home.dto.response.LocationResponse
+import com.mib.feature_home.dto.response.CityResponse
 import com.mib.feature_home.dto.response.ProductResponse
 import com.mib.feature_home.dto.response.SubcategoryResponse
-import com.mib.feature_home.dto.response.VerificationCodeResponse
 import com.mib.lib_api.dto.ApiResponse
 import com.mib.lib_api.dto.NetworkResponse
 import com.mib.lib_auth.dto.response.TokenResponse
@@ -49,13 +47,10 @@ interface HomeService {
         @Part("email") email: RequestBody?,
         @Part("password") password: RequestBody?,
         @Part("name") name: RequestBody?,
-        @Part("location") location: RequestBody?,
-        @Part("bank_code") bankCode: RequestBody?,
-        @Part("bank_account_number") bankAccountNumber: RequestBody?,
+        @Part("phone") phone: RequestBody?,
+        @Part("gender") gender: RequestBody?,
         @Part("code") code: RequestBody?,
         @Part profilePicture: MultipartBody.Part?,
-        @Part ktpPicture: MultipartBody.Part?,
-        @Part ktpSelfiePicture: MultipartBody.Part?
     ): NetworkResponse<ApiResponse<TokenResponse>>
 
     @POST("/auth/send-code")
@@ -64,8 +59,5 @@ interface HomeService {
     ): NetworkResponse<ApiResponse<Void>>
 
     @GET("/public/cities")
-    suspend fun getLocations(): NetworkResponse<ApiResponse<List<LocationResponse>>>
-
-    @GET("/public/banks")
-    suspend fun getBanks(): NetworkResponse<ApiResponse<List<BankResponse>>>
+    suspend fun getLocations(): NetworkResponse<ApiResponse<List<CityResponse>>>
 }

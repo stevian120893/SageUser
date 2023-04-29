@@ -2,8 +2,11 @@ package com.mib.feature_home.presentation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.mib.lib.mvvm.NavigationEmitter
+import com.mib.lib_auth.repository.SessionRepository
 import com.mib.lib_coroutines.IODispatcher
+import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_pref.SessionPref
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +18,8 @@ class HomeTabViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     @IODispatcher private val ioDispatcher: CoroutineContext,
     private val sessionPref: SessionPref,
+    private val sessionRepository: SessionRepository,
+    private val homeNavigation: HomeNavigation
 ) : ViewModel(), NavigationEmitter {
 
     private var appUpdateType: Int? = null
@@ -55,6 +60,13 @@ class HomeTabViewModel @Inject constructor(
 //            appUpdateHandler.requestUpdate(activity, type)
 //        }
 //    }
+
+    fun isLoggedIn(navController: NavController): Boolean {
+        return if(sessionRepository.getAccessToken().isNullOrBlank()) {
+            homeNavigation.goToLoginScreen(navController)
+            false
+        } else true
+    }
 
     fun saveBackStack() {
         stack = backStack.getStack()

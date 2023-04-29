@@ -4,9 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 class CategoryResponse (
     @SerializedName("code")
-    val categoryId: String?,
+    val categoryCode: String?,
     @SerializedName("name")
     val categoryName: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("image_path")
+    val imageUrl: String?
 )

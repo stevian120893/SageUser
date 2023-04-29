@@ -25,6 +25,10 @@
         android:name="com.mib.feature_home.contents.product_list.ProductListFragment"
         android:label="ProductListFragment" />
     <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.mib.feature_home.contents.product_detail.ProductDetailFragment"
+        android:label="ProductDetailFragment" />
+    <fragment
         android:id="@+id/loginFragment"
         android:name="com.mib.feature_home.contents.login.LoginFragment"
         android:label="LoginFragment" />
@@ -51,6 +55,9 @@
     <action
         android:id="@+id/action_productListFragment"
         app:destination="@id/productListFragment" />
+    <action
+        android:id="@+id/action_productDetailFragment"
+        app:destination="@id/productDetailFragment" />
     <action
         android:id="@+id/action_login_fragment"
         app:destination="@id/loginFragment" />

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mib.feature_home.databinding.AdapterPromosItemBinding
+import com.mib.feature_home.databinding.AdapterBannerBinding
 import com.mib.feature_home.domain.model.Banner
 
 class BannerAdapter(
@@ -14,7 +14,7 @@ class BannerAdapter(
 ) : RecyclerView.Adapter<BannerAdapter.BannerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BannerViewHolder {
-        val itemBinding = AdapterPromosItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val itemBinding = AdapterBannerBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return BannerViewHolder(parent.context, itemBinding, clickListener)
     }
 
@@ -33,7 +33,7 @@ class BannerAdapter(
 
     class BannerViewHolder(
         private val context: Context,
-        private val itemBinding: AdapterPromosItemBinding,
+        private val itemBinding: AdapterBannerBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(banner: Banner) {

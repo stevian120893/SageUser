@@ -10,5 +10,7 @@ class SubcategoryResponse (
     @SerializedName("name")
     val subcategoryName: String?,
     @SerializedName("status")
-    val status: String?
+    val status: String?,
+    @SerializedName("image_path")
+    val imageUrl: String?
 )

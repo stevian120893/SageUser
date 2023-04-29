@@ -28,6 +28,11 @@
                       <LayoutPositions />
                     </value>
                   </entry>
+                  <entry key="action_productDetailFragment">
+                    <value>
+                      <LayoutPositions />
+                    </value>
+                  </entry>
                   <entry key="action_productListFragment">
                     <value>
                       <LayoutPositions />
@@ -91,7 +96,19 @@
                       </LayoutPositions>
                     </value>
                   </entry>
-                  <entry key="produc">
+                  <entry key="productDetailFragment">
+                    <value>
+                      <LayoutPositions>
+                        <option name="myPosition">
+                          <Point>
+                            <option name="x" value="12" />
+                            <option name="y" value="12" />
+                          </Point>
+                        </option>
+                      </LayoutPositions>
+                    </value>
+                  </entry>
+                  <entry key="productListFragment">
                     <value>
                       <LayoutPositions>
                         <option name="myPosition">

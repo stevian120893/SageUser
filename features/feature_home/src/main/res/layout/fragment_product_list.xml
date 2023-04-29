@@ -40,25 +40,25 @@
                 <LinearLayout
                     android:id="@+id/llSearch"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_40sdp"
+                    android:layout_height="@dimen/_45sdp"
                     android:background="@drawable/bg_rounded_ellipse"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:paddingStart="16dp"
+                    android:paddingStart="@dimen/_18sdp"
                     android:paddingTop="3dp"
-                    android:paddingEnd="10dp"
+                    android:paddingEnd="@dimen/_18sdp"
                     android:paddingBottom="3dp">
                     <ImageView
                         android:id="@+id/ivSearch"
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
                         android:clickable="false"
                         android:src="@drawable/ic_search" />
                     <TextView
                         android:id="@+id/etSearch"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
+                        android:layout_marginStart="@dimen/_10sdp"
                         android:background="@android:color/transparent"
                         android:clickable="false"
                         android:fontFamily="@font/font_poppins_regular"
@@ -113,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <include layout="@layout/placeholder_list" />
+                <include layout="@layout/shimmer_list" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
     </LinearLayout>

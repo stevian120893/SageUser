@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterCategoriesItemBinding
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
@@ -19,7 +20,7 @@ class CategoriesPagingAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder  {
         return if (viewType == VIEW_TYPE_ITEM) {
             val itemBinding = AdapterCategoriesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            CategoryItemHolder(itemBinding, onItemClickListener)
+            CategoryItemHolder(parent.context, itemBinding, onItemClickListener)
         } else {
             val itemBinding = AdapterLoadingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             LoadingViewHolder(itemBinding)
@@ -44,11 +45,13 @@ class CategoriesPagingAdapter(
     }
 
     class CategoryItemHolder(
+        private val context: Context,
         private val itemBinding: AdapterCategoriesItemBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(category: Category) {
             itemBinding.tvCategory.text = category.categoryName
+            Glide.with(context).load(category.imageUrl).into(itemBinding.ivCategory)
 
             itemBinding.llAdapterParent.setOnClickListener {
                 adapterListener.onClick(category)
@@ -65,7 +68,7 @@ class CategoriesPagingAdapter(
     }
 
     fun addLoadingFooter() {
-        itemList.add(Category("", "", ""))
+        itemList.add(Category("", "", "", ""))
         notifyItemInserted(itemList.size-1)
     }
 

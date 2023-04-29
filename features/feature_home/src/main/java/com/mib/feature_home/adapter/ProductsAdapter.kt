@@ -10,6 +10,7 @@ import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
 import com.mib.feature_home.databinding.AdapterProductItemBinding
 import com.mib.feature_home.domain.model.Product
+import com.mib.feature_home.utils.withThousandSeparator
 import java.math.BigDecimal
 
 class ProductsAdapter(
@@ -53,11 +54,12 @@ class ProductsAdapter(
         fun bind(product: Product) {
             Glide.with(context).load(product.productImageUrl).into(itemBinding.ivProduct)
             itemBinding.tvProductName.text = product.productName
-//            itemBinding.tvDescription.text = product.productDescription
+            itemBinding.tvProductPrice.text = product.price.toString().withThousandSeparator()
+//            itemBinding.tvRating.text = product
 
-//            itemBinding.ivEdit.setOnClickListener {
-//                adapterListener.onClick(product)
-//            }
+            itemBinding.llAdapterParent.setOnClickListener {
+                adapterListener.onClick(product)
+            }
         }
     }
 

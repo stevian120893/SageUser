@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
-import com.mib.feature_home.contents.bottom_menu.home.HomeViewModel
-import com.mib.feature_home.databinding.FragmentHomeBinding
-import com.mib.feature_home.databinding.FragmentLoginBinding
-import com.mib.feature_home.databinding.FragmentRegisterBinding
+import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.databinding.FragmentProfileBinding
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -18,22 +15,11 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-
-    private val backPressedCallback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {
-            activity?.finish()
-        }
-    }
 
     override fun initViewModel(firstInit: Boolean) {
         setViewModel(ProfileViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this@ProfileFragment, backPressedCallback)
     }
 
     override fun onCreateView(
@@ -41,17 +27,24 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadingDialog.subscribe(this, false)
+        viewModel.loadingDialogNavigation.subscribe(this, false)
+
+        if(viewModel.isLoggedIn()) {
+            binding.btLogout.visibility = View.VISIBLE
+        } else {
+            binding.btLogin.visibility = View.VISIBLE
+            viewModel.goToLoginScreen(findNavController())
+        }
 
         lifecycleScope.launch {
-            initListener(view.context)
-            observeLiveData()
+            initListener()
+            observeLiveData(view.context)
         }
     }
 
@@ -60,9 +53,14 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
         _binding = null
     }
 
-    private fun initListener(context: Context) {}
-
-    private fun observeLiveData() {
-        viewModel.stateLiveData.observe(viewLifecycleOwner) {}
+    private fun initListener() {
+        binding.btLogin.setOnClickListener {
+            viewModel.showUploadOptionDialog(this@ProfileFragment)
+        }
+        binding.btLogout.setOnClickListener {
+            viewModel.showUploadOptionDialog(this@ProfileFragment)
+        }
     }
+
+    private fun observeLiveData(context: Context) {}
 }

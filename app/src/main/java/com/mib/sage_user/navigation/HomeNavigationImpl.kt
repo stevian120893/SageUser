@@ -2,6 +2,7 @@ package com.mib.sage_user.navigation
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_NAME
@@ -44,5 +45,25 @@ class HomeNavigationImpl : HomeNavigation {
                 KEY_SUBCATEGORY_NAME to subcategoryName
             )
         )
+    }
+
+    override fun goToProductDetailScreen(
+        navController: NavController,
+        productCode: String
+    ) {
+        navController.navigate(
+            R.id.action_productDetailFragment,
+            bundleOf(
+                KEY_PRODUCT_CODE to productCode,
+            )
+        )
+    }
+
+    override fun goToLoginScreen(navController: NavController) {
+        navController.navigate(R.id.action_login_fragment)
+    }
+
+    override fun goToRegisterScreen(navController: NavController) {
+        navController.navigate(R.id.action_register_fragment)
     }
 }

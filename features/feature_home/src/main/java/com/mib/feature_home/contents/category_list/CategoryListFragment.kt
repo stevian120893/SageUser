@@ -146,7 +146,7 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                 override fun onClick(category: Category) {
                     viewModel.goToSubcategoryListScreen(
                         findNavController(),
-                        category.categoryId,
+                        category.categoryCode,
                         category.categoryName
                     )
                 }

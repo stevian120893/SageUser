@@ -14,6 +14,7 @@ import com.mib.feature_home.usecase.GetProductsUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
+import com.mib.lib_auth.repository.SessionRepository
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
@@ -28,12 +29,15 @@ import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    @IODispatcher private val ioDispatcher: CoroutineContext,
-    @MainDispatcher private val mainDispatcher: CoroutineContext,
+    val loadingDialog: LoadingDialogNavigation,
+    @IODispatcher
+    private val ioDispatcher: CoroutineContext,
+    @MainDispatcher
+    private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getProductsUseCase: GetProductsUseCase,
-    val loadingDialog: LoadingDialogNavigation,
-    private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
+    private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation,
+    private val sessionRepository: SessionRepository
 ) : BaseViewModel<ProductListViewModel.ViewState>(ViewState()) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
@@ -77,8 +81,15 @@ class ProductListViewModel @Inject constructor(
         }
     }
 
-    fun goToHomeScreen(navController: NavController) {
-        homeNavigation.goToHomeScreen(navController)
+    fun goToProductDetail(navController: NavController, productCode: String) {
+        homeNavigation.goToProductDetailScreen(navController, productCode)
+    }
+
+    fun isLoggedIn(navController: NavController): Boolean {
+        return if(sessionRepository.getAccessToken().isNullOrBlank()) {
+            homeNavigation.goToLoginScreen(navController)
+            false
+        } else true
     }
 
     data class ViewState(

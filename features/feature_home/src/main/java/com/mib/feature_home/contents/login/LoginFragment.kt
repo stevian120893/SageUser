@@ -27,7 +27,7 @@ class LoginFragment : BaseFragment<LoginViewModel>(0) {
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            activity?.finish()
+            findNavController().popBackStack()
         }
     }
 

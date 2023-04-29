@@ -21,12 +21,9 @@ interface HomeRepository {
         email: String,
         password: String,
         name: String,
-        location: String,
+        phone: String,
+        gender: String,
         profilePicture: MultipartBody.Part?,
-        ktpPicture: MultipartBody.Part?,
-        ktpSelfiePicture: MultipartBody.Part?,
-        bankCode: String,
-        bankAccountNumber: String,
         code: String
     ): Pair<TokenResponse?, String?>
     suspend fun sendCode(

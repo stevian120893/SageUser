@@ -99,25 +99,19 @@ class HomeRepositoryImpl(
         email: String,
         password: String,
         name: String,
-        location: String,
+        phone: String,
+        gender: String,
         profilePicture: MultipartBody.Part?,
-        ktpPicture: MultipartBody.Part?,
-        ktpSelfiePicture: MultipartBody.Part?,
-        bankCode: String,
-        bankAccountNumber: String,
         code: String
     ): Pair<TokenResponse?, String?> {
         val result = service.register(
             email = AppUtils.createRequestBody(email),
             password = AppUtils.createRequestBody(password),
             name = AppUtils.createRequestBody(name),
-            location = AppUtils.createRequestBody(location),
-            bankCode = AppUtils.createRequestBody(bankCode),
-            bankAccountNumber = AppUtils.createRequestBody(bankAccountNumber),
+            phone = AppUtils.createRequestBody(phone),
+            gender = AppUtils.createRequestBody(gender),
             code = AppUtils.createRequestBody(code),
             profilePicture = profilePicture,
-            ktpPicture = ktpPicture,
-            ktpSelfiePicture = ktpSelfiePicture,
         )
         return when (result) {
             is NetworkResponse.Success -> result.value.data to null

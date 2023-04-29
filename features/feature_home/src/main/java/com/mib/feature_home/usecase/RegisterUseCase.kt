@@ -13,24 +13,18 @@ class RegisterUseCase(
         email: String,
         password: String,
         name: String,
-        location: String,
+        phone: String,
+        gender: String,
         profilePicture: MultipartBody.Part?,
-        ktpPicture: MultipartBody.Part?,
-        ktpSelfiePicture: MultipartBody.Part?,
-        bankCode: String,
-        bankAccountNumber: String,
         code: String
     ): Pair<TokenResponse?, String?> {
         val response = homeRepository.register(
             email,
             password,
             name,
-            location,
+            phone,
+            gender,
             profilePicture,
-            ktpPicture,
-            ktpSelfiePicture,
-            bankCode,
-            bankAccountNumber,
             code
         )
         // save the token in the session

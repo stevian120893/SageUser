@@ -3,6 +3,7 @@ package com.mib.feature_home.mapper
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category
 import com.mib.feature_home.domain.model.Home
+import com.mib.feature_home.domain.model.City
 import com.mib.feature_home.dto.response.HomeResponse
 
 fun HomeResponse.toDomainModel(): Home {
@@ -18,14 +19,23 @@ fun HomeResponse.toDomainModel(): Home {
 
     val categories = category?.map { content ->
         Category(
-            categoryId = content.categoryId.orEmpty(),
+            categoryCode = content.categoryCode.orEmpty(),
             categoryName = content.categoryName.orEmpty(),
-            status = content.status.orEmpty()
+            status = content.status.orEmpty(),
+            imageUrl = content.imageUrl.orEmpty()
+        )
+    }.orEmpty()
+
+    val cities = city?.map { content ->
+        City(
+            code = content.code.orEmpty(),
+            name = content.name.orEmpty()
         )
     }.orEmpty()
 
     return Home(
         banners = banners,
-        categories = categories
+        categories = categories,
+        cities = cities
     )
 }

@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
 //apply plugin: 'com.google.firebase.crashlytics'
 apply from: "$rootDir/gradle_scripts/hilt.gradle"
 apply from: "$rootDir/gradle_scripts/keystore.gradle"
@@ -21,10 +21,10 @@ android {
         versionCode appVersionCode
         versionName appVersionName
         manifestPlaceholders['appAuthRedirectScheme'] = 'com.mib.sage_user'
-        ndk {
-            // Filter for architectures supported by Flutter.
-            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64', 'x86'
-        }
+//        ndk {
+//            // Filter for architectures supported by Flutter.
+//            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86_64', 'x86'
+//        }
         signingConfig signingConfigs.debug
     }
 
@@ -48,12 +48,12 @@ android {
             minifyEnabled false
             testCoverageEnabled true
             versionNameSuffix "-debug"
-            applicationIdSuffix ".debug"
+//            applicationIdSuffix ".debug"
             buildConfigField "String", "FILE_AUTHORITY", "\"${appId}.debug.provider\""
             manifestPlaceholders.fileProviderAuthority = "${appId}.debug.provider"
-            ndk {
-                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
-            }
+//            ndk {
+//                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86'
+//            }
         }
         release {
 //            shrinkResources true

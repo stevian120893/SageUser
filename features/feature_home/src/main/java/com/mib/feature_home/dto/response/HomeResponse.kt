@@ -7,4 +7,6 @@ class HomeResponse (
     val banner: List<BannerResponse>?,
     @SerializedName("category")
     val category: List<CategoryResponse>?,
+    @SerializedName("city")
+    val city: List<CityResponse>?
 )

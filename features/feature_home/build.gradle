@@ -34,6 +34,7 @@ dependencies {
     implementation "$appDependencies.glide"
     implementation "$appDependencies.jetpackNavFragmentKtx"
     implementation "$appDependencies.lifecycleKtx"
+    implementation "$appDependencies.location"
     implementation "$appDependencies.sdp"
     implementation "$appDependencies.facebookShimmer"
     implementation "$appDependencies.swipeRefreshLayout"

@@ -46,6 +46,7 @@ class CategoryListViewModel @Inject constructor(
                     )
                 }
                 result.second?.let {
+                    state = state.copy(isLoadCategories = false)
                     toastEvent.postValue(it)
                     if(it == ApiConstants.ERROR_MESSAGE_UNAUTHORIZED) {
                         withContext(mainDispatcher) {

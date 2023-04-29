@@ -60,7 +60,7 @@
                 android:paddingLeft="@dimen/_5sdp"/>
         </RelativeLayout>
 
-        <Button
+        `<Button
             android:id="@+id/btLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
             android:backgroundTint="@color/colorPrimary"
             android:text="@string/shared_res_login"
             style="@style/ButtonText"
-            android:layout_marginTop="@dimen/_30sdp"/>
+            android:layout_marginTop="@dimen/_30sdp"/>`
 
         <TextView
             android:id="@+id/tvRegister"

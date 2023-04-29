@@ -1,7 +1,8 @@
 package com.mib.feature_home.domain.model
 
 class Category (
-    val categoryId: String,
+    val categoryCode: String,
     val categoryName: String,
-    val status: String
+    val status: String,
+    val imageUrl: String
 )

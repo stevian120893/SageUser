@@ -9,12 +9,69 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.mib.feature_home.R
+import com.mib.feature_home.*
+import com.mib.feature_home.`interface`.ListenerCityList
+import com.mib.feature_home.`interface`.ListenerTwoActions
+import com.mib.feature_home.adapter.CityAdapter
+import com.mib.feature_home.domain.model.City
 import com.mib.lib_navigation.DialogListener
 
 class DialogUtils {
     companion object {
+        fun showDialogGpsOff(context: Context, dialogListenerTwoAction: ListenerTwoActions) {
+            val dialog = AlertDialog.Builder(context)
+            dialog.setTitle("Your GPS is off")
+                .setIcon(R.drawable.ic_icon)
+                .setMessage("Please turn on to continue")
+                .setNegativeButton("Later") { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                    dialogListenerTwoAction.firstAction()
+                }
+                .setPositiveButton("Turn on") { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                    dialogListenerTwoAction.secondAction()
+                }
+        }
+
+        fun showBottomDialogActivateLocationThroughSettings(context: Context, dialogListenerTwoAction: ListenerTwoActions) {
+            val dialog = AlertDialog.Builder(context)
+            dialog.setTitle("Turn on your GPS")
+                .setIcon(R.drawable.ic_icon)
+                .setMessage("Let's turn it on")
+                .setNegativeButton("Later") { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                    dialogListenerTwoAction.firstAction()
+                }
+                .setPositiveButton("Turn on") { dialogInterface, _ ->
+                    dialogInterface.cancel()
+                    dialogListenerTwoAction.secondAction()
+                }
+        }
+
+        fun showDialogList(context: Context, cityList: List<City>?, listener: ListenerCityList) {
+            val dialogBuilder = AlertDialog.Builder(context)
+            val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val layoutView: View = inflater.inflate(R.layout.dialog_list, null)
+
+            val rvList = layoutView.findViewById<RecyclerView>(R.id.rvLocation)
+            rvList.layoutManager = LinearLayoutManager(context)
+            val adapter = CityAdapter(cityList.orEmpty(), object : CityAdapter.OnItemClickListener {
+                override fun onClick(city: City) {
+                    listener.action(city)
+                }
+            })
+            rvList.adapter = adapter
+
+            dialogBuilder.setView(layoutView)
+            val alertDialog = dialogBuilder.create()
+            alertDialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
+            alertDialog.show()
+        }
+
         fun showDialogImage(context: Context, image: String?) {
             val dialogBuilder = AlertDialog.Builder(context)
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -39,7 +96,7 @@ class DialogUtils {
             subtitle: String,
             left: String,
             right: String,
-            dialogListener: DialogListener
+            dialogListener: DialogListener,
         ) {
             val dialogBuilder = AlertDialog.Builder(context)
             val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater

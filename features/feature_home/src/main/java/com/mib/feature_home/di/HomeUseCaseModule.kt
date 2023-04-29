@@ -1,7 +1,9 @@
 package com.mib.feature_home.di
 
 import com.mib.feature_home.repository.HomeRepository
+import com.mib.feature_home.repository.HomeWithAuthRepository
 import com.mib.feature_home.usecase.GetCategoriesUseCase
+import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.feature_home.usecase.GetProductsUseCase
 import com.mib.feature_home.usecase.GetSubcategoriesUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
@@ -47,5 +49,10 @@ object HomeUseCaseModule {
     @Provides
     fun provideSendCodeUseCase(repo: HomeRepository): SendCodeUseCase {
         return SendCodeUseCase(repo)
+    }
+
+    @Provides
+    fun provideGetProductDetailUseCase(repo: HomeWithAuthRepository): GetProductDetailUseCase {
+        return GetProductDetailUseCase(repo)
     }
 }

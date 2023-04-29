@@ -45,7 +45,7 @@
             android:backgroundTint="@color/textColorGray"
             android:layout_marginTop="@dimen/_8sdp">
             <Spinner
-                android:id="@+id/snLocation"
+                android:id="@+id/snGender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/Regular14"
@@ -55,34 +55,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Regular10Gray"
-            android:text="@string/register_location_info"
-            android:layout_marginTop="@dimen/_3sdp"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_rounded_stroke_6"
-            android:backgroundTint="@color/textColorGray"
-            android:layout_marginTop="@dimen/_8sdp">
-            <Spinner
-                android:id="@+id/snBank"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Regular14"
-                android:padding="@dimen/_8sdp"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Regular10Gray"
-            android:text="@string/register_bank_info"
+            android:text="@string/choose_gender"
             android:layout_marginTop="@dimen/_3sdp"/>
 
         <EditText
-            android:id="@+id/etBankAccountNumber"
+            android:id="@+id/etPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/profile_bank_account_number"
+            android:hint="@string/phone_number"
             style="@style/Regular14"
             android:layout_marginTop="@dimen/_12sdp"/>
 
@@ -104,52 +84,6 @@
                 android:layout_marginBottom="@dimen/_5sdp"/>
             <ImageView
                 android:id="@+id/ivAddPhotoProfile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_photo"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_12sdp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_upload_ktp_picture"
-                style="@style/SemiBold20"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorGrayLine"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_5sdp"/>
-            <ImageView
-                android:id="@+id/ivAddPhotoKtp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_add_photo"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="@dimen/_12sdp">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/profile_upload_ktp_picture_person"
-                style="@style/SemiBold20"/>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/colorGrayLine"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:layout_marginBottom="@dimen/_5sdp"/>
-            <ImageView
-                android:id="@+id/ivAddPhotoKtpPerson"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_add_photo"/>

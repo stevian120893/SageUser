@@ -58,7 +58,7 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
 //            setupAdapter(requireContext())
-            AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvProduct, 4)
+            AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvProduct, 2)
             initListener()
             observeLiveData(view.context)
         }
@@ -153,7 +153,8 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
             itemList = products.toMutableList(),
             onItemClickListener = object : ProductsAdapter.OnItemClickListener {
                 override fun onClick(product: Product) {
-//                    viewModel.onCl(this@CategoryListFragment, category)
+                    if(viewModel.isLoggedIn(findNavController()))
+                        viewModel.goToProductDetail(findNavController(), product.productCode)
                 }
             }
         )
