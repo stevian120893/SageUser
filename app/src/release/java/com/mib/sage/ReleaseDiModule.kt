@@ -1,7 +1,7 @@
 package com.mib.sage
 
-import com.mib.sage.config.ApiAppConfig
-import com.mib.sage.di.BaseUrlQualifier
+import com.mib.sage_user.config.ApiAppConfig
+import com.mib.sage_user.di.BaseUrlQualifier
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
