@@ -74,6 +74,22 @@ class CategoryListViewModel @Inject constructor(
         )
     }
 
+    fun goToProductListScreen(
+        navController: NavController,
+        categoryCode: String? = null,
+        subcategoryCode: String? = null,
+        subcategoryName: String? = null,
+        isSearch: Boolean = false
+    ) {
+        homeNavigation.goToProductListScreen(
+            navController,
+            categoryCode,
+            subcategoryCode,
+            subcategoryName,
+            isSearch
+        )
+    }
+
     data class ViewState(
         var isLoadCategories: Boolean = false,
         var categoriesItemPaging: CategoriesItemPaging? = null

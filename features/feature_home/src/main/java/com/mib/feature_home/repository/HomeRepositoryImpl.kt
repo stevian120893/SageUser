@@ -3,6 +3,7 @@ package com.mib.feature_home.repository
 import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.Home
 import com.mib.feature_home.domain.model.ProductsItemPaging
+import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
@@ -88,6 +89,28 @@ class HomeRepositoryImpl(
             }
             else -> {
                 ProductsItemPaging(
+                    emptyList(),
+                    null
+                ) to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun getPromos(
+        cursor: String?
+    ): Pair<PromoItemPaging, String?> {
+        val result = service.getPromo(cursor)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
+                val nextCursor = result.value.meta?.nextCursor
+                PromoItemPaging(
+                    items,
+                    nextCursor
+                ) to null
+            }
+            else -> {
+                PromoItemPaging(
                     emptyList(),
                     null
                 ) to result.getErrorMessage()

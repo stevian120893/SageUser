@@ -3,6 +3,7 @@ package com.mib.feature_home.repository
 import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.Home
 import com.mib.feature_home.domain.model.ProductsItemPaging
+import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
 import com.mib.lib_auth.dto.response.TokenResponse
 import okhttp3.MultipartBody
@@ -17,6 +18,9 @@ interface HomeRepository {
         subcategoryCode: String?,
         searchKey: String?
     ): Pair<ProductsItemPaging, String?>
+    suspend fun getPromos(
+        cursor: String?
+    ): Pair<PromoItemPaging, String?>
     suspend fun register(
         email: String,
         password: String,

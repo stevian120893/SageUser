@@ -3,6 +3,7 @@ package com.mib.sage_user
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
@@ -19,6 +20,8 @@ class MainActivity : FragmentActivity() {
     lateinit var sessionRepository: SessionRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         // Handle the splash screen transition (Android 12)
         installSplashScreen()
 

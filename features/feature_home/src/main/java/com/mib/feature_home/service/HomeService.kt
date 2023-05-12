@@ -5,6 +5,7 @@ import com.mib.feature_home.dto.response.CategoryResponse
 import com.mib.feature_home.dto.response.HomeResponse
 import com.mib.feature_home.dto.response.CityResponse
 import com.mib.feature_home.dto.response.ProductResponse
+import com.mib.feature_home.dto.response.PromoResponse
 import com.mib.feature_home.dto.response.SubcategoryResponse
 import com.mib.lib_api.dto.ApiResponse
 import com.mib.lib_api.dto.NetworkResponse
@@ -40,6 +41,11 @@ interface HomeService {
         @Query("subcategory_code") subcategoryCode: String?,
         @Query("search") search: String?,
     ): NetworkResponse<ApiResponse<List<ProductResponse>>>
+
+    @GET("/promo/list")
+    suspend fun getPromo(
+        @Query("page") cursor: String?
+    ): NetworkResponse<ApiResponse<List<PromoResponse>>>
 
     @Multipart
     @POST("/auth/register")

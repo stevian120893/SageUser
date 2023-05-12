@@ -17,6 +17,7 @@
     <string name="subcategory_name">Nama subkategori</string>
     <string name="category_name">Nama kategori</string>
     <string name="choose_your_location">Pilih lokasi anda</string>
+    <string name="home_out_of_area">Diluar jangkauan</string>
 
     <!--    Product detail-->
     <string name="product_detail">Detil Produk</string>
@@ -53,6 +54,12 @@
     <string name="promo_start_date">Tanggal mulai</string>
     <string name="promo_expired_date">Tanggal kadaluwarsa</string>
     <string name="promo_upload_picture">Unggah Foto Promo</string>
+    <string name="promo">Promo</string>
+
+    <!--    History-->
+    <string name="your_order">Pemesanan Anda</string>
+    <string name="active">Aktif</string>
+    <string name="done">Selesai</string>
 
     <!--    Profile-->
     <string name="profile_are_you_sure_logout">Anda yakin ingin keluar?</string>
@@ -83,11 +90,14 @@
     <string name="shared_res_success">Berhasil</string>
     <string name="shared_res_failed">Gagal</string>
     <string name="shared_res_failed_load">Gagal memuat</string>
-    <string name="shared_res_no_data">Belum ada data</string>
     <string name="shared_res_copied">Tersalin</string>
     <string name="shared_res_yes_logout">Ya, keluar</string>
     <string name="shared_res_logout">Keluar</string>
     <string name="shared_res_back">Kembali</string>
     <string name="shared_res_whatsapp_number">085882411322</string>
     <string name="shared_res_closed">Tutup</string>
+    <string name="shared_res_no_data">Oops! belum terdapat data..</string>
+
+<!--    city-->
+    <string name="city_res_jakarta">Jakarta</string>
 </resources>

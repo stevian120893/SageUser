@@ -1,16 +1,20 @@
 package com.mib.feature_home.contents.product_list
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_CATEGORY_CODE
+import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_IS_SEARCH
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_NAME
 import com.mib.feature_home.domain.model.ProductsItemPaging
 import com.mib.feature_home.usecase.GetProductsUseCase
+import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
@@ -45,6 +49,7 @@ class ProductListViewModel @Inject constructor(
     private var categoryCode: String? = null
     private var subcategoryCode: String? = null
     private var subcategoryName: String? = null
+    var isSearch: Boolean = false
 
     private val _subcategoryNameLiveData = SingleLiveEvent<String>()
     val subcategoryNameLiveData: LiveData<String> = _subcategoryNameLiveData
@@ -53,13 +58,14 @@ class ProductListViewModel @Inject constructor(
         categoryCode = arg?.getString(KEY_CATEGORY_CODE).orEmpty()
         subcategoryCode = arg?.getString(KEY_SUBCATEGORY_CODE).orEmpty()
         subcategoryName = arg?.getString(KEY_SUBCATEGORY_NAME).orEmpty()
+        isSearch = arg?.getBoolean(KEY_IS_SEARCH) ?: false
         _subcategoryNameLiveData.postValue(arg?.getString(KEY_SUBCATEGORY_NAME).orEmpty())
     }
 
-    fun fetchProducts(fragment: Fragment, nextCursor: String? = null) {
+    fun fetchProducts(fragment: Fragment, nextCursor: String? = null, keySearch: String? = null) {
         state = state.copy(isLoadProducts = true, event = NO_EVENT)
         viewModelScope.launch(ioDispatcher) {
-            val result = getProductsUseCase(nextCursor, categoryCode.orEmpty(), subcategoryCode.orEmpty(), "")
+            val result = getProductsUseCase(nextCursor, categoryCode.orEmpty(), subcategoryCode.orEmpty(), keySearch)
 
             withContext(mainDispatcher) {
                 result.first.items?.let {
@@ -79,6 +85,11 @@ class ProductListViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun searchMerchant(fragment: Fragment, v: View?) {
+        v?.let { AppUtils.hideKeyboard(it, fragment.context) }
+        fetchProducts(fragment, ProductListFragment.DEFAULT_NEXT_CURSOR_REQUEST)
     }
 
     fun goToProductDetail(navController: NavController, productCode: String) {

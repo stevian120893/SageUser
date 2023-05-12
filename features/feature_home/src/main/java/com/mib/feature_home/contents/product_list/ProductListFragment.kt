@@ -2,9 +2,12 @@ package com.mib.feature_home.contents.product_list
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -41,7 +44,6 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@ProductListFragment, backPressedCallback)
-        viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
     }
 
     override fun onCreateView(
@@ -57,8 +59,8 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
-//            setupAdapter(requireContext())
             AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvProduct, 2)
+            initView()
             initListener()
             observeLiveData(view.context)
         }
@@ -69,6 +71,16 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         _binding = null
         productsAdapter = null
         nextCursor = null
+    }
+
+    private fun initView() {
+        if(!viewModel.isSearch) {
+            viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+        } else {
+            binding.srlProduct.isEnabled = false
+            binding.tvSubcategoryName.visibility = View.GONE
+            AppUtils.showKeyboard(binding.etSearch, requireContext())
+        }
     }
 
     private fun initListener() {
@@ -87,6 +99,30 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
                 }
             }
         })
+
+        binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.searchMerchant(this@ProductListFragment, v)
+                handled = true
+            }
+            handled
+        }
+
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if (binding.etSearch.text.toString().trim { it <= ' ' } == "") {
+                    beginState()
+                }
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
+
+        binding.llNoData.setOnClickListener {
+            viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+        }
 
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
@@ -113,7 +149,7 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
                     state.productsItemPaging?.let { productsItem ->
                         if(productsItem.items?.isNotEmpty() == true) {
                             binding.rvProduct.visibility = View.VISIBLE
-                            binding.tvNoData.visibility = View.GONE
+                            binding.llNoData.visibility = View.GONE
                             nextCursor = productsItem.nextCursor
                             val hasMoreItem = productsItem.nextCursor != null
                             if(hasMoreItem) {
@@ -123,19 +159,19 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
                                     productsAdapter?.addList(productsItem.items?.toMutableList())
                                     isLoadNextItem = false
                                 } else { // first fetch
-                                    productsItem.items?.let { setupAdapter(context, it) }
+                                    setupAdapter(context, productsItem.items)
                                 }
                             } else {
                                 if(isLoadNextItem) {
                                     productsAdapter?.removeLoadingFooter()
                                     isLoadNextItem = false
                                 } else {
-                                    productsItem.items?.let { setupAdapter(context, it) }
+                                    setupAdapter(context, productsItem.items)
                                 }
                             }
                         } else {
                             binding.rvProduct.visibility = View.GONE
-                            binding.tvNoData.visibility = View.VISIBLE
+                            binding.llNoData.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -161,13 +197,20 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         binding.rvProduct.adapter = productsAdapter
     }
 
+    private fun beginState() {
+        binding.sflProduct.visibility = View.GONE
+        binding.llContent.visibility = View.GONE
+        binding.llNoData.visibility = View.GONE
+    }
+
     companion object {
         private const val MAX_PAGINATION_ITEMS = 10
-        private const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
 
+        const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         const val KEY_CATEGORY_CODE = "key_category_code"
         const val KEY_SUBCATEGORY_CODE = "key_subcategory_code"
         const val KEY_SUBCATEGORY_NAME = "key_subcategory_name"
+        const val KEY_IS_SEARCH = "key_is_search"
     }
 }

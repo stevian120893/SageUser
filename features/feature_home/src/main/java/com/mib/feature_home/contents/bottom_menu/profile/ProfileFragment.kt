@@ -39,7 +39,6 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
             binding.btLogout.visibility = View.VISIBLE
         } else {
             binding.btLogin.visibility = View.VISIBLE
-            viewModel.goToLoginScreen(findNavController())
         }
 
         lifecycleScope.launch {
@@ -55,7 +54,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
 
     private fun initListener() {
         binding.btLogin.setOnClickListener {
-            viewModel.showUploadOptionDialog(this@ProfileFragment)
+            viewModel.goToLoginScreen(findNavController())
         }
         binding.btLogout.setOnClickListener {
             viewModel.showUploadOptionDialog(this@ProfileFragment)

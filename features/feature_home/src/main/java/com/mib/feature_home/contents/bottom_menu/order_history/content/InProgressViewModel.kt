@@ -1,4 +1,4 @@
-package com.mib.feature_home.contents.bottom_menu.order_history
+package com.mib.feature_home.contents.bottom_menu.order_history.content
 
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
@@ -13,13 +13,13 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
-class OrderHistoryViewModel @Inject constructor(
+class InProgressViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineContext,
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val loginUseCase: LoginUseCase,
     val loadingDialog: LoadingDialogNavigation
-) : BaseViewModel<OrderHistoryViewModel.ViewState>(ViewState()) {
+) : BaseViewModel<InProgressViewModel.ViewState>(ViewState()) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 

@@ -79,11 +79,18 @@ class SubcategoryListViewModel @Inject constructor(
 
     fun goToProductListScreen(
         navController: NavController,
-        categoryCode: String,
-        subcategoryCode: String,
-        subcategoryName: String,
+        categoryCode: String? = null,
+        subcategoryCode: String? = null,
+        subcategoryName: String? = null,
+        isSearch: Boolean = false
     ) {
-        homeNavigation.goToProductListScreen(navController, categoryCode, subcategoryCode, subcategoryName)
+        homeNavigation.goToProductListScreen(
+            navController,
+            categoryCode,
+            subcategoryCode,
+            subcategoryName,
+            isSearch
+        )
     }
 
     data class ViewState(

@@ -9,20 +9,17 @@ import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
 import com.mib.feature_home.databinding.AdapterPromoBinding
-import com.mib.feature_home.domain.model.Product
-import com.mib.feature_home.utils.withThousandSeparator
-import java.math.BigDecimal
+import com.mib.feature_home.domain.model.Promo
 
 class PromoAdapter(
-    val context: Context,
-    val itemList: MutableList<Product>,
+    val itemList: MutableList<Promo>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder  {
         return if (viewType == VIEW_TYPE_ITEM) {
             val itemBinding = AdapterPromoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ProductItemHolder(parent.context, itemBinding, onItemClickListener)
+            PromoItemHolder(parent.context, itemBinding, onItemClickListener)
         } else {
             val itemBinding = AdapterLoadingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             LoadingViewHolder(itemBinding)
@@ -34,29 +31,29 @@ class PromoAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (itemList[position].productName.isBlank()) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+        return if (itemList[position].promoTitle.isBlank()) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ProductItemHolder) {
-            val product: Product = itemList[position]
-            holder.bind(product)
+        if (holder is PromoItemHolder) {
+            val promo: Promo = itemList[position]
+            holder.bind(promo)
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, position)
         }
     }
 
-    class ProductItemHolder(
+    class PromoItemHolder(
         private val context: Context,
         private val itemBinding: AdapterPromoBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(product: Product) {
-            Glide.with(context).load(product.productImageUrl).into(itemBinding.ivPromo)
-            itemBinding.tvPromo.text = product.productName
+        fun bind(item: Promo) {
+            Glide.with(context).load(item.promoImageUrl).into(itemBinding.ivPromo)
+            itemBinding.tvPromo.text = item.promoTitle
 
             itemBinding.rlPromo.setOnClickListener {
-                adapterListener.onClick(product)
+                adapterListener.onClick(item)
             }
         }
     }
@@ -70,14 +67,16 @@ class PromoAdapter(
     }
 
     fun addLoadingFooter() {
-        itemList.add(Product(
+        itemList.add(Promo(
             "",
             "",
             "",
+            0,
+            0L,
+            0L,
+            false,
             "",
-            "",
-            "",
-            "","", BigDecimal.ZERO,0,""
+            ""
         ))
         notifyItemInserted(itemList.size-1)
     }
@@ -88,11 +87,11 @@ class PromoAdapter(
     }
 
     interface OnItemClickListener {
-        fun onClick(product: Product)
+        fun onClick(item: Promo)
     }
 
-    fun addList(products: MutableList<Product>?) {
-        itemList.addAll(products ?: emptyList())
+    fun addList(items: MutableList<Promo>?) {
+        itemList.addAll(items ?: emptyList())
         notifyDataSetChanged()
     }
 

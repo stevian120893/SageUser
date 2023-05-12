@@ -88,7 +88,8 @@
                         android:gravity="center_vertical"
                         android:drawablePadding="@dimen/_2sdp"
                         style="@style/Medium12"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:ellipsize="marquee"/>
                     <TextView
                         android:id="@+id/tvTime"
                         android:layout_width="0dp"
@@ -98,18 +99,22 @@
                         android:gravity="center_vertical"
                         android:drawablePadding="@dimen/_2sdp"
                         style="@style/Medium12"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                     <TextView
                         android:id="@+id/tvLocation"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Jakarta Barat"
+                        android:text="-"
                         android:drawableStart="@drawable/ic_location"
                         android:gravity="center_vertical"
                         android:drawableTint="@color/colorPrimary"
                         android:drawablePadding="@dimen/_2sdp"
                         style="@style/Medium12"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -149,7 +154,9 @@
                         android:gravity="center_vertical"
                         android:drawablePadding="@dimen/_2sdp"
                         style="@style/Medium12"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
                 </LinearLayout>
             </RelativeLayout>
 

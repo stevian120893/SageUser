@@ -88,6 +88,22 @@ class HomeViewModel @Inject constructor(
         homeNavigation.goToSubcategoryListScreen(navController, categoryCode, categoryName)
     }
 
+    fun goToProductListScreen(
+        navController: NavController,
+        categoryCode: String? = null,
+        subcategoryCode: String? = null,
+        subcategoryName: String? = null,
+        isSearch: Boolean = false
+    ) {
+        homeNavigation.goToProductListScreen(
+            navController,
+            categoryCode,
+            subcategoryCode,
+            subcategoryName,
+            isSearch
+        )
+    }
+
     fun chooseLocation(context: Context) {
         DialogUtils.showDialogList(context, cities, object : ListenerCityList {
             override fun action(city: City) {

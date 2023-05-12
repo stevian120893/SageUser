@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.R
 import com.mib.feature_home.adapter.BannerAdapter
 import com.mib.feature_home.adapter.CategoriesAdapter
 import com.mib.feature_home.contents.bottom_menu.home.HomeViewModel.Companion.EVENT_UPDATE_FIRST_ITEMS
@@ -71,6 +72,13 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
     }
 
     private fun initListener(context: Context) {
+        binding.llSearch.setOnClickListener {
+            viewModel.goToProductListScreen(
+                navController = findNavController(),
+                isSearch = true
+            )
+        }
+
         binding.textSeeAll.setOnClickListener {
             viewModel.goToCategoryListScreen(findNavController())
         }
@@ -111,8 +119,13 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                     }
                 }
                 EVENT_UPDATE_LOCATION -> {
-                    if(it.location != null) {
-                        binding.tvLocation.text = it.location?.second.orEmpty()
+                    it.location?.let { location ->
+                        val cityName = location.second.orEmpty()
+                        if(cityName == getString(R.string.city_res_jakarta)) {
+                            binding.tvLocation.text = getString(R.string.city_res_jakarta)
+                        } else {
+                            binding.tvLocation.text = getString(R.string.home_out_of_area)
+                        }
                     }
                 }
             }

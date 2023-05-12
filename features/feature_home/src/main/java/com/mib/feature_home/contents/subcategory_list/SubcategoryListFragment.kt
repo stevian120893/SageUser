@@ -57,7 +57,6 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
-//            setupAdapter(requireContext())
             AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvSubcategory, 4)
             initListener()
             observeLiveData(view.context)
@@ -88,6 +87,17 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
             }
         })
 
+        binding.llSearch.setOnClickListener {
+            viewModel.goToProductListScreen(
+                navController = findNavController(),
+                isSearch = true
+            )
+        }
+
+        binding.llNoData.setOnClickListener {
+            viewModel.fetchSubcategories(this@SubcategoryListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+        }
+
         binding.ivBack.setOnClickListener {
             viewModel.goToHomeScreen(findNavController())
         }
@@ -115,7 +125,7 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
                     state.subcategoriesItemPaging?.let { subcategoriesItem ->
                         if(subcategoriesItem.items?.isNotEmpty() == true) {
                             binding.rvSubcategory.visibility = View.VISIBLE
-                            binding.tvNoData.visibility = View.GONE
+                            binding.llNoData.visibility = View.GONE
                             nextCursor = subcategoriesItem.nextCursor
                             val hasMoreItem = subcategoriesItem.nextCursor != null
                             if(hasMoreItem) {
@@ -137,7 +147,7 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
                             }
                         } else {
                             binding.rvSubcategory.visibility = View.GONE
-                            binding.tvNoData.visibility = View.VISIBLE
+                            binding.llNoData.visibility = View.VISIBLE
                         }
                     }
                 }

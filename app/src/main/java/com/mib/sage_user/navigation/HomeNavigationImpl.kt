@@ -4,8 +4,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment
-import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_CODE
-import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_NAME
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_CODE
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_NAME
 import com.mib.lib_navigation.HomeNavigation
@@ -33,16 +31,18 @@ class HomeNavigationImpl : HomeNavigation {
     }
     override fun goToProductListScreen(
         navController: NavController,
-        categoryCode: String,
-        subcategoryCode: String,
-        subcategoryName: String
+        categoryCode: String?,
+        subcategoryCode: String?,
+        subcategoryName: String?,
+        isSearch: Boolean
     ) {
         navController.navigate(
             R.id.action_productListFragment,
             bundleOf(
                 ProductListFragment.KEY_CATEGORY_CODE to categoryCode,
-                KEY_SUBCATEGORY_CODE to subcategoryCode,
-                KEY_SUBCATEGORY_NAME to subcategoryName
+                ProductListFragment.KEY_SUBCATEGORY_CODE to subcategoryCode,
+                ProductListFragment.KEY_SUBCATEGORY_NAME to subcategoryName,
+                ProductListFragment.KEY_IS_SEARCH to isSearch
             )
         )
     }

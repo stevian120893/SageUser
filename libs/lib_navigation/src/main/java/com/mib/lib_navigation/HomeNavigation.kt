@@ -6,7 +6,13 @@ interface HomeNavigation {
     fun goToHomeScreen(navController: NavController)
     fun goToCategoryListScreen(navController: NavController)
     fun goToSubcategoryListScreen(navController: NavController, categoryCode: String, categoryName: String)
-    fun goToProductListScreen(navController: NavController, categoryCode: String, subcategoryCode: String, subcategoryName: String)
+    fun goToProductListScreen(
+        navController: NavController,
+        categoryCode: String? = null,
+        subcategoryCode: String? = null,
+        subcategoryName: String? = null,
+        isSearch: Boolean = false
+    )
     fun goToProductDetailScreen(navController: NavController, productCode: String)
     fun goToLoginScreen(navController: NavController)
     fun goToRegisterScreen(navController: NavController)

@@ -1,31 +1,29 @@
 package com.mib.feature_home.contents.bottom_menu.order_history
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.lifecycleScope
-import com.mib.feature_home.databinding.FragmentLoginBinding
-import com.mib.lib.mvvm.BaseFragment
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
+import com.mib.feature_home.R
+import com.mib.feature_home.contents.bottom_menu.order_history.content.CompletedFragment
+import com.mib.feature_home.contents.bottom_menu.order_history.content.InProgressFragment
+import com.mib.feature_home.databinding.FragmentOrderHistoryBinding
+import com.mib.feature_home.utils.TabAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class OrderHistoryFragment : BaseFragment<OrderHistoryViewModel>(0) {
+class OrderHistoryFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentOrderHistoryBinding? = null
     private val binding get() = _binding!!
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             activity?.finish()
         }
-    }
-
-    override fun initViewModel(firstInit: Boolean) {
-        setViewModel(OrderHistoryViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,18 +36,13 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryViewModel>(0) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentOrderHistoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadingDialog.subscribe(this, false)
-
-        lifecycleScope.launch {
-            initListener(view.context)
-            observeLiveData()
-        }
+        initUi()
     }
 
     override fun onDestroyView() {
@@ -57,9 +50,18 @@ class OrderHistoryFragment : BaseFragment<OrderHistoryViewModel>(0) {
         _binding = null
     }
 
-    private fun initListener(context: Context) {}
+    private fun initUi() {
+        val adapter = TabAdapter(childFragmentManager, lifecycle)
+        adapter.addFragment(InProgressFragment(), getString(R.string.active))
+        adapter.addFragment(CompletedFragment(), getString(R.string.done))
+        binding.tabLayout.setupWithViewPager(binding.vpHistory, adapter)
+        binding.vpHistory.isUserInputEnabled = false
 
-    private fun observeLiveData() {
-        viewModel.stateLiveData.observe(viewLifecycleOwner) {}
+        binding.vpHistory.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+            }
+        })
+
     }
 }

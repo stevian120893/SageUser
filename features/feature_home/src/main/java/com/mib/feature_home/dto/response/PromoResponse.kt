@@ -12,16 +12,6 @@ class PromoResponse (
     val description: String?,
     @SerializedName("type")
     val type: Int?,
-    @SerializedName("discount")
-    val promoDiscountAmount: BigDecimal?,
-    @SerializedName("minimum_amount")
-    val minimumTransactionAmount: BigDecimal?,
-    @SerializedName("maximum_discount")
-    val maximumDiscount: BigDecimal?,
-    @SerializedName("input_code")
-    val promoInputCode: String?,
-    @SerializedName("quota")
-    val promoQuota: Int?,
     @SerializedName("start_date")
     val promoStartDate: Long?,
     @SerializedName("end_date")

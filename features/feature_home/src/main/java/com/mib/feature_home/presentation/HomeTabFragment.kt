@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.mib.feature_home.R
 import com.mib.feature_home.contents.bottom_menu.home.HomeFragment
+import com.mib.feature_home.contents.bottom_menu.order_history.OrderHistoryFragment
 import com.mib.feature_home.contents.bottom_menu.profile.ProfileFragment
 import com.mib.feature_home.contents.bottom_menu.promo.PromoFragment
 import com.mib.lib.mvvm.BaseFragment
@@ -37,7 +38,7 @@ class HomeTabFragment : BaseFragment<HomeTabViewModel>(0),
 
     private var homeFragment = HomeFragment()
     private var promoFragment = PromoFragment()
-    private var orderHistoryFragment = PromoFragment()
+    private var orderHistoryFragment = OrderHistoryFragment()
     private var profileFragment = ProfileFragment()
     private var activeFragment: Fragment? = null
 

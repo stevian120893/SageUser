@@ -56,7 +56,6 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
-//            setupAdapter(requireContext())
             AppUtils.firstSetRecyclerView(view.context, LinearLayoutManager.VERTICAL, binding.rvCategory)
             initListener()
             observeLiveData(view.context)
@@ -87,11 +86,22 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
             }
         })
 
+        binding.llSearch.setOnClickListener {
+            viewModel.goToProductListScreen(
+                navController = findNavController(),
+                isSearch = true
+            )
+        }
+
         binding.ivBack.setOnClickListener {
             viewModel.goToHomeScreen(findNavController())
         }
 
         binding.srlCategory.setOnRefreshListener {
+            viewModel.fetchCategories(this@CategoryListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+        }
+
+        binding.llNoData.setOnClickListener {
             viewModel.fetchCategories(this@CategoryListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
         }
     }
@@ -109,7 +119,7 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                 state.categoriesItemPaging?.let { categoriesItem ->
                     if(categoriesItem.items?.isNotEmpty() == true) {
                         binding.rvCategory.visibility = View.VISIBLE
-                        binding.tvNoData.visibility = View.GONE
+                        binding.llNoData.visibility = View.GONE
                         nextCursor = categoriesItem.nextCursor
                         val hasMoreItem = categoriesItem.nextCursor != null
                         if(hasMoreItem) {
@@ -119,19 +129,19 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                                 categoriesPagingAdapter?.addList(categoriesItem.items?.toMutableList())
                                 isLoadNextItem = false
                             } else { // first fetch
-                                categoriesItem.items?.let { setupAdapter(context, it) }
+                                setupAdapter(context, categoriesItem.items)
                             }
                         } else {
                             if(isLoadNextItem) {
                                 categoriesPagingAdapter?.removeLoadingFooter()
                                 isLoadNextItem = false
                             } else {
-                                categoriesItem.items?.let { setupAdapter(context, it) }
+                                setupAdapter(context, categoriesItem.items)
                             }
                         }
                     } else {
                         binding.rvCategory.visibility = View.GONE
-                        binding.tvNoData.visibility = View.VISIBLE
+                        binding.llNoData.visibility = View.VISIBLE
                     }
                 }
             }
