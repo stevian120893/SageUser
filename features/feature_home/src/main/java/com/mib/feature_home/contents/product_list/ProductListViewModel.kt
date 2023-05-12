@@ -87,9 +87,13 @@ class ProductListViewModel @Inject constructor(
         }
     }
 
-    fun searchMerchant(fragment: Fragment, v: View?) {
+    fun searchMerchant(fragment: Fragment, v: View?, searchKey: String) {
         v?.let { AppUtils.hideKeyboard(it, fragment.context) }
-        fetchProducts(fragment, ProductListFragment.DEFAULT_NEXT_CURSOR_REQUEST)
+        fetchProducts(
+            fragment = fragment,
+            nextCursor = ProductListFragment.DEFAULT_NEXT_CURSOR_REQUEST,
+            keySearch = searchKey
+        )
     }
 
     fun goToProductDetail(navController: NavController, productCode: String) {

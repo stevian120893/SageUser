@@ -103,7 +103,7 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         binding.etSearch.setOnEditorActionListener { v, actionId, _ ->
             var handled = false
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.searchMerchant(this@ProductListFragment, v)
+                viewModel.searchMerchant(this@ProductListFragment, v, binding.etSearch.text.toString())
                 handled = true
             }
             handled
