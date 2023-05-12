@@ -101,3 +101,6 @@ org.eclipse.buildship.core.prefs
 
 local.properties
 .DS_Store
+
+*.lock
+*.bin
