@@ -18,6 +18,7 @@ import com.mib.feature_home.`interface`.ListenerTwoActions
 import com.mib.feature_home.adapter.CityAdapter
 import com.mib.feature_home.domain.model.City
 import com.mib.lib_navigation.DialogListener
+import com.mib.feature_home.utils.utils_interface.DialogOneButtonListener
 
 class DialogUtils {
     companion object {
@@ -122,6 +123,34 @@ class DialogUtils {
             btRight.setOnClickListener {
                 alertDialog.dismiss()
                 dialogListener.onRightButtonClicked()
+            }
+        }
+
+        fun showDialogWithOneButton(
+            context: Context?,
+            title: String,
+            subtitle: String,
+            buttonText: String,
+            dialogListener: DialogOneButtonListener
+        ) {
+            val dialogBuilder = AlertDialog.Builder(context)
+            val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val layoutView: View = inflater.inflate(R.layout.dialog_one_button, null)
+            val tvTitle = layoutView.findViewById<TextView>(R.id.tvTitle)
+            val tvSubTitle = layoutView.findViewById<TextView>(R.id.tvSubTitle)
+            val btOk = layoutView.findViewById<Button>(R.id.btOk)
+
+            tvTitle.text = title
+            tvSubTitle.text = subtitle
+            btOk.text = buttonText
+            dialogBuilder.setView(layoutView)
+            val alertDialog = dialogBuilder.create()
+            alertDialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.show()
+            btOk.setOnClickListener {
+                alertDialog.dismiss()
+                dialogListener.onSubmitClicked()
             }
         }
     }

@@ -7,8 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.mib.feature_home.R
 import com.mib.feature_home.databinding.FragmentProfileBinding
+import com.mib.feature_home.utils.AppUtils
+import com.mib.feature_home.utils.DialogUtils
 import com.mib.lib.mvvm.BaseFragment
+import com.mib.lib_navigation.DialogListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -36,13 +41,13 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
         viewModel.loadingDialogNavigation.subscribe(this, false)
 
         if(viewModel.isLoggedIn()) {
-            binding.btLogout.visibility = View.VISIBLE
+            binding.llSignout.visibility = View.VISIBLE
         } else {
-            binding.btLogin.visibility = View.VISIBLE
+            binding.llSignIn.visibility = View.VISIBLE
         }
 
         lifecycleScope.launch {
-            initListener()
+            initListener(view.context)
             observeLiveData(view.context)
         }
     }
@@ -52,14 +57,46 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
         _binding = null
     }
 
-    private fun initListener() {
-        binding.btLogin.setOnClickListener {
+    private fun initListener(context: Context) {
+        binding.llSupport.setOnClickListener {
+            DialogUtils.showDialogWithTwoButtons(
+                context = context,
+                title = context.getString(R.string.contact),
+                subtitle = context.getString(R.string.contact_us_via),
+                left = context.getString(R.string.whatsapp),
+                right = context.getString(R.string.email),
+                object : DialogListener {
+                    override fun onLeftButtonClicked() {
+                        AppUtils.openWhatsApp(context, context.getString(R.string.shared_res_whatsapp_number))
+                    }
+
+                    override fun onRightButtonClicked() {
+                        AppUtils.openEmail(context, context.getString(R.string.contact_us_email))
+                    }
+                }
+            )
+        }
+
+        binding.llTermsAndConditions.setOnClickListener {
+//            AppUtils.goToWebView(context, getString(R.string.profile_terms_and_conditions), SharedPreferenceHelper.getTncLink(context!!), "")
+        }
+
+        binding.llRateUs.setOnClickListener {
+            AppUtils.launchMarket(context)
+        }
+
+        binding.llSignIn.setOnClickListener {
             viewModel.goToLoginScreen(findNavController())
         }
-        binding.btLogout.setOnClickListener {
+        binding.llSignout.setOnClickListener {
             viewModel.showUploadOptionDialog(this@ProfileFragment)
         }
     }
 
-    private fun observeLiveData(context: Context) {}
+    private fun observeLiveData(context: Context) {
+        viewModel.stateLiveData.observe(viewLifecycleOwner) {
+            binding.tvName.text = it.profile?.name.orEmpty()
+            Glide.with(context).load(it.profile?.profilePictureImageUrl).into(binding.ivIconProfile)
+        }
+    }
 }

@@ -10,8 +10,18 @@ class PromoResponse (
     val promoTitle: String?,
     @SerializedName("description")
     val description: String?,
+    @SerializedName("input_code")
+    val inputCode: String?,
+    @SerializedName("quota")
+    val quota: String?,
     @SerializedName("type")
-    val type: Int?,
+    val type: String?,
+    @SerializedName("discount")
+    val discount: String?,
+    @SerializedName("minimum_amount")
+    val minimumAmount: String?,
+    @SerializedName("maximum_discount")
+    val maximumDiscount: String?,
     @SerializedName("start_date")
     val promoStartDate: Long?,
     @SerializedName("end_date")

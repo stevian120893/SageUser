@@ -1,5 +1,6 @@
 package com.mib.feature_home.contents.product_detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.FragmentProductDetailBinding
+import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -50,7 +52,7 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel>(0) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
-            initListener()
+            initListener(view.context)
             observeLiveData()
         }
     }
@@ -60,7 +62,10 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel>(0) {
         _binding = null
     }
 
-    private fun initListener() {
+    private fun initListener(context: Context) {
+        binding.tvContactUs.setOnClickListener {
+            AppUtils.openWhatsApp(context, context.getString(R.string.shared_res_whatsapp_number))
+        }
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }

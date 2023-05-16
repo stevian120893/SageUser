@@ -63,6 +63,20 @@
 
     <!--    Profile-->
     <string name="profile_are_you_sure_logout">Anda yakin ingin keluar?</string>
+    <string name="profile_help_desc">Hubungi kami untuk membantu kamu</string>
+    <string name="profile_rate_us">Rate us</string>
+    <string name="profile_terms_and_conditions">Syarat &amp; Ketentuan</string>
+    <string name="profile_rate_us_desc">Kasih penilaian kamu terhadap layanan kami</string>
+    <string name="profile_terms_and_condition_desc">Baca ketentuan dan kondisi kami</string>
+    <string name="profile_logout_desc">Keluar dari akun kamu</string>
+    <string name="profile_login_desc">Masuk ke akun kamu</string>
+    <string name="contact">Hubungi</string>
+    <string name="contact_us_via">Hubungi kami melalui..</string>
+    <string name="whatsapp">Whatsapp</string>
+    <string name="telephone">Telepon</string>
+    <string name="email">Email</string>
+    <string name="contact_us_email">sage@gmail.com</string>
+    <string name="submit">Kirim</string>
 
     <!--    image-->
     <string name="upload_image">Unggah gambar</string>
@@ -97,6 +111,7 @@
     <string name="shared_res_whatsapp_number">085882411322</string>
     <string name="shared_res_closed">Tutup</string>
     <string name="shared_res_no_data">Oops! belum terdapat data..</string>
+    <string name="shared_res_help">Bantuan</string>
 
 <!--    city-->
     <string name="city_res_jakarta">Jakarta</string>

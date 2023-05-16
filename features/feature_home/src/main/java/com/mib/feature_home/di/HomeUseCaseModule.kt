@@ -5,6 +5,7 @@ import com.mib.feature_home.repository.HomeWithAuthRepository
 import com.mib.feature_home.usecase.GetCategoriesUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.feature_home.usecase.GetProductsUseCase
+import com.mib.feature_home.usecase.GetProfileUseCase
 import com.mib.feature_home.usecase.GetPromoUseCase
 import com.mib.feature_home.usecase.GetSubcategoriesUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
@@ -40,7 +41,12 @@ object HomeUseCaseModule {
     }
 
     @Provides
-    fun provideGetPromoUseCase(repo: HomeRepository): GetPromoUseCase {
+    fun provideGetProfileUseCase(repo: HomeWithAuthRepository): GetProfileUseCase {
+        return GetProfileUseCase(repo)
+    }
+
+    @Provides
+    fun provideGetPromoUseCase(repo: HomeWithAuthRepository): GetPromoUseCase {
         return GetPromoUseCase(repo)
     }
 

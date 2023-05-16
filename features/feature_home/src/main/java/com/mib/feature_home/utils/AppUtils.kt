@@ -1,6 +1,7 @@
 package com.mib.feature_home.utils
 
 import android.content.*
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.location.Address
 import android.location.Geocoder
@@ -35,6 +36,61 @@ import okhttp3.internal.and
 class AppUtils {
 
     companion object {
+
+        fun openWhatsApp(context: Context, phoneNumber: String) {
+            var mPhoneNumber = phoneNumber
+
+            if (mPhoneNumber.substring(0, 1) == "0")
+                mPhoneNumber = mPhoneNumber.substring(1)
+            else if (mPhoneNumber.substring(0, 2) == "62")
+                mPhoneNumber = mPhoneNumber.substring(2)
+            else if (mPhoneNumber.substring(0, 2) == "+6")
+                mPhoneNumber = mPhoneNumber.substring(3)
+
+            val contact = "+62$mPhoneNumber" // use country code with your phone number
+            val url = "https://api.whatsapp.com/send?phone=$contact"
+            try {
+                val pm = context.packageManager
+                pm.getPackageInfo("com.whatsapp", PackageManager.GET_ACTIVITIES)
+                val i = Intent(Intent.ACTION_VIEW)
+                i.data = Uri.parse(url)
+                context.startActivity(i)
+            } catch (e: PackageManager.NameNotFoundException) {
+                Toast.makeText(context, "Whatsapp app not installed in your phone", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+        }
+
+        fun openEmail(context: Context, emailAddress: String) {
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "message/rfc822"
+            i.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
+            i.putExtra(Intent.EXTRA_SUBJECT, "Bantuan")
+            i.putExtra(Intent.EXTRA_TEXT, "Halo Que, ")
+            try {
+                context.startActivity(Intent.createChooser(i, "Kirim pesan..."))
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+//        fun goToWebView(mContext: Context, title: String, url: String, from: String) {
+//            val intent = WebViewActivity.newIntent(mContext)
+//            intent.putExtra(INTENT_EXTRA_WEBVIEW_TITLE, title)
+//            intent.putExtra(INTENT_EXTRA_WEBVIEW_URL, url)
+//            intent.putExtra(INTENT_EXTRA_WEBVIEW_FROM, from)
+//            mContext.startActivity(intent)
+//        }
+
+        fun launchMarket(context: Context) {
+            val uri = Uri.parse("market://details?id=" + context.packageName)
+            val myAppLinkToMarket = Intent(Intent.ACTION_VIEW, uri)
+            try {
+                context.startActivity(myAppLinkToMarket)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(context, "Unable to find market app", Toast.LENGTH_LONG).show()
+            }
+        }
 
         fun isGPSEnabled(mContext: Context): Boolean {
             val lm: LocationManager =

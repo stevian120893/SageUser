@@ -5,12 +5,16 @@ import com.google.gson.annotations.SerializedName
 class ProfileResponse (
     @SerializedName("name")
     val name: String?,
+    @SerializedName("phone")
+    val phone: String?,
+    @SerializedName("email")
+    val email: String?,
     @SerializedName("city_code")
     val cityCode: String?,
     @SerializedName("city_name")
     val cityName: String?,
-    @SerializedName("profile_picture")
-    val profilePicture: String?,
+    @SerializedName("profile_picture_path")
+    val profilePictureImageUrl: String?,
     @SerializedName("ktp_picture")
     val ktpPicture: String?,
     @SerializedName("selfie_picture")
