@@ -11,7 +11,8 @@
         app:cardCornerRadius="@dimen/_6sdp"
         android:elevation="@dimen/_5sdp"
         android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginRight="@dimen/_5sdp">
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/spacing_middle">
         <ImageView
             android:id="@+id/ivBanner"
             android:layout_width="match_parent"

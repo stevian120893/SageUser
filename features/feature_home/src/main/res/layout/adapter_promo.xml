@@ -4,21 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rlPromo"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="@dimen/_6sdp"
         android:elevation="@dimen/_5sdp"
         android:layout_marginLeft="@dimen/_5sdp"
-        android:layout_marginRight="@dimen/_5sdp">
+        android:layout_marginRight="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/spacing_middle">
         <ImageView
             android:id="@+id/ivPromo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_120sdp"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:background="@color/color_bg_gray" />
+            android:background="@color/colorGray1" />
         <TextView
             android:id="@+id/tvPromo"
             android:layout_width="@dimen/_200sdp"

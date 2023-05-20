@@ -12,7 +12,6 @@ import com.mib.feature_home.databinding.AdapterSubcategoriesItemBinding
 import com.mib.feature_home.domain.model.Subcategory
 
 class SubcategoriesPagingAdapter(
-    val context: Context,
     val itemList: MutableList<Subcategory>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

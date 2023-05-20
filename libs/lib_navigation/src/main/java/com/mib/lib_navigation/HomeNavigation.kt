@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 
 interface HomeNavigation {
     fun goToHomeScreen(navController: NavController)
-    fun goToCategoryListScreen(navController: NavController)
+    fun goToCategoryListScreen(navController: NavController, categoryCode: String?)
     fun goToSubcategoryListScreen(navController: NavController, categoryCode: String, categoryName: String)
     fun goToProductListScreen(
         navController: NavController,

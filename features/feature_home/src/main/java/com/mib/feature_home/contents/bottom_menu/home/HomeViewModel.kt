@@ -57,7 +57,7 @@ class HomeViewModel @Inject constructor(
     private lateinit var cities: List<City>
 
     fun getHomeContent() {
-        state = state.copy(isLoadHome = true)
+        state = state.copy(isLoadHome = true, event = EVENT_UPDATE_FIRST_ITEMS)
         viewModelScope.launch(ioDispatcher) {
             val result = getHomeContentUseCase()
 
@@ -80,8 +80,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun goToCategoryListScreen(navController: NavController) {
-        homeNavigation.goToCategoryListScreen(navController)
+    fun goToCategoryListScreen(navController: NavController, categoryCode: String? = null) {
+        homeNavigation.goToCategoryListScreen(navController, categoryCode)
     }
 
     fun goToSubcategoryListScreen(navController: NavController, categoryCode: String, categoryName: String) {

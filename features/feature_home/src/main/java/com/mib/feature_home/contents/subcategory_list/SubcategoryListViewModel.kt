@@ -8,9 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_CODE
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_NAME
-import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
-import com.mib.feature_home.usecase.GetCategoriesUseCase
 import com.mib.feature_home.usecase.GetSubcategoriesUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState

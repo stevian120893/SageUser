@@ -13,8 +13,16 @@ class HomeNavigationImpl : HomeNavigation {
     override fun goToHomeScreen(navController: NavController) {
         navController.navigate(R.id.action_homeFragment)
     }
-    override fun goToCategoryListScreen(navController: NavController) {
-        navController.navigate(R.id.action_categoryListFragment)
+    override fun goToCategoryListScreen(
+        navController: NavController,
+        categoryCode: String?
+    ) {
+        navController.navigate(
+            R.id.action_categoryListFragment,
+            bundleOf(
+                KEY_CATEGORY_CODE to categoryCode,
+            )
+        )
     }
     override fun goToSubcategoryListScreen(
         navController: NavController,

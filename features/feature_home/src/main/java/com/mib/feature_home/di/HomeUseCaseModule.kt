@@ -2,6 +2,7 @@ package com.mib.feature_home.di
 
 import com.mib.feature_home.repository.HomeRepository
 import com.mib.feature_home.repository.HomeWithAuthRepository
+import com.mib.feature_home.usecase.BookOrderUseCase
 import com.mib.feature_home.usecase.GetCategoriesUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.feature_home.usecase.GetProductsUseCase
@@ -56,6 +57,13 @@ object HomeUseCaseModule {
         sessionRepo: SessionRepository
     ): RegisterUseCase {
         return RegisterUseCase(repo, sessionRepo)
+    }
+
+    @Provides
+    fun provideBookOrderUseCase(
+        repo: HomeWithAuthRepository,
+    ): BookOrderUseCase {
+        return BookOrderUseCase(repo)
     }
 
     @Provides

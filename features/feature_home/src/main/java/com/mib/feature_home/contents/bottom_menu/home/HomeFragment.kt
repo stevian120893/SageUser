@@ -43,6 +43,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@HomeFragment, backPressedCallback)
         viewModel.initGps(requireContext())
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getHomeContent()
     }
 
@@ -60,7 +64,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
         viewModel.loadingDialog.subscribe(this, false)
 
         lifecycleScope.launch {
-            AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvCategory, 2)
+            AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvCategory, 3)
             initListener(view.context)
             observeLiveData()
         }
@@ -140,10 +144,9 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                     if(category.categoryCode == CATEGORY_ALL) {
                         viewModel.goToCategoryListScreen(findNavController())
                     } else {
-                        viewModel.goToSubcategoryListScreen(
+                        viewModel.goToCategoryListScreen(
                             findNavController(),
-                            category.categoryCode,
-                            category.categoryName
+                            category.categoryCode
                         )
                     }
                 }

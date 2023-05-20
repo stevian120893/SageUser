@@ -161,7 +161,6 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
 
     private fun setupAdapter(context: Context, subcategories: List<Subcategory>) {
         subcategoriesPagingAdapter = SubcategoriesPagingAdapter(
-            context = context,
             itemList = subcategories.toMutableList(),
             onItemClickListener = object : SubcategoriesPagingAdapter.OnItemClickListener {
                 override fun onClick(subcategory: Subcategory) {

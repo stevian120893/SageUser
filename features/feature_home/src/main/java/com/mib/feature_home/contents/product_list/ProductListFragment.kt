@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.mib.feature_home.adapter.ProductsAdapter
 import com.mib.feature_home.contents.product_list.ProductListViewModel.Companion.EVENT_UPDATE_PRODUCT_LIST
+import com.mib.feature_home.contents.product_list.ProductListViewModel.Companion.EVENT_UPDATE_SUBCATEGORY_NAME
 import com.mib.feature_home.databinding.FragmentProductListBinding
 import com.mib.feature_home.domain.model.Product
 import com.mib.feature_home.utils.AppUtils
@@ -60,9 +61,9 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
             AppUtils.firstSetRecyclerViewGrid(view.context, binding.rvProduct, 2)
+            observeLiveData(view.context)
             initView()
             initListener()
-            observeLiveData(view.context)
         }
     }
 
@@ -75,7 +76,7 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
 
     private fun initView() {
         if(!viewModel.isSearch) {
-            viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+            viewModel.updateSubcategoryName()
         } else {
             binding.srlProduct.isEnabled = false
             binding.tvSubcategoryName.visibility = View.GONE
@@ -143,6 +144,10 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
             }
 
             when (state.event) {
+                EVENT_UPDATE_SUBCATEGORY_NAME -> {
+                    binding.tvSubcategoryName.text = state.subcategoryName
+                    viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+                }
                 EVENT_UPDATE_PRODUCT_LIST -> {
                     binding.sflProduct.visibility = View.GONE
                     binding.llContent.visibility = View.VISIBLE
@@ -156,7 +161,7 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
                                 val cursor = nextCursor?.toInt() ?: -1
                                 if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
                                     productsAdapter?.removeLoadingFooter()
-                                    productsAdapter?.addList(productsItem.items?.toMutableList())
+                                    productsAdapter?.addList(productsItem.items.toMutableList())
                                     isLoadNextItem = false
                                 } else { // first fetch
                                     setupAdapter(context, productsItem.items)
@@ -176,10 +181,6 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
                     }
                 }
             }
-        }
-
-        viewModel.subcategoryNameLiveData.observe(viewLifecycleOwner) {
-            binding.tvSubcategoryName.text = it
         }
     }
 

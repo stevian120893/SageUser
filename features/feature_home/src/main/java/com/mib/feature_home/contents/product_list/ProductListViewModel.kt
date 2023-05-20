@@ -2,7 +2,6 @@ package com.mib.feature_home.contents.product_list
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -51,15 +50,15 @@ class ProductListViewModel @Inject constructor(
     private var subcategoryName: String? = null
     var isSearch: Boolean = false
 
-    private val _subcategoryNameLiveData = SingleLiveEvent<String>()
-    val subcategoryNameLiveData: LiveData<String> = _subcategoryNameLiveData
-
     fun init(arg: Bundle?) {
         categoryCode = arg?.getString(KEY_CATEGORY_CODE).orEmpty()
         subcategoryCode = arg?.getString(KEY_SUBCATEGORY_CODE).orEmpty()
         subcategoryName = arg?.getString(KEY_SUBCATEGORY_NAME).orEmpty()
         isSearch = arg?.getBoolean(KEY_IS_SEARCH) ?: false
-        _subcategoryNameLiveData.postValue(arg?.getString(KEY_SUBCATEGORY_NAME).orEmpty())
+    }
+
+    fun updateSubcategoryName() {
+        state = state.copy(event = EVENT_UPDATE_SUBCATEGORY_NAME, subcategoryName = subcategoryName)
     }
 
     fun fetchProducts(fragment: Fragment, nextCursor: String? = null, keySearch: String? = null) {
@@ -117,5 +116,6 @@ class ProductListViewModel @Inject constructor(
     companion object {
         const val NO_EVENT = 0
         const val EVENT_UPDATE_PRODUCT_LIST = 1
+        const val EVENT_UPDATE_SUBCATEGORY_NAME = 2
     }
 }
