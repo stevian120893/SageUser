@@ -15,7 +15,8 @@
             android:layout_width="@dimen/_100sdp"
             android:layout_height="@dimen/_100sdp"
             android:src="@drawable/ic_logo_sage"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/_32sdp"/>
 
         <EditText
             android:id="@+id/etEmail"
@@ -77,7 +78,7 @@
             android:text="@string/shared_res_register"
             android:layout_marginTop="@dimen/_16sdp"
             android:gravity="center"
-            style="@style/Regular12"
+            style="@style/Regular12Dark"
             android:padding="@dimen/_4sdp"/>
     </LinearLayout>
 </ScrollView>

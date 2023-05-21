@@ -45,11 +45,6 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
         viewModel.initGps(requireContext())
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getHomeContent()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -123,9 +118,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                     }
                 }
                 EVENT_UPDATE_LOCATION -> {
+                    viewModel.getHomeContent()
                     it.location?.let { location ->
                         val cityName = location.second.orEmpty()
-                        if(cityName == getString(R.string.city_res_jakarta)) {
+                        if(cityName.lowercase().contains("jakarta")) {
                             binding.tvLocation.text = getString(R.string.city_res_jakarta)
                         } else {
                             binding.tvLocation.text = getString(R.string.home_out_of_area)

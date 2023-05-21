@@ -125,8 +125,10 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                     if(state.isLoadCategories) {
                         binding.rvCategory.visibility = View.GONE
                         binding.sflCategory.visibility = View.VISIBLE
+                        binding.sflSubcategory.visibility = View.VISIBLE
                     } else {
                         binding.sflCategory.visibility = View.GONE
+                        binding.sflSubcategory.visibility = View.GONE
                         binding.rvCategory.visibility = View.VISIBLE
                         state.categoriesItemPaging?.let { categoriesItem ->
                             if(categoriesItem.items?.isNotEmpty() == true) {
