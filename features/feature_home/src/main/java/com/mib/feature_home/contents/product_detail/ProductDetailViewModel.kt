@@ -1,11 +1,13 @@
 package com.mib.feature_home.contents.product_detail
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.R
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.domain.model.ProductDetail
+import com.mib.feature_home.usecase.BookOrderUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
@@ -28,9 +30,10 @@ class ProductDetailViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getProductDetailUseCase: GetProductDetailUseCase,
+    private val bookOrderUseCase: BookOrderUseCase,
     val loadingDialog: LoadingDialogNavigation,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
-) : BaseViewModel<ProductDetailViewModel.ViewState>(ViewState()) {
+) : BaseViewModel<ProductDetailViewModel.ViewState>(ViewState(NO_EVENT)) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
     private var productCode: String? = null
@@ -40,14 +43,14 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun getProductDetail(navController: NavController) {
-        state = state.copy(isLoadProduct = true)
+        state = state.copy(isLoadProduct = true, event = EVENT_UPDATE_PRODUCT)
         viewModelScope.launch(ioDispatcher) {
             val result = getProductDetailUseCase(productCode.orEmpty())
 
-            loadingDialog.dismiss()
             withContext(mainDispatcher) {
                 result.first?.let {
                     state = state.copy(
+                        event = EVENT_UPDATE_PRODUCT,
                         isLoadProduct = false,
                         productDetail = it
                     )
@@ -64,8 +67,32 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    fun bookOrder(fragment: Fragment) {
+        loadingDialog.show()
+        viewModelScope.launch(ioDispatcher) {
+            val result = bookOrderUseCase(productCode.orEmpty(), "address", "12314123", "")
+
+            withContext(mainDispatcher) {
+                loadingDialog.dismiss()
+                result.first?.let {
+                    state = state.copy(event = EVENT_ORDER_SUCCEED)
+                }
+                result.second?.let {
+                    toastEvent.postValue(it)
+                }
+            }
+        }
+    }
+
     data class ViewState(
+        val event: Int,
         var isLoadProduct: Boolean = false,
         var productDetail: ProductDetail? = null
     ) : BaseViewState
+
+    companion object {
+        const val NO_EVENT = 1
+        const val EVENT_UPDATE_PRODUCT = 2
+        const val EVENT_ORDER_SUCCEED = 3
+    }
 }

@@ -37,7 +37,7 @@
                 android:layout_height="@dimen/_80sdp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:background="@drawable/ic_account"/>
+                android:background="@drawable/bg_circle"/>
             <ImageView
                 android:layout_width="@dimen/_22sdp"
                 android:layout_height="@dimen/_22sdp"

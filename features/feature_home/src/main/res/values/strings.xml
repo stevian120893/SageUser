@@ -30,6 +30,9 @@
     <string name="years">%s tahun</string>
     <string name="currency_format">Rp%s</string>
     <string name="rating">%s/5</string>
+    <string name="booking_code">Kode booking</string>
+    <string name="price">Harga</string>
+    <string name="status">Status</string>
 
     <!--    Register-->
     <string name="phone_number">No. Handphone</string>
@@ -112,7 +115,10 @@
     <string name="shared_res_closed">Tutup</string>
     <string name="shared_res_no_data">Oops! belum terdapat data..</string>
     <string name="shared_res_help">Bantuan</string>
+    <string name="shared_res_processing">Memproses</string>
+    <string name="shared_res_login_with_your_account">Masuk dengan akun anda</string>
 
-<!--    city-->
+
+    <!--    city-->
     <string name="city_res_jakarta">Jakarta</string>
 </resources>

@@ -13,13 +13,17 @@
         android:orientation="vertical"
         android:background="@color/activity_background">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_10sdp"
-            style="@style/SemiBold18"
-            android:layout_gravity="center_vertical"
-            android:text="@string/promo"/>
+            android:padding="@dimen/_16sdp"
+            android:background="@color/white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/promo"
+                style="@style/SemiBold20"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llContent"
@@ -47,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/_60sdp"
                     android:paddingRight="@dimen/_60sdp"
-                    android:src="@drawable/ic_no_data"
+                    android:src="@drawable/illustration_no_data"
                     android:adjustViewBounds="true"/>
                 <TextView
                     android:layout_width="match_parent"

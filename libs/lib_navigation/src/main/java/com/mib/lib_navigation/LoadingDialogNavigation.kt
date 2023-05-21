@@ -1,6 +1,7 @@
 package com.mib.lib_navigation
 
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 
 interface LoadingDialogNavigation {
     /**

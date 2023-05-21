@@ -105,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/_60sdp"
                     android:paddingRight="@dimen/_60sdp"
-                    android:src="@drawable/ic_no_data"
+                    android:src="@drawable/illustration_no_data"
                     android:adjustViewBounds="true"/>
                 <TextView
                     android:layout_width="match_parent"

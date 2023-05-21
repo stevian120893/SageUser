@@ -5,24 +5,22 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
-import com.mib.feature_home.databinding.AdapterProductItemBinding
-import com.mib.feature_home.domain.model.Product
+import com.mib.feature_home.databinding.AdapterOrderHistoryBinding
+import com.mib.feature_home.domain.model.OrderHistory
 import com.mib.feature_home.utils.withThousandSeparator
 import java.math.BigDecimal
 
-class ProductsAdapter(
-    val context: Context,
-    val itemList: MutableList<Product>,
+class OrderHistoryAdapter(
+    val itemList: MutableList<OrderHistory>,
     private val onItemClickListener: OnItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder  {
         return if (viewType == VIEW_TYPE_ITEM) {
-            val itemBinding = AdapterProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            ProductItemHolder(parent.context, itemBinding, onItemClickListener)
+            val itemBinding = AdapterOrderHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            OrderHistoryItemHolder(parent.context, itemBinding, onItemClickListener)
         } else {
             val itemBinding = AdapterLoadingItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             LoadingViewHolder(itemBinding)
@@ -34,31 +32,30 @@ class ProductsAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (itemList[position].productName.isBlank()) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+        return if (itemList[position].code.isBlank()) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is ProductItemHolder) {
-            val product: Product = itemList[position]
-            holder.bind(product)
+        if (holder is OrderHistoryItemHolder) {
+            val orderHistory: OrderHistory = itemList[position]
+            holder.bind(orderHistory)
         } else if (holder is LoadingViewHolder) {
             showLoadingView(holder, position)
         }
     }
 
-    class ProductItemHolder(
+    class OrderHistoryItemHolder(
         private val context: Context,
-        private val itemBinding: AdapterProductItemBinding,
+        private val itemBinding: AdapterOrderHistoryBinding,
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
-        fun bind(product: Product) {
-            Glide.with(context).load(product.productImageUrl).into(itemBinding.ivProduct)
-            itemBinding.tvProductName.text = product.productName
-            itemBinding.tvProductPrice.text = context.getString(R.string.currency_format, product.price.toString().withThousandSeparator())
-//            itemBinding.tvRating.text = product
+        fun bind(item: OrderHistory) {
+            itemBinding.tvOrderId.text = item.code
+            itemBinding.tvPrice.text = context.getString(R.string.currency_format, item.totalPayment.toString().withThousandSeparator())
+            itemBinding.tvStatus.text = item.status
 
-            itemBinding.llAdapterParent.setOnClickListener {
-                adapterListener.onClick(product)
+            itemBinding.rlOrderHistory.setOnClickListener {
+                adapterListener.onClick(item)
             }
         }
     }
@@ -72,14 +69,16 @@ class ProductsAdapter(
     }
 
     fun addLoadingFooter() {
-        itemList.add(Product(
+        itemList.add(OrderHistory(
             "",
             "",
             "",
             "",
             "",
             "",
-            "","", BigDecimal.ZERO,0,""
+            "",
+            BigDecimal.ZERO,
+            ""
         ))
         notifyItemInserted(itemList.size-1)
     }
@@ -90,11 +89,11 @@ class ProductsAdapter(
     }
 
     interface OnItemClickListener {
-        fun onClick(product: Product)
+        fun onClick(item: OrderHistory)
     }
 
-    fun addList(products: MutableList<Product>?) {
-        itemList.addAll(products ?: emptyList())
+    fun addList(items: MutableList<OrderHistory>?) {
+        itemList.addAll(items ?: emptyList())
         notifyDataSetChanged()
     }
 

@@ -29,11 +29,9 @@ class LoadingDialogFragment : DialogFragment() {
     private var imageIndex = 0
     private val images by lazy {
         listOf(
-            VectorDrawableCompat.create(resources, R.drawable.ic_loading, null),
-//            VectorDrawableCompat.create(resources, R.drawable.ic_loading_wink, null),
-//            VectorDrawableCompat.create(resources, R.drawable.ic_loading_normal, null),
-//            VectorDrawableCompat.create(resources, R.drawable.ic_loading_wink, null),
-//            VectorDrawableCompat.create(resources, R.drawable.ic_loading_normal, null)
+            VectorDrawableCompat.create(resources, R.drawable.ic_processing, null),
+            VectorDrawableCompat.create(resources, R.drawable.ic_services, null),
+            VectorDrawableCompat.create(resources, R.drawable.ic_toolbox, null)
         )
     }
 
@@ -71,13 +69,13 @@ class LoadingDialogFragment : DialogFragment() {
             }
             val textView = TextView(view.context).also {
                 it.typeface = Typeface.DEFAULT
-                it.setText(R.string.shared_res_loading)
+                it.setText(R.string.shared_res_processing)
             }
             linearLayout?.let {
-                val dp36 = 36
+                val dp48 = 48
                 it.addView(
                     imageView,
-                    LayoutParams(dp36, dp36).also { param ->
+                    LayoutParams(dp48, dp48).also { param ->
                         param.gravity = Gravity.CENTER_HORIZONTAL
                     }
                 )
@@ -117,7 +115,7 @@ class LoadingDialogFragment : DialogFragment() {
                         stopAnimation()
                         if (imageView.isAttachedToWindow) {
                             imageIndex++
-                            imageView.setImageDrawable(images[imageIndex % 1])
+                            imageView.setImageDrawable(images[imageIndex % 3])
                             startAnimation()
                         }
                     }

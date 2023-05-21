@@ -40,7 +40,7 @@ class PromoFragment : BaseFragment<PromoViewModel>(0) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@PromoFragment, backPressedCallback)
-        viewModel.fetchPromo(this@PromoFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+        if(viewModel.isLoggedIn()) viewModel.fetchPromo(this@PromoFragment, DEFAULT_NEXT_CURSOR_REQUEST)
     }
 
     override fun onCreateView(

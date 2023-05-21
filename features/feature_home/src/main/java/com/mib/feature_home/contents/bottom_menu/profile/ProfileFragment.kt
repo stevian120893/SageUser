@@ -27,6 +27,11 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
         setViewModel(ProfileViewModel::class.java)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if(viewModel.isLoggedIn()) viewModel.getProfile(findNavController())
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +47,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>(0) {
 
         if(viewModel.isLoggedIn()) {
             binding.llSignout.visibility = View.VISIBLE
+            binding.ivIconProfile.clipToOutline = true
         } else {
             binding.llSignIn.visibility = View.VISIBLE
         }

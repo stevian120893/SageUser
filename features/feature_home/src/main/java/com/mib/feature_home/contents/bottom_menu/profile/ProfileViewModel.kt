@@ -44,7 +44,7 @@ class ProfileViewModel @Inject constructor(
 
             withContext(mainDispatcher) {
                 result.first?.let {
-                    state = state.copy(profile = it, )
+                    state = state.copy(profile = it)
                 }
                 result.second?.let {
                     toastEvent.postValue(it)

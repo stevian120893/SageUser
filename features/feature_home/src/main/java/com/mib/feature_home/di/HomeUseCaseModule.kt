@@ -4,6 +4,7 @@ import com.mib.feature_home.repository.HomeRepository
 import com.mib.feature_home.repository.HomeWithAuthRepository
 import com.mib.feature_home.usecase.BookOrderUseCase
 import com.mib.feature_home.usecase.GetCategoriesUseCase
+import com.mib.feature_home.usecase.GetOrderHistoryUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.feature_home.usecase.GetProductsUseCase
 import com.mib.feature_home.usecase.GetProfileUseCase
@@ -64,6 +65,11 @@ object HomeUseCaseModule {
         repo: HomeWithAuthRepository,
     ): BookOrderUseCase {
         return BookOrderUseCase(repo)
+    }
+
+    @Provides
+    fun provideGetOrderHistoryUseCase(repo: HomeWithAuthRepository): GetOrderHistoryUseCase {
+        return GetOrderHistoryUseCase(repo)
     }
 
     @Provides

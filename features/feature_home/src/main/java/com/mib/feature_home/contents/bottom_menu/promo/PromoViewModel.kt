@@ -8,6 +8,7 @@ import com.mib.feature_home.usecase.GetPromoUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
+import com.mib.lib_auth.repository.SessionRepository
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.LoadingDialogNavigation
@@ -26,6 +27,7 @@ class PromoViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val getPromoUseCase: GetPromoUseCase,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation,
+    private val sessionRepository: SessionRepository
 ) : BaseViewModel<PromoViewModel.ViewState>(ViewState()) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
@@ -52,6 +54,10 @@ class PromoViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun isLoggedIn(): Boolean {
+        return !sessionRepository.getAccessToken().isNullOrBlank()
     }
 
     data class ViewState(

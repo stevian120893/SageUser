@@ -10,8 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.mib.feature_home.R
+import com.mib.feature_home.contents.product_detail.ProductDetailViewModel.Companion.EVENT_ORDER_SUCCEED
+import com.mib.feature_home.contents.product_detail.ProductDetailViewModel.Companion.EVENT_UPDATE_PRODUCT
 import com.mib.feature_home.databinding.FragmentProductDetailBinding
 import com.mib.feature_home.utils.AppUtils
+import com.mib.feature_home.utils.withThousandSeparator
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -53,7 +56,7 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel>(0) {
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
             initListener(view.context)
-            observeLiveData()
+            observeLiveData(view.context)
         }
     }
 
@@ -69,28 +72,40 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel>(0) {
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.btOrder.setOnClickListener {
+            viewModel.bookOrder(this@ProductDetailFragment)
+        }
     }
 
-    private fun observeLiveData() {
+    private fun observeLiveData(context: Context) {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-            if(state.isLoadProduct) {
-                binding.rlContent.visibility = View.GONE
-                binding.sflProductDetail.visibility = View.VISIBLE
-            } else {
-                binding.rlContent.visibility = View.VISIBLE
-                binding.sflProductDetail.visibility = View.GONE
+            when(state.event) {
+                EVENT_UPDATE_PRODUCT -> {
+                    if(state.isLoadProduct) {
+                        binding.rlContent.visibility = View.GONE
+                        binding.sflProductDetail.visibility = View.VISIBLE
+                    } else {
+                        binding.rlContent.visibility = View.VISIBLE
+                        binding.sflProductDetail.visibility = View.GONE
 
-                Glide.with(this@ProductDetailFragment).load(state.productDetail?.imageUrl).into(binding.ivProduct)
-                binding.tvProductName.text = state.productDetail?.name.orEmpty()
-                binding.tvTime.text = state.productDetail?.operationTime.orEmpty()
-                binding.tvLocation.text = state.productDetail?.location?.name.orEmpty()
-                binding.tvServiceUsed.text = getString(R.string.service_used, state.productDetail?.transactionUsage.toString())
-                binding.tvYearsService.text = getString(R.string.years, state.productDetail?.serviceYearsExperience.toString())
-                binding.tvMerchantName.text = state.productDetail?.merchantName.toString()
-                binding.tvDescription.text = state.productDetail?.description.toString()
-                binding.tvRating.text = getString(R.string.rating, state.productDetail?.rating.toString())
+                        Glide.with(this@ProductDetailFragment).load(state.productDetail?.imageUrl).into(binding.ivProduct)
+                        binding.tvProductName.text = state.productDetail?.name.orEmpty()
+                        binding.tvPrice.text = context.getString(R.string.currency_format, state.productDetail?.price.orEmpty().withThousandSeparator())
+                        binding.tvTime.text = state.productDetail?.operationTime.orEmpty()
+                        binding.tvLocation.text = state.productDetail?.location?.name.orEmpty()
+                        binding.tvServiceUsed.text = getString(R.string.service_used, state.productDetail?.transactionUsage.toString())
+                        binding.tvYearsService.text = getString(R.string.years, state.productDetail?.serviceYearsExperience.toString())
+                        binding.tvMerchantName.text = state.productDetail?.merchantName.toString()
+                        binding.tvDescription.text = state.productDetail?.description.toString()
+                        binding.tvRating.text = getString(R.string.rating, state.productDetail?.rating.toString())
 
-                // TODO payment acceptance
+                        // TODO payment acceptance
+                    }
+                }
+                EVENT_ORDER_SUCCEED -> {
+                    AppUtils.openWhatsApp(context, context.getString(R.string.shared_res_whatsapp_number))
+                }
             }
         }
     }
