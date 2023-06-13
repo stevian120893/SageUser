@@ -14,7 +14,6 @@ import com.mib.feature_home.adapter.BannerAdapter
 import com.mib.feature_home.adapter.CategoriesAdapter
 import com.mib.feature_home.contents.bottom_menu.home.HomeViewModel.Companion.EVENT_UPDATE_FIRST_ITEMS
 import com.mib.feature_home.contents.bottom_menu.home.HomeViewModel.Companion.EVENT_UPDATE_LOCATION
-import com.mib.feature_home.contents.category_list.CategoryListFragment
 import com.mib.feature_home.databinding.FragmentHomeBinding
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category

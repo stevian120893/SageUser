@@ -78,7 +78,7 @@
             android:text="@string/shared_res_register"
             android:layout_marginTop="@dimen/_16sdp"
             android:gravity="center"
-            style="@style/Regular12Dark"
+            style="@style/Regular12"
             android:padding="@dimen/_4sdp"/>
     </LinearLayout>
 </ScrollView>
