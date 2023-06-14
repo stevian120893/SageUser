@@ -9,6 +9,7 @@ import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
 import com.mib.feature_home.databinding.AdapterOrderHistoryBinding
 import com.mib.feature_home.domain.model.OrderHistory
+import com.mib.feature_home.utils.stringToDate
 import com.mib.feature_home.utils.withThousandSeparator
 import java.math.BigDecimal
 
@@ -50,7 +51,12 @@ class OrderHistoryAdapter(
         private val adapterListener: OnItemClickListener
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: OrderHistory) {
+            itemBinding.tvOrderName.text = item.code
+            itemBinding.tvMerchantName.text = item.merchantName
+            // TODO: image
+
             itemBinding.tvOrderId.text = item.code
+            itemBinding.tvDate.text = item.bookingDate.stringToDate("dd MMM yyyy, hh.mm a")
             itemBinding.tvPrice.text = context.getString(R.string.currency_format, item.totalPayment.toString().withThousandSeparator())
             itemBinding.tvStatus.text = item.status
 

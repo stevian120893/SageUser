@@ -20,7 +20,7 @@
     <string name="home_out_of_area">Diluar jangkauan</string>
 
     <!--    Product detail-->
-    <string name="product_detail">Detil Produk</string>
+    <string name="product_detail">Detail Produk</string>
     <string name="contact_us">Hubungi kami</string>
     <string name="merchant_name">Nama merchant</string>
     <string name="description">Deskripsi</string>
@@ -63,6 +63,10 @@
     <string name="your_order">Pemesanan Anda</string>
     <string name="active">Aktif</string>
     <string name="done">Selesai</string>
+    <string name="date">Tanggal</string>
+    <string name="order_history_detail">Detail pesanan</string>
+    <string name="payment_type">Tipe pembayaran</string>
+    <string name="notes">Catatan</string>
 
     <!--    Profile-->
     <string name="profile_are_you_sure_logout">Anda yakin ingin keluar?</string>
@@ -117,6 +121,7 @@
     <string name="shared_res_help">Bantuan</string>
     <string name="shared_res_processing">Memproses</string>
     <string name="shared_res_login_with_your_account">Masuk dengan akun anda</string>
+    <string name="shared_res_address">Alamat</string>
 
 
     <!--    city-->

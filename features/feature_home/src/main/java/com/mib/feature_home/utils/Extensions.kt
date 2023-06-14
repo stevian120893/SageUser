@@ -21,7 +21,9 @@ import com.mib.feature_home.utils.utils_interface.DatePickerListener
 import com.mib.feature_home.utils.utils_interface.TimeDialogListener
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import pl.aprilapps.easyphotopicker.EasyImage
 
@@ -134,4 +136,40 @@ fun String.withThousandSeparator(): String
 fun String.removeThousandSeparator(): String
 {
     return this.replace(".", "")
+}
+
+fun String.stringToDate(): Date?
+{
+    var date: Date? = null
+
+    val dateFormat = "yyyy-MM-dd"
+    val sdf = SimpleDateFormat(dateFormat)
+    date = sdf.parse(this)
+
+    return date
+}
+
+fun String.stringToDate(dateFormat: String): Date?
+{
+    var date: Date? = null
+
+    val sdf = SimpleDateFormat(dateFormat)
+    date = sdf.parse(this)
+
+    return date
+}
+
+fun Date.dateToString(): String
+{
+    val dateFormat = "dd MMMM yyyy"
+    val sdf = SimpleDateFormat(dateFormat)
+
+    return sdf.format(this)
+}
+
+fun Date.dateToString(dateFormat: String): String
+{
+    val sdf = SimpleDateFormat(dateFormat)
+
+    return sdf.format(this)
 }
