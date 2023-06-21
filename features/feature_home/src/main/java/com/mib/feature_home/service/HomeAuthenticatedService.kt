@@ -6,6 +6,7 @@ import com.mib.feature_home.dto.response.OrderResponse
 import com.mib.feature_home.dto.response.ProductDetailResponse
 import com.mib.feature_home.dto.response.ProfileResponse
 import com.mib.feature_home.dto.response.PromoResponse
+import com.mib.feature_home.dto.response.order_detail.OrderDetailResponse
 import com.mib.lib_api.dto.ApiResponse
 import com.mib.lib_api.dto.NetworkResponse
 import retrofit2.http.Body
@@ -37,4 +38,9 @@ interface HomeAuthenticatedService {
     suspend fun getPromo(
         @Query("page") cursor: String?
     ): NetworkResponse<ApiResponse<List<PromoResponse>>>
+
+    @GET("/order/detail")
+    suspend fun getOrderDetail(
+        @Query("order_id") orderId: String
+    ): NetworkResponse<ApiResponse<OrderDetailResponse>>
 }

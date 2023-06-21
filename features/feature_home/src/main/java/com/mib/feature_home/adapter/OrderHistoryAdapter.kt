@@ -9,6 +9,7 @@ import com.mib.feature_home.R
 import com.mib.feature_home.databinding.AdapterLoadingItemBinding
 import com.mib.feature_home.databinding.AdapterOrderHistoryBinding
 import com.mib.feature_home.domain.model.OrderHistory
+import com.mib.feature_home.utils.dateToString
 import com.mib.feature_home.utils.stringToDate
 import com.mib.feature_home.utils.withThousandSeparator
 import java.math.BigDecimal
@@ -56,7 +57,7 @@ class OrderHistoryAdapter(
             // TODO: image
 
             itemBinding.tvOrderId.text = item.code
-            itemBinding.tvDate.text = item.bookingDate.stringToDate("dd MMM yyyy, hh.mm a")
+            itemBinding.tvDate.text = item.bookingDate.stringToDate("dd MMM yyyy, hh.mm a")?.dateToString().orEmpty()
             itemBinding.tvPrice.text = context.getString(R.string.currency_format, item.totalPayment.toString().withThousandSeparator())
             itemBinding.tvStatus.text = item.status
 

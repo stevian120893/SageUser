@@ -5,6 +5,7 @@ import com.mib.feature_home.domain.model.OrderHistoryItemPaging
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.dto.request.OrderRequest
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
@@ -104,6 +105,18 @@ class HomeWithAuthRepositoryImpl(
                     emptyList(),
                     null
                 ) to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun getOrderDetail(orderId: String): Pair<OrderDetail?, String?> {
+        return when (val result = service.getOrderDetail(orderId)) {
+            is NetworkResponse.Success -> {
+                val item = result.value.data?.toDomainModel()
+                item to null
+            }
+            else -> {
+                null to result.getErrorMessage()
             }
         }
     }

@@ -8,7 +8,12 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.mib.feature_home.databinding.FragmentProductDetailBinding
+import com.mib.feature_home.R
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
+import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
+import com.mib.feature_home.utils.dateToString
+import com.mib.feature_home.utils.stringToDate
+import com.mib.feature_home.utils.withThousandSeparator
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -16,7 +21,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) {
 
-    private var _binding: FragmentProductDetailBinding? = null
+    private var _binding: FragmentOrderHistoryDetailBinding? = null
     private val binding get() = _binding!!
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
@@ -33,7 +38,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@OrderHistoryDetailFragment, backPressedCallback)
-//        viewModel.getProductDetail(findNavController())
+        viewModel.getOrderDetail(findNavController())
     }
 
     override fun onCreateView(
@@ -41,7 +46,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentProductDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentOrderHistoryDetailBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -67,33 +72,36 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     private fun observeLiveData(context: Context) {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-//            when(state.event) {
-//                EVENT_UPDATE_PRODUCT -> {
-//                    if(state.isLoadProduct) {
-//                        binding.rlContent.visibility = View.GONE
-//                        binding.sflProductDetail.visibility = View.VISIBLE
-//                    } else {
-//                        binding.rlContent.visibility = View.VISIBLE
-//                        binding.sflProductDetail.visibility = View.GONE
-//
+            when(state.event) {
+                EVENT_UPDATE_ORDER_DETAIL -> {
+                    if(state.isLoadOrderDetail) {
+                        binding.llContent.visibility = View.GONE
+                        binding.sflProductDetail.visibility = View.VISIBLE
+                    } else {
+                        binding.llContent.visibility = View.VISIBLE
+                        binding.sflProductDetail.visibility = View.GONE
+
 //                        Glide.with(this@ProductDetailFragment).load(state.productDetail?.imageUrl).into(binding.ivProduct)
-//                        binding.tvProductName.text = state.productDetail?.name.orEmpty()
-//                        binding.tvPrice.text = context.getString(R.string.currency_format, state.productDetail?.price.orEmpty().withThousandSeparator())
-//                        binding.tvTime.text = state.productDetail?.operationTime.orEmpty()
-//                        binding.tvLocation.text = state.productDetail?.location?.name.orEmpty()
-//                        binding.tvServiceUsed.text = getString(R.string.service_used, state.productDetail?.transactionUsage.toString())
-//                        binding.tvYearsService.text = getString(R.string.years, state.productDetail?.serviceYearsExperience.toString())
-//                        binding.tvMerchantName.text = state.productDetail?.merchantName.toString()
-//                        binding.tvDescription.text = state.productDetail?.description.toString()
-//                        binding.tvRating.text = getString(R.string.rating, state.productDetail?.rating.toString())
-//
-//                        // TODO payment acceptance
-//                    }
-//                }
-//                EVENT_ORDER_SUCCEED -> {
+                        binding.tvOrderName.text = state.orderDetail?.detail?.product?.name.orEmpty()
+                        binding.tvMerchantName.text = state.orderDetail?.merchant?.name.orEmpty()
+                        binding.tvCityName.text = state.orderDetail?.address.orEmpty()
+
+                        binding.tvDate.text = state.orderDetail?.bookingDate?.stringToDate("dd MMM yyyy, hh.mm a")?.dateToString().orEmpty()
+                        binding.tvPrice.text = context.getString(R.string.currency_format, state.orderDetail?.totalPrice.toString().withThousandSeparator())
+                        binding.tvPaymentType.text = state.orderDetail?.usedPaymentMethod.toString()
+
+                        binding.tvNotes.text = state.orderDetail?.note.toString()
+                        binding.tvAddress.text = state.orderDetail?.address.toString()
+                    }
+                }
+//                ProductDetailViewModel.EVENT_ORDER_SUCCEED -> {
 //                    AppUtils.openWhatsApp(context, context.getString(R.string.shared_res_whatsapp_number))
 //                }
-//            }
+            }
         }
+    }
+
+    companion object {
+        const val KEY_ORDER_ID = "KEY_ORDER_ID"
     }
 }

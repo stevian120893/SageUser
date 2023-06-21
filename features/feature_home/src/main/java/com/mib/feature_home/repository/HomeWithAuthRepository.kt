@@ -5,6 +5,7 @@ import com.mib.feature_home.domain.model.OrderHistoryItemPaging
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
 
 interface HomeWithAuthRepository {
     suspend fun getProductDetail(
@@ -28,4 +29,8 @@ interface HomeWithAuthRepository {
     suspend fun getPromos(
         cursor: String?
     ): Pair<PromoItemPaging, String?>
+
+    suspend fun getOrderDetail(
+        orderId: String
+    ): Pair<OrderDetail?, String?>
 }

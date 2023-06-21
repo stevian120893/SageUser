@@ -1,8 +1,14 @@
 package com.mib.feature_home.contents.order_history_detail
 
 import android.os.Bundle
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
+import com.mib.lib_api.ApiConstants
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
@@ -12,47 +18,50 @@ import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @HiltViewModel
 class OrderHistoryDetailViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineContext,
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
+    private val getOrderDetailUseCase: GetOrderDetailUseCase,
     val loadingDialog: LoadingDialogNavigation,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
 ) : BaseViewModel<OrderHistoryDetailViewModel.ViewState>(ViewState(NO_EVENT)) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
-//    private var productCode: String? = null
+    private var orderId: String? = null
 
     fun init(arg: Bundle?) {
-//        productCode = arg?.getString(KEY_PRODUCT_CODE).orEmpty()
+        orderId = arg?.getString(KEY_ORDER_ID)
     }
 
-//    fun getProductDetail(navController: NavController) {
-//        state = state.copy(isLoadProduct = true, event = EVENT_UPDATE_PRODUCT)
-//        viewModelScope.launch(ioDispatcher) {
-//            val result = getProductDetailUseCase(productCode.orEmpty())
-//
-//            withContext(mainDispatcher) {
-//                result.first?.let {
-//                    state = state.copy(
-//                        event = EVENT_UPDATE_PRODUCT,
-//                        isLoadProduct = false,
-//                        productDetail = it
-//                    )
-//                }
-//                result.second?.let {
-//                    toastEvent.postValue(it)
-//                    if(it == ApiConstants.ERROR_MESSAGE_UNAUTHORIZED) {
-//                        withContext(mainDispatcher) {
-//                            unauthorizedErrorNavigation.handleErrorMessage(navController, it)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
+    fun getOrderDetail(navController: NavController) {
+        state = state.copy(isLoadOrderDetail = true, event = EVENT_UPDATE_ORDER_DETAIL)
+        viewModelScope.launch(ioDispatcher) {
+            val result = getOrderDetailUseCase(orderId.orEmpty())
+
+            withContext(mainDispatcher) {
+                result.first?.let {
+                    state = state.copy(
+                        event = EVENT_UPDATE_ORDER_DETAIL,
+                        isLoadOrderDetail = false,
+                        orderDetail = it
+                    )
+                }
+                result.second?.let {
+                    toastEvent.postValue(it)
+                    if(it == ApiConstants.ERROR_MESSAGE_UNAUTHORIZED) {
+                        withContext(mainDispatcher) {
+                            unauthorizedErrorNavigation.handleErrorMessage(navController, it)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 //    fun bookOrder(fragment: Fragment) {
 //        loadingDialog.show()
@@ -73,13 +82,13 @@ class OrderHistoryDetailViewModel @Inject constructor(
 
     data class ViewState(
         val event: Int,
-//        var isLoadProduct: Boolean = false,
-//        var productDetail: ProductDetail? = null
+        var isLoadOrderDetail: Boolean = false,
+        var orderDetail: OrderDetail? = null
     ) : BaseViewState
 
     companion object {
         const val NO_EVENT = 1
-        const val EVENT_UPDATE_PRODUCT = 2
-        const val EVENT_ORDER_SUCCEED = 3
+        const val EVENT_UPDATE_ORDER_DETAIL = 2
+//        const val EVENT_ORDER_SUCCEED = 3
     }
 }
