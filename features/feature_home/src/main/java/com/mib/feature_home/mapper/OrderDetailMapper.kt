@@ -6,6 +6,7 @@ import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.domain.model.order_detail.PaymentMethod
 import com.mib.feature_home.domain.model.order_detail.Product
 import com.mib.feature_home.dto.response.order_detail.OrderDetailResponse
+import com.mib.feature_home.utils.AppUtils
 import java.math.BigDecimal
 
 fun OrderDetailResponse.toDomainModel(): OrderDetail {
@@ -48,15 +49,15 @@ fun OrderDetailResponse.toDomainModel(): OrderDetail {
         code = this.code.orEmpty(),
         address = this.address.orEmpty(),
         status = status,
-        orderDate = this.orderDate.orEmpty(),
-        bookingDate = this.bookingDate.orEmpty(),
-        orderAcceptedAt = this.orderAcceptedAt.orEmpty(),
+        orderDate = AppUtils.convertMillisToDate(this.orderDate),
+        bookingDate = AppUtils.convertMillisToDate(this.bookingDate),
+        orderAcceptedAt = AppUtils.convertMillisToDate(this.orderAcceptedAt),
         totalPrice = this.totalPrice ?: BigDecimal.ZERO,
         discount = this.discount ?: BigDecimal.ZERO,
         totalPayment = this.totalPayment ?: BigDecimal.ZERO,
         usedPaymentMethod = this.usedPaymentMethod.orEmpty(),
         paymentReceiptImage = this.paymentReceiptImage.orEmpty(),
-        paymentSuccessAt = this.paymentSuccessAt.orEmpty(),
+        paymentSuccessAt = AppUtils.convertMillisToDate(this.paymentSuccessAt),
         note = this.note.orEmpty(),
         detail = detail,
         paymentMethod = paymentMethods

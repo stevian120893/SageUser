@@ -2,6 +2,7 @@ package com.mib.sage_user.navigation
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_CODE
@@ -73,5 +74,17 @@ class HomeNavigationImpl : HomeNavigation {
 
     override fun goToRegisterScreen(navController: NavController) {
         navController.navigate(R.id.action_register_fragment)
+    }
+
+    override fun goToOrderDetailScreen(
+        navController: NavController,
+        orderId: String
+    ) {
+        navController.navigate(
+            R.id.action_orderDetailFragment,
+            bundleOf(
+                KEY_ORDER_ID to orderId,
+            )
+        )
     }
 }

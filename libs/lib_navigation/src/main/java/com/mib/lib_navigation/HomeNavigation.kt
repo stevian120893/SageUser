@@ -16,4 +16,5 @@ interface HomeNavigation {
     fun goToProductDetailScreen(navController: NavController, productCode: String)
     fun goToLoginScreen(navController: NavController)
     fun goToRegisterScreen(navController: NavController)
+    fun goToOrderDetailScreen(navController: NavController, orderId: String)
 }

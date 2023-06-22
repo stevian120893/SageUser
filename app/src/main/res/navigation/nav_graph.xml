@@ -40,6 +40,10 @@
         android:id="@+id/loadingDialog"
         android:name="com.mib.feature_home.utils.LoadingDialogFragment"
         android:label="LoadingDialogFragment" />
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment"
+        android:label="OrderDetailFragment" />
     <!--end region-->
 
     <!--region action-->
@@ -67,5 +71,8 @@
     <action
         android:id="@+id/action_loadingDialog"
         app:destination="@id/loadingDialog" />
+    <action
+        android:id="@+id/action_orderDetailFragment"
+        app:destination="@id/orderDetailFragment" />
     <!--end region-->
 </navigation>

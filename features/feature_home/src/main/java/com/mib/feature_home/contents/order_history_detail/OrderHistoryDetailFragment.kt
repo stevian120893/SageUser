@@ -86,7 +86,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                         binding.tvMerchantName.text = state.orderDetail?.merchant?.name.orEmpty()
                         binding.tvCityName.text = state.orderDetail?.address.orEmpty()
 
-                        binding.tvDate.text = state.orderDetail?.bookingDate?.stringToDate("dd MMM yyyy, hh.mm a")?.dateToString().orEmpty()
+                        binding.tvDate.text = state.orderDetail?.bookingDate
                         binding.tvPrice.text = context.getString(R.string.currency_format, state.orderDetail?.totalPrice.toString().withThousandSeparator())
                         binding.tvPaymentType.text = state.orderDetail?.usedPaymentMethod.toString()
 

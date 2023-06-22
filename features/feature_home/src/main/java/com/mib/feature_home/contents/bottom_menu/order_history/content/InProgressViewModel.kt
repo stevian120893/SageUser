@@ -65,6 +65,10 @@ class InProgressViewModel @Inject constructor(
         homeNavigation.goToLoginScreen(navController = navController)
     }
 
+    fun goToOrderDetailScreen(navController: NavController, orderId: String) {
+        homeNavigation.goToOrderDetailScreen(navController = navController, orderId = orderId)
+    }
+
     fun isLoggedIn(): Boolean {
         return !sessionRepository.getAccessToken().isNullOrBlank()
     }

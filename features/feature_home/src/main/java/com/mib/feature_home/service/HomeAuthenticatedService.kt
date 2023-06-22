@@ -12,6 +12,7 @@ import com.mib.lib_api.dto.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface HomeAuthenticatedService {
@@ -39,8 +40,8 @@ interface HomeAuthenticatedService {
         @Query("page") cursor: String?
     ): NetworkResponse<ApiResponse<List<PromoResponse>>>
 
-    @GET("/order/detail")
+    @GET("/order/detail/{order_id}")
     suspend fun getOrderDetail(
-        @Query("order_id") orderId: String
+        @Path("order_id") orderId: String
     ): NetworkResponse<ApiResponse<OrderDetailResponse>>
 }

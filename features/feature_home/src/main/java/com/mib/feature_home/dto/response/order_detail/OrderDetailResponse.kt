@@ -14,11 +14,11 @@ class OrderDetailResponse (
     @SerializedName("status")
     val status: String?,
     @SerializedName("order_date")
-    val orderDate: String?,
+    val orderDate: Long?,
     @SerializedName("booking_date")
-    val bookingDate: String?,
+    val bookingDate: Long?,
     @SerializedName("order_accepted_at")
-    val orderAcceptedAt: String?,
+    val orderAcceptedAt: Long?,
     @SerializedName("total_price")
     val totalPrice: BigDecimal?,
     @SerializedName("discount")
@@ -30,7 +30,7 @@ class OrderDetailResponse (
     @SerializedName("payment_receipt_image")
     val paymentReceiptImage: String?,
     @SerializedName("payment_success_at")
-    val paymentSuccessAt: String?,
+    val paymentSuccessAt: Long?,
     @SerializedName("note")
     val note: String?,
     @SerializedName("detail")

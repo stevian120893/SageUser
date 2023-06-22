@@ -140,7 +140,7 @@ class InProgressFragment : BaseFragment<InProgressViewModel>(0) {
             itemList = items.toMutableList(),
             onItemClickListener = object : OrderHistoryAdapter.OnItemClickListener {
                 override fun onClick(item: OrderHistory) {
-                    // TODO
+                    viewModel.goToOrderDetailScreen(findNavController(), item.code)
                 }
             }
         )
