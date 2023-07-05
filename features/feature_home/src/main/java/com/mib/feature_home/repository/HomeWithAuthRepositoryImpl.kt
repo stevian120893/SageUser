@@ -7,6 +7,7 @@ import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.dto.request.OrderRequest
+import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
 import com.mib.feature_home.service.HomeAuthenticatedService
@@ -113,6 +114,28 @@ class HomeWithAuthRepositoryImpl(
         return when (val result = service.getOrderDetail(orderId)) {
             is NetworkResponse.Success -> {
                 val item = result.value.data?.toDomainModel()
+                item to null
+            }
+            else -> {
+                null to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun sendRating(
+        orderId: String,
+        rating: String,
+        review: String
+    ): Pair<Void?, String?> {
+        val sendRatingRequest = SendRatingRequest(
+            orderId = orderId,
+            rating = rating,
+            review = review
+        )
+        val result = service.sendRating(sendRatingRequest)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val item = result.value.data
                 item to null
             }
             else -> {

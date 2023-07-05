@@ -13,5 +13,6 @@ class Product (
     val productImageUrl: String,
     val price: BigDecimal,
     val serviceYearsExperience: Int,
-    val status: String
+    val status: String,
+    val rating: String
 )

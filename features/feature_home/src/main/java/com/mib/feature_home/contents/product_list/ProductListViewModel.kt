@@ -33,10 +33,8 @@ import kotlinx.coroutines.withContext
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
     val loadingDialog: LoadingDialogNavigation,
-    @IODispatcher
-    private val ioDispatcher: CoroutineContext,
-    @MainDispatcher
-    private val mainDispatcher: CoroutineContext,
+    @IODispatcher private val ioDispatcher: CoroutineContext,
+    @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getProductsUseCase: GetProductsUseCase,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation,

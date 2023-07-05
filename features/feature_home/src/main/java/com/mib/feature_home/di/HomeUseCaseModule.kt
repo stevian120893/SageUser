@@ -12,6 +12,7 @@ import com.mib.feature_home.usecase.GetProfileUseCase
 import com.mib.feature_home.usecase.GetPromoUseCase
 import com.mib.feature_home.usecase.GetSubcategoriesUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
+import com.mib.feature_home.usecase.SendRatingUseCase
 import com.mib.feature_home.usecase.auth.SendCodeUseCase
 import com.mib.feature_home.usecase.home.GetHomeContentUseCase
 import com.mib.lib_auth.repository.SessionRepository
@@ -86,5 +87,10 @@ object HomeUseCaseModule {
     @Provides
     fun provideGetOrderDetailUseCase(repo: HomeWithAuthRepository): GetOrderDetailUseCase {
         return GetOrderDetailUseCase(repo)
+    }
+
+    @Provides
+    fun provideSendRatingUseCase(repo: HomeWithAuthRepository): SendRatingUseCase {
+        return SendRatingUseCase(repo)
     }
 }

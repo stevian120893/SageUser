@@ -55,7 +55,7 @@ class ProductsAdapter(
             Glide.with(context).load(product.productImageUrl).into(itemBinding.ivProduct)
             itemBinding.tvProductName.text = product.productName
             itemBinding.tvProductPrice.text = context.getString(R.string.currency_format, product.price.toString().withThousandSeparator())
-//            itemBinding.tvRating.text = product
+            itemBinding.tvRating.text = context.getString(R.string.rating, product.rating)
 
             itemBinding.llAdapterParent.setOnClickListener {
                 adapterListener.onClick(product)
@@ -79,7 +79,7 @@ class ProductsAdapter(
             "",
             "",
             "",
-            "","", BigDecimal.ZERO,0,""
+            "","", BigDecimal.ZERO,0,"", ""
         ))
         notifyItemInserted(itemList.size-1)
     }

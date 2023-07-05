@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
+import com.mib.feature_home.usecase.SendRatingUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
@@ -27,6 +28,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getOrderDetailUseCase: GetOrderDetailUseCase,
+    private val sendRatingUseCase: SendRatingUseCase,
     val loadingDialog: LoadingDialogNavigation,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
 ) : BaseViewModel<OrderHistoryDetailViewModel.ViewState>(ViewState(NO_EVENT)) {
@@ -63,22 +65,23 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-//    fun bookOrder(fragment: Fragment) {
-//        loadingDialog.show()
-//        viewModelScope.launch(ioDispatcher) {
-//            val result = bookOrderUseCase(productCode.orEmpty(), "address", "12314123", "")
-//
-//            withContext(mainDispatcher) {
-//                loadingDialog.dismiss()
-//                result.first?.let {
-//                    state = state.copy(event = EVENT_ORDER_SUCCEED)
-//                }
-//                result.second?.let {
-//                    toastEvent.postValue(it)
-//                }
-//            }
-//        }
-//    }
+    fun sendRating(review: String, rating: String) {
+        loadingDialog.show()
+        viewModelScope.launch(ioDispatcher) {
+            if(orderId.isNullOrEmpty()) return@launch
+
+            val result = sendRatingUseCase(orderId.orEmpty(), rating, review)
+            withContext(mainDispatcher) {
+                loadingDialog.dismiss()
+                result.first?.let {
+                    state = state.copy(event = EVENT_SEND_RATING)
+                }
+                result.second?.let {
+                    toastEvent.postValue(it)
+                }
+            }
+        }
+    }
 
     data class ViewState(
         val event: Int,
@@ -89,6 +92,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
     companion object {
         const val NO_EVENT = 1
         const val EVENT_UPDATE_ORDER_DETAIL = 2
-//        const val EVENT_ORDER_SUCCEED = 3
+        const val EVENT_ORDER_SUCCEED = 3
+        const val EVENT_SEND_RATING = 4
     }
 }

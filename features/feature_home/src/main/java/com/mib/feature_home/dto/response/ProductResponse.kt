@@ -26,4 +26,6 @@ class ProductResponse (
     val serviceYearsExperience: Int?,
     @SerializedName("status")
     val status: String?,
+    @SerializedName("rating")
+    val rating: String?
 )

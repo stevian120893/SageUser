@@ -67,6 +67,7 @@
     <string name="order_history_detail">Detail pesanan</string>
     <string name="payment_type">Tipe pembayaran</string>
     <string name="notes">Catatan</string>
+    <string name="give_rating">Ulas layanan</string>
 
     <!--    Profile-->
     <string name="profile_are_you_sure_logout">Anda yakin ingin keluar?</string>

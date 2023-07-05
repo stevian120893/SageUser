@@ -1,6 +1,7 @@
 package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.OrderRequest
+import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.response.OrderHistoryResponse
 import com.mib.feature_home.dto.response.OrderResponse
 import com.mib.feature_home.dto.response.ProductDetailResponse
@@ -44,4 +45,9 @@ interface HomeAuthenticatedService {
     suspend fun getOrderDetail(
         @Path("order_id") orderId: String
     ): NetworkResponse<ApiResponse<OrderDetailResponse>>
+
+    @POST("/product/post-rating")
+    suspend fun sendRating(
+        @Body body: SendRatingRequest
+    ): NetworkResponse<ApiResponse<Void>>
 }
