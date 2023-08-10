@@ -9,9 +9,6 @@ fun UserInfoResponse.toDomainModel(): UserInfo {
         fullName = fullName,
         email = email,
         phone = phone.orEmpty(),
-        businessName = businessName,
-        tin = tin.orEmpty(),
         address = address.orEmpty(),
-        status = status.orEmpty()
     )
 }

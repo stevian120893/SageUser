@@ -118,6 +118,11 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                 }
                 EVENT_UPDATE_LOCATION -> {
                     viewModel.getHomeContent()
+                    if(it.cityChosen != null) {
+                        viewModel.getHomeContent() // based on city
+                        return@observe
+                    }
+
                     it.location?.let { location ->
                         val cityName = location.second.orEmpty()
                         if(cityName.lowercase().contains("jakarta")) {

@@ -7,8 +7,5 @@ class UserInfo(
     val fullName: String,
     val email: String?,
     val phone: String,
-    val businessName: String?,
-    val tin: String?,
     val address: String?,
-    val status: String?
 ): Serializable

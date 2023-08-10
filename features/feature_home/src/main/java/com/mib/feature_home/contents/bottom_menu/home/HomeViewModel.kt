@@ -32,6 +32,7 @@ import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
+import com.mib.lib_pref.AccountPref
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -45,7 +46,8 @@ class HomeViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getHomeContentUseCase: GetHomeContentUseCase,
-    val loadingDialog: LoadingDialogNavigation
+    val loadingDialog: LoadingDialogNavigation,
+    private val accountPref: AccountPref
 ) : BaseViewModel<HomeViewModel.ViewState>(ViewState()) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
@@ -80,6 +82,10 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun saveUserLocation() {
+        accountPref.location = state.cityChosen?.name.orEmpty()
+    }
+
     fun goToCategoryListScreen(navController: NavController, categoryCode: String? = null) {
         homeNavigation.goToCategoryListScreen(navController, categoryCode)
     }
@@ -108,6 +114,7 @@ class HomeViewModel @Inject constructor(
         DialogUtils.showDialogList(context, cities, object : ListenerCityList {
             override fun action(city: City) {
                 state = state.copy(cityChosen = city, event = EVENT_UPDATE_LOCATION)
+                saveUserLocation()
             }
         })
     }

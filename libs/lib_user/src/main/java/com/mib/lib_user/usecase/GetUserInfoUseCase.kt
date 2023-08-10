@@ -21,7 +21,6 @@ class GetUserInfoUseCase(
         accountPref.fullname = userInfo.fullName
         accountPref.email = userInfo.email.orEmpty()
         accountPref.phoneNumber = userInfo.phone
-        accountPref.tin = userInfo.tin.orEmpty()
         accountPref.address = userInfo.address.orEmpty()
     }
 }
