@@ -39,4 +39,13 @@ interface HomeWithAuthRepository {
         rating: String,
         review: String
     ): Pair<Void?, String?>
+
+    suspend fun payDana(
+        code: String
+    ): Pair<Void?, String?>
+
+    suspend fun payTransfer(
+        code: String,
+        referenceId: String,
+    ): Pair<Void?, String?>
 }

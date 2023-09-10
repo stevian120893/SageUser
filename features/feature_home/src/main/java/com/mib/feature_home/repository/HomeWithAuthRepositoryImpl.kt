@@ -7,6 +7,8 @@ import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.dto.request.OrderRequest
+import com.mib.feature_home.dto.request.PayDanaRequest
+import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
@@ -133,6 +135,44 @@ class HomeWithAuthRepositoryImpl(
             review = review
         )
         val result = service.sendRating(sendRatingRequest)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val item = result.value.data
+                item to null
+            }
+            else -> {
+                null to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun payDana(
+        code: String
+    ): Pair<Void?, String?> {
+        val payDanaRequest = PayDanaRequest(
+            code = code
+        )
+        val result = service.payDana(payDanaRequest)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val item = result.value.data
+                item to null
+            }
+            else -> {
+                null to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun payTransfer(
+        code: String,
+        referenceId: String,
+    ): Pair<Void?, String?> {
+        val payTransferRequest = PayTransferRequest(
+            code = code,
+            referenceId = referenceId
+        )
+        val result = service.payTransfer(payTransferRequest)
         return when (result) {
             is NetworkResponse.Success -> {
                 val item = result.value.data

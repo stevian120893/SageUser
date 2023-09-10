@@ -4,8 +4,13 @@ import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_CASH
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
+import com.mib.feature_home.usecase.PayDanaUseCase
+import com.mib.feature_home.usecase.PayTransferUseCase
 import com.mib.feature_home.usecase.SendRatingUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
@@ -29,6 +34,8 @@ class OrderHistoryDetailViewModel @Inject constructor(
     private val homeNavigation: HomeNavigation,
     private val getOrderDetailUseCase: GetOrderDetailUseCase,
     private val sendRatingUseCase: SendRatingUseCase,
+    private val payDanaUseCase: PayDanaUseCase,
+    private val payTransferUseCase: PayTransferUseCase,
     val loadingDialog: LoadingDialogNavigation,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
 ) : BaseViewModel<OrderHistoryDetailViewModel.ViewState>(ViewState(NO_EVENT)) {
@@ -58,6 +65,42 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     if(it == ApiConstants.ERROR_MESSAGE_UNAUTHORIZED) {
                         withContext(mainDispatcher) {
                             unauthorizedErrorNavigation.handleErrorMessage(navController, it)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun payOrder() {
+        loadingDialog.show()
+        viewModelScope.launch(ioDispatcher) {
+            if(state.orderDetail?.code.isNullOrEmpty()) return@launch
+
+            when(state.orderDetail?.usedPaymentMethod) {
+                KEY_PAYMENT_METHOD_DANA -> {
+                    val result = payDanaUseCase(orderId.orEmpty())
+                    withContext(mainDispatcher) {
+                        loadingDialog.dismiss()
+                        result.first?.let {
+                            // TODO : go to url
+                            state = state.copy(event = EVENT_SEND_RATING)
+                        }
+                        result.second?.let {
+                            toastEvent.postValue(it)
+                        }
+                    }
+                }
+                KEY_PAYMENT_METHOD_TRANSFER -> {
+                    val result = payTransferUseCase(orderId.orEmpty(), "")
+                    withContext(mainDispatcher) {
+                        loadingDialog.dismiss()
+                        result.first?.let {
+                            // TODO finish payment
+                            state = state.copy(event = EVENT_SEND_RATING)
+                        }
+                        result.second?.let {
+                            toastEvent.postValue(it)
                         }
                     }
                 }

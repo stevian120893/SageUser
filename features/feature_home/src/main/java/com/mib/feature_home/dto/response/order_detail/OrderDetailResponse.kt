@@ -40,13 +40,21 @@ class OrderDetailResponse (
 ) {
     companion object {
         @StringDef(
+            NEGOTIATING,
+            WAITING_FOR_PAYMENT,
             ONGOING,
-//            IN_PROGRESS,
+            DONE,
+            CANCEL,
+            DELETED,
         )
         @Retention(AnnotationRetention.SOURCE)
         annotation class Status
 
+        const val NEGOTIATING = "NEGOTIATING"
+        const val WAITING_FOR_PAYMENT = "WAITING_FOR_PAYMENT"
         const val ONGOING = "ONGOING"
-//        const val IN_PROGRESS = "inprogress"
+        const val DONE = "DONE"
+        const val CANCEL = "CANCEL"
+        const val DELETED = "DELETED"
     }
 }

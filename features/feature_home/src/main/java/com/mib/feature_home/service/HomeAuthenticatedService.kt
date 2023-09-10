@@ -1,6 +1,8 @@
 package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.OrderRequest
+import com.mib.feature_home.dto.request.PayDanaRequest
+import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.response.OrderHistoryResponse
 import com.mib.feature_home.dto.response.OrderResponse
@@ -49,5 +51,15 @@ interface HomeAuthenticatedService {
     @POST("/product/post-rating")
     suspend fun sendRating(
         @Body body: SendRatingRequest
+    ): NetworkResponse<ApiResponse<Void>>
+
+    @POST("/order/pay-with-dana")
+    suspend fun payDana(
+        @Body body: PayDanaRequest
+    ): NetworkResponse<ApiResponse<Void>>
+
+    @POST("/order/pay-order")
+    suspend fun payTransfer(
+        @Body body: PayTransferRequest
     ): NetworkResponse<ApiResponse<Void>>
 }

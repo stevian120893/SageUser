@@ -11,6 +11,8 @@ import com.mib.feature_home.usecase.GetProductsUseCase
 import com.mib.feature_home.usecase.GetProfileUseCase
 import com.mib.feature_home.usecase.GetPromoUseCase
 import com.mib.feature_home.usecase.GetSubcategoriesUseCase
+import com.mib.feature_home.usecase.PayDanaUseCase
+import com.mib.feature_home.usecase.PayTransferUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
 import com.mib.feature_home.usecase.SendRatingUseCase
 import com.mib.feature_home.usecase.auth.SendCodeUseCase
@@ -92,5 +94,15 @@ object HomeUseCaseModule {
     @Provides
     fun provideSendRatingUseCase(repo: HomeWithAuthRepository): SendRatingUseCase {
         return SendRatingUseCase(repo)
+    }
+
+    @Provides
+    fun providePayDanaUseCase(repo: HomeWithAuthRepository): PayDanaUseCase {
+        return PayDanaUseCase(repo)
+    }
+
+    @Provides
+    fun providePayTransferUseCase(repo: HomeWithAuthRepository): PayTransferUseCase {
+        return PayTransferUseCase(repo)
     }
 }

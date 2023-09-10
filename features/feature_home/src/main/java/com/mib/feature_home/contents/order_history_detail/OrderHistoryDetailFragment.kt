@@ -68,6 +68,10 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         binding.ivBack.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.btPay.setOnClickListener {
+
+        }
     }
 
     private fun observeLiveData(context: Context) {
@@ -103,5 +107,8 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     companion object {
         const val KEY_ORDER_ID = "KEY_ORDER_ID"
+        const val KEY_PAYMENT_METHOD_DANA = "DANA"
+        const val KEY_PAYMENT_METHOD_TRANSFER = "TRANSFER"
+        const val KEY_PAYMENT_METHOD_CASH = "CASH"
     }
 }
