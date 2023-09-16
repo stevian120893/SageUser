@@ -2,6 +2,7 @@ package com.mib.feature_home.repository
 
 import com.mib.feature_home.domain.model.Order
 import com.mib.feature_home.domain.model.OrderHistoryItemPaging
+import com.mib.feature_home.domain.model.PayDana
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
@@ -148,14 +149,14 @@ class HomeWithAuthRepositoryImpl(
 
     override suspend fun payDana(
         code: String
-    ): Pair<Void?, String?> {
+    ): Pair<PayDana?, String?> {
         val payDanaRequest = PayDanaRequest(
             code = code
         )
         val result = service.payDana(payDanaRequest)
         return when (result) {
             is NetworkResponse.Success -> {
-                val item = result.value.data
+                val item = result.value.data?.toDomainModel()
                 item to null
             }
             else -> {

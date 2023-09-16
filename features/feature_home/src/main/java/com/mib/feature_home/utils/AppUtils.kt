@@ -15,11 +15,13 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_FROM
+import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_TITLE
+import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_URL
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.text.NumberFormat
@@ -74,13 +76,13 @@ class AppUtils {
             }
         }
 
-//        fun goToWebView(mContext: Context, title: String, url: String, from: String) {
-//            val intent = WebViewActivity.newIntent(mContext)
-//            intent.putExtra(INTENT_EXTRA_WEBVIEW_TITLE, title)
-//            intent.putExtra(INTENT_EXTRA_WEBVIEW_URL, url)
-//            intent.putExtra(INTENT_EXTRA_WEBVIEW_FROM, from)
-//            mContext.startActivity(intent)
-//        }
+        fun goToWebView(mContext: Context, title: String, url: String, from: String) {
+            val intent = WebViewActivity.newIntent(mContext)
+            intent.putExtra(INTENT_EXTRA_WEBVIEW_TITLE, title)
+            intent.putExtra(INTENT_EXTRA_WEBVIEW_URL, url)
+            intent.putExtra(INTENT_EXTRA_WEBVIEW_FROM, from)
+            mContext.startActivity(intent)
+        }
 
         fun launchMarket(context: Context) {
             val uri = Uri.parse("market://details?id=" + context.packageName)

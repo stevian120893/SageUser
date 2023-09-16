@@ -70,7 +70,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         }
 
         binding.btPay.setOnClickListener {
-
+            viewModel.payOrder(context)
         }
     }
 

@@ -2,6 +2,7 @@ package com.mib.feature_home.repository
 
 import com.mib.feature_home.domain.model.Order
 import com.mib.feature_home.domain.model.OrderHistoryItemPaging
+import com.mib.feature_home.domain.model.PayDana
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
@@ -42,7 +43,7 @@ interface HomeWithAuthRepository {
 
     suspend fun payDana(
         code: String
-    ): Pair<Void?, String?>
+    ): Pair<PayDana?, String?>
 
     suspend fun payTransfer(
         code: String,

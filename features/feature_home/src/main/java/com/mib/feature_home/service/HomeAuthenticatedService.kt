@@ -6,6 +6,7 @@ import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.response.OrderHistoryResponse
 import com.mib.feature_home.dto.response.OrderResponse
+import com.mib.feature_home.dto.response.PayDanaResponse
 import com.mib.feature_home.dto.response.ProductDetailResponse
 import com.mib.feature_home.dto.response.ProfileResponse
 import com.mib.feature_home.dto.response.PromoResponse
@@ -56,7 +57,7 @@ interface HomeAuthenticatedService {
     @POST("/order/pay-with-dana")
     suspend fun payDana(
         @Body body: PayDanaRequest
-    ): NetworkResponse<ApiResponse<Void>>
+    ): NetworkResponse<ApiResponse<PayDanaResponse>>
 
     @POST("/order/pay-order")
     suspend fun payTransfer(

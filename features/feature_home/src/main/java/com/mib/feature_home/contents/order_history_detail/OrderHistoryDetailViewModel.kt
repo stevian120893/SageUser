@@ -1,8 +1,10 @@
 package com.mib.feature_home.contents.order_history_detail
 
+import android.content.Context
 import android.os.Bundle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_CASH
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
@@ -12,6 +14,7 @@ import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.feature_home.usecase.PayDanaUseCase
 import com.mib.feature_home.usecase.PayTransferUseCase
 import com.mib.feature_home.usecase.SendRatingUseCase
+import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
@@ -72,7 +75,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-    fun payOrder() {
+    fun payOrder(context: Context) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             if(state.orderDetail?.code.isNullOrEmpty()) return@launch
@@ -83,8 +86,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     withContext(mainDispatcher) {
                         loadingDialog.dismiss()
                         result.first?.let {
-                            // TODO : go to url
-                            state = state.copy(event = EVENT_SEND_RATING)
+                            AppUtils.goToWebView(context, context.getString(R.string.shared_res_back), it.paymentUrl, "")
                         }
                         result.second?.let {
                             toastEvent.postValue(it)

@@ -28,6 +28,11 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name="com.mib.feature_home.utils.WebViewActivity"
+            android:exported="true">
+        </activity>
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
