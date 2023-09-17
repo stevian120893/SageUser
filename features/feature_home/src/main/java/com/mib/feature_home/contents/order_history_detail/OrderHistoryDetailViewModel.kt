@@ -86,7 +86,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     withContext(mainDispatcher) {
                         loadingDialog.dismiss()
                         result.first?.let {
-                            AppUtils.goToWebView(context, context.getString(R.string.shared_res_back), it.paymentUrl, "")
+                            AppUtils.goToWebView(context, KEY_PAYMENT_METHOD_DANA, it.paymentUrl, "")
                         }
                         result.second?.let {
                             toastEvent.postValue(it)
