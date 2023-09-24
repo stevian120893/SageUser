@@ -1,6 +1,6 @@
 package com.mib.feature_home.repository
 
-import com.mib.feature_home.domain.model.Order
+import com.mib.feature_home.domain.model.BookOrder
 import com.mib.feature_home.domain.model.OrderHistoryItemPaging
 import com.mib.feature_home.domain.model.PayDana
 import com.mib.feature_home.domain.model.ProductDetail
@@ -21,7 +21,7 @@ interface HomeWithAuthRepository {
         address: String,
         date: String,
         note: String
-    ): Pair<Order?, String?>
+    ): Pair<BookOrder?, String?>
 
     suspend fun getOrderHistory(
         cursor: String?

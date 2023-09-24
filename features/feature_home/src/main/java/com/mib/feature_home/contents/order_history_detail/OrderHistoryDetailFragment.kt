@@ -9,8 +9,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.R
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_ORDER_SUCCEED
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.DONE
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.WAITING_FOR_PAYMENT
 import com.mib.feature_home.utils.dateToString
 import com.mib.feature_home.utils.stringToDate
 import com.mib.feature_home.utils.withThousandSeparator
@@ -96,11 +99,15 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
                         binding.tvNotes.text = state.orderDetail?.note.toString()
                         binding.tvAddress.text = state.orderDetail?.address.toString()
+
+                        if(state.orderDetail?.status != WAITING_FOR_PAYMENT) {
+                            binding.btPay.visibility = View.GONE
+                        }
                     }
                 }
-//                ProductDetailViewModel.EVENT_ORDER_SUCCEED -> {
-//                    AppUtils.openWhatsApp(context, context.getString(R.string.shared_res_whatsapp_number))
-//                }
+                EVENT_ORDER_SUCCEED -> {
+                    binding.llGiveRating.visibility = View.VISIBLE
+                }
             }
         }
     }

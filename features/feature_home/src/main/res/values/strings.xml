@@ -123,6 +123,13 @@
     <string name="shared_res_processing">Memproses</string>
     <string name="shared_res_login_with_your_account">Masuk dengan akun anda</string>
     <string name="shared_res_address">Alamat</string>
+    <string name="shared_res_status">Status</string>
+    <string name="shared_res_status_negotiating">Dalam penawaran</string>
+    <string name="shared_res_status_waiting_for_payment">Menunggu pembayaran</string>
+    <string name="shared_res_status_ongoing">Sedang dikerjakan</string>
+    <string name="shared_res_status_cancel">Dibatalkan</string>
+    <string name="shared_res_status_done">Selesai</string>
+    <string name="shared_res_status_unknown">Tidak diketahui</string>
 
 
     <!--    city-->

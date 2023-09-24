@@ -1,6 +1,6 @@
 package com.mib.feature_home.usecase
 
-import com.mib.feature_home.domain.model.Order
+import com.mib.feature_home.domain.model.BookOrder
 import com.mib.feature_home.repository.HomeWithAuthRepository
 
 class BookOrderUseCase(private val homeWithAuthRepository: HomeWithAuthRepository) {
@@ -9,7 +9,7 @@ class BookOrderUseCase(private val homeWithAuthRepository: HomeWithAuthRepositor
         address: String,
         date: String,
         note: String
-    ): Pair<Order?, String?> {
+    ): Pair<BookOrder?, String?> {
         return homeWithAuthRepository.bookOrder(productCode, address, date, note)
     }
 }

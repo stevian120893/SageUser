@@ -1,6 +1,6 @@
 package com.mib.feature_home.repository
 
-import com.mib.feature_home.domain.model.Order
+import com.mib.feature_home.domain.model.BookOrder
 import com.mib.feature_home.domain.model.OrderHistoryItemPaging
 import com.mib.feature_home.domain.model.PayDana
 import com.mib.feature_home.domain.model.ProductDetail
@@ -11,7 +11,6 @@ import com.mib.feature_home.dto.request.OrderRequest
 import com.mib.feature_home.dto.request.PayDanaRequest
 import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
-import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
 import com.mib.feature_home.service.HomeAuthenticatedService
 import com.mib.lib_api.dto.NetworkResponse
@@ -50,7 +49,7 @@ class HomeWithAuthRepositoryImpl(
         address: String,
         date: String,
         note: String,
-    ): Pair<Order?, String?> {
+    ): Pair<BookOrder?, String?> {
         val orderRequest = OrderRequest(
             productCode = productCode,
             address = address,

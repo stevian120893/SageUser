@@ -1,6 +1,5 @@
 package com.mib.feature_home.dto.response.order_detail
 
-import androidx.annotation.StringDef
 import com.google.gson.annotations.SerializedName
 import java.math.BigDecimal
 
@@ -37,24 +36,4 @@ class OrderDetailResponse (
     val detail: DetailResponse?,
     @SerializedName("payment_method")
     val paymentMethod: List<PaymentMethodResponse>?
-) {
-    companion object {
-        @StringDef(
-            NEGOTIATING,
-            WAITING_FOR_PAYMENT,
-            ONGOING,
-            DONE,
-            CANCEL,
-            DELETED,
-        )
-        @Retention(AnnotationRetention.SOURCE)
-        annotation class Status
-
-        const val NEGOTIATING = "NEGOTIATING"
-        const val WAITING_FOR_PAYMENT = "WAITING_FOR_PAYMENT"
-        const val ONGOING = "ONGOING"
-        const val DONE = "DONE"
-        const val CANCEL = "CANCEL"
-        const val DELETED = "DELETED"
-    }
-}
+)

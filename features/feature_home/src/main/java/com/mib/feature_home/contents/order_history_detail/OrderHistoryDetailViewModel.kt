@@ -10,6 +10,7 @@ import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFrag
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.DONE
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.feature_home.usecase.PayDanaUseCase
 import com.mib.feature_home.usecase.PayTransferUseCase
@@ -57,11 +58,20 @@ class OrderHistoryDetailViewModel @Inject constructor(
 
             withContext(mainDispatcher) {
                 result.first?.let {
-                    state = state.copy(
-                        event = EVENT_UPDATE_ORDER_DETAIL,
-                        isLoadOrderDetail = false,
-                        orderDetail = it
-                    )
+                    val isOrderDone = it.status == DONE
+                    state = if(isOrderDone) {
+                        state.copy(
+                            event = EVENT_ORDER_SUCCEED,
+                            isLoadOrderDetail = false,
+                            orderDetail = it
+                        )
+                    } else {
+                        state.copy(
+                            event = EVENT_UPDATE_ORDER_DETAIL,
+                            isLoadOrderDetail = false,
+                            orderDetail = it
+                        )
+                    }
                 }
                 result.second?.let {
                     toastEvent.postValue(it)

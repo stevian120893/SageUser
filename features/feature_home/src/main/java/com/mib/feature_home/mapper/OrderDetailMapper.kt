@@ -3,6 +3,8 @@ package com.mib.feature_home.mapper
 import com.mib.feature_home.domain.model.order_detail.Detail
 import com.mib.feature_home.domain.model.order_detail.Merchant
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.ONGOING
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.UNKNOWN
 import com.mib.feature_home.domain.model.order_detail.PaymentMethod
 import com.mib.feature_home.domain.model.order_detail.Product
 import com.mib.feature_home.dto.response.order_detail.OrderDetailResponse
@@ -38,17 +40,11 @@ fun OrderDetailResponse.toDomainModel(): OrderDetail {
         totalPrice = this.detail?.totalPrice ?: BigDecimal.ZERO
     )
 
-    val status = when (status) {
-        OrderDetailResponse.ONGOING -> OrderDetail.ONGOING
-//        OrderDetailResponse.EXPIRED, WalletTransactionResponse.FAILED -> WalletTransactionItem.FAILED
-        else -> OrderDetail.UNKNOWN
-    }
-
     return OrderDetail(
         merchant = merchant,
         code = this.code.orEmpty(),
         address = this.address.orEmpty(),
-        status = status,
+        status = status.orEmpty(),
         orderDate = AppUtils.convertMillisToDate(this.orderDate),
         bookingDate = AppUtils.convertMillisToDate(this.bookingDate),
         orderAcceptedAt = AppUtils.convertMillisToDate(this.orderAcceptedAt),
