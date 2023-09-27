@@ -127,11 +127,18 @@
     <string name="shared_res_status_negotiating">Dalam penawaran</string>
     <string name="shared_res_status_waiting_for_payment">Menunggu pembayaran</string>
     <string name="shared_res_status_ongoing">Sedang dikerjakan</string>
-    <string name="shared_res_status_cancel">Dibatalkan</string>
+    <string name="shared_res_status_cancel_order">Dibatalkan</string>
     <string name="shared_res_status_done">Selesai</string>
     <string name="shared_res_status_unknown">Tidak diketahui</string>
-
+    <string name="shared_res_status_cancel">Batal</string>
 
     <!--    city-->
     <string name="city_res_jakarta">Jakarta</string>
+
+    <!--    order-->
+    <string name="order_confirmation">Konfirmasi order</string>
+    <string name="order_confirmation_description">Data dibawah dapat diubah pada saat melakukan penawaran</string>
+    <string name="order_confirmation_date">Perkiraan tanggal pengerjaan</string>
+    <string name="order_confirmation_time">Perkiraan jam pengerjaan</string>
+    <string name="order_confirmation_notes">Catatan</string>
 </resources>

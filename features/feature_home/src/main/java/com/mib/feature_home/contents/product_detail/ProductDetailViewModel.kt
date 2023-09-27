@@ -1,19 +1,24 @@
 package com.mib.feature_home.contents.product_detail
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.mib.feature_home.R
+import com.mib.feature_home.`interface`.DialogOrderListener
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.usecase.BookOrderUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
+import com.mib.feature_home.utils.AppUtils
+import com.mib.feature_home.utils.DialogUtils
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
+import com.mib.lib_navigation.DialogListener
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
@@ -67,10 +72,31 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun bookOrder(fragment: Fragment) {
+    fun confirmOrder(context: Context) {
+        DialogUtils.showOrderConfirmationDialog(
+            context = context,
+            object : DialogOrderListener {
+                override fun order(bookingDate: String, bookingTime: String, bookingAddress: String, bookingNote: String) {
+                    if(bookingDate.isEmpty()) {
+                        toastEvent.postValue(context.getString(R.string.shared_res_please_fill_blank_space))
+                        return
+                    }
+
+                    val timeInMillis = AppUtils.convertDateToMillis(bookingDate)
+                    if(timeInMillis.isEmpty()) {
+                        toastEvent.postValue(context.getString(R.string.shared_res_please_fill_blank_space))
+                        return
+                    }
+                    bookOrder(timeInMillis, bookingTime, bookingAddress, bookingNote)
+                }
+            }
+        )
+    }
+
+    private fun bookOrder(bookingDate: String, bookingTime: String, bookingAddress: String, bookingNote: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
-            val result = bookOrderUseCase(productCode.orEmpty(), "address", "12314123", "")
+            val result = bookOrderUseCase(productCode.orEmpty(), bookingAddress, bookingDate, bookingNote)
 
             withContext(mainDispatcher) {
                 loadingDialog.dismiss()

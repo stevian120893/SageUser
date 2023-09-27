@@ -17,7 +17,7 @@ object CustomUtils {
             NEGOTIATING -> context.getString(R.string.shared_res_status_negotiating)
             WAITING_FOR_PAYMENT -> context.getString(R.string.shared_res_status_waiting_for_payment)
             ONGOING -> context.getString(R.string.shared_res_status_ongoing)
-            CANCEL -> context.getString(R.string.shared_res_status_cancel)
+            CANCEL -> context.getString(R.string.shared_res_status_cancel_order)
             DONE -> context.getString(R.string.shared_res_status_done)
             else -> context.getString(R.string.shared_res_status_unknown)
         }

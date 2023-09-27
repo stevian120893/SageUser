@@ -7,18 +7,22 @@ import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mib.feature_home.*
+import com.mib.feature_home.`interface`.DialogOrderListener
 import com.mib.feature_home.`interface`.ListenerCityList
 import com.mib.feature_home.`interface`.ListenerTwoActions
 import com.mib.feature_home.adapter.CityAdapter
 import com.mib.feature_home.domain.model.City
+import com.mib.feature_home.utils.utils_interface.DatePickerListener
 import com.mib.lib_navigation.DialogListener
 import com.mib.feature_home.utils.utils_interface.DialogOneButtonListener
+import com.mib.feature_home.utils.utils_interface.TimeDialogListener
 
 class DialogUtils {
     companion object {
@@ -151,6 +155,54 @@ class DialogUtils {
             btOk.setOnClickListener {
                 alertDialog.dismiss()
                 dialogListener.onSubmitClicked()
+            }
+        }
+
+        fun showOrderConfirmationDialog(
+            context: Context?,
+            dialogListener: DialogOrderListener
+        ) {
+            val dialogBuilder = AlertDialog.Builder(context)
+            val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val layoutView: View = inflater.inflate(R.layout.dialog_order_confirmation, null)
+            val etBookingDate = layoutView.findViewById<EditText>(R.id.etBookingDate)
+            val etBookingTime = layoutView.findViewById<EditText>(R.id.etBookingTime)
+            val etBookingAddress = layoutView.findViewById<EditText>(R.id.etBookingAddress)
+            val etBookingNotes = layoutView.findViewById<EditText>(R.id.etBookingNotes)
+            val btCancel = layoutView.findViewById<Button>(R.id.btCancel)
+            val btOrder = layoutView.findViewById<Button>(R.id.btOrder)
+
+            etBookingDate.let { et ->
+                et.setOnClickListener {
+                    et.openDatePicker(context, object: DatePickerListener {
+                        override fun onFinishSelectDate(result: String) {
+                            etBookingDate.setText(result)
+                        }
+                    })
+                }
+            }
+
+            etBookingTime.let { et ->
+                et.setOnClickListener {
+                    et.openTimePicker(context, object: TimeDialogListener {
+                        override fun onFinishSelectTime(result: String) {
+                            etBookingTime.setText(result)
+                        }
+                    })
+                }
+            }
+
+            dialogBuilder.setView(layoutView)
+            val alertDialog = dialogBuilder.create()
+            alertDialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.show()
+            btCancel.setOnClickListener {
+                alertDialog.dismiss()
+            }
+            btOrder.setOnClickListener {
+                alertDialog.dismiss()
+                dialogListener.order(etBookingDate.text.toString(), etBookingTime.text.toString(), etBookingAddress.text.toString(), etBookingNotes.text.toString())
             }
         }
     }

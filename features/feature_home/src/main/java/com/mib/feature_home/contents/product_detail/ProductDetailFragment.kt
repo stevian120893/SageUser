@@ -74,7 +74,7 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel>(0) {
         }
 
         binding.btOrder.setOnClickListener {
-            viewModel.bookOrder(this@ProductDetailFragment)
+            viewModel.confirmOrder(context)
         }
     }
 

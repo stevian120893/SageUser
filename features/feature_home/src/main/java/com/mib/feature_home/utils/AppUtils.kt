@@ -25,6 +25,7 @@ import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW
 import java.security.InvalidKeyException
 import java.security.NoSuchAlgorithmException
 import java.text.NumberFormat
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.crypto.Mac
@@ -348,6 +349,13 @@ class AppUtils {
             } else {
                 "0$input"
             }
+        }
+
+        fun convertDateToMillis(date: String): String {
+            val sdf = SimpleDateFormat("dd-MM-yyyy")
+            val mDate = sdf.parse(date)
+            val sec = mDate.time/1000
+            return sec.toString().orEmpty()
         }
 
         fun isPricePromo(promoPrice: String) : Boolean {
