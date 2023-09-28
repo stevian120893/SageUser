@@ -2,7 +2,6 @@ package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.OrderRequest
 import com.mib.feature_home.dto.request.PayDanaRequest
-import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.dto.response.OrderHistoryResponse
 import com.mib.feature_home.dto.response.OrderResponse
@@ -13,9 +12,13 @@ import com.mib.feature_home.dto.response.PromoResponse
 import com.mib.feature_home.dto.response.order_detail.OrderDetailResponse
 import com.mib.lib_api.dto.ApiResponse
 import com.mib.lib_api.dto.NetworkResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -59,8 +62,10 @@ interface HomeAuthenticatedService {
         @Body body: PayDanaRequest
     ): NetworkResponse<ApiResponse<PayDanaResponse>>
 
+    @Multipart
     @POST("/order/pay-order")
     suspend fun payTransfer(
-        @Body body: PayTransferRequest
+        @Part("code") code: RequestBody?,
+        @Part paymentReceiptImage: MultipartBody.Part?
     ): NetworkResponse<ApiResponse<Void>>
 }

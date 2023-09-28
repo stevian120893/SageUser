@@ -141,4 +141,5 @@
     <string name="order_confirmation_date">Perkiraan tanggal pengerjaan</string>
     <string name="order_confirmation_time">Perkiraan jam pengerjaan</string>
     <string name="order_confirmation_notes">Catatan</string>
+    <string name="order_upload_payment_receipt">Unggah foto pembayaran</string>
 </resources>

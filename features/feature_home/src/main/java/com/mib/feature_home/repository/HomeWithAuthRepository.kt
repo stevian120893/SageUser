@@ -7,6 +7,7 @@ import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.domain.model.Profile
 import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import okhttp3.MultipartBody
 
 interface HomeWithAuthRepository {
     suspend fun getProductDetail(
@@ -47,6 +48,7 @@ interface HomeWithAuthRepository {
 
     suspend fun payTransfer(
         code: String,
-        referenceId: String,
+        referenceId: String? = null,
+        paymentReceiptImage: MultipartBody.Part?
     ): Pair<Void?, String?>
 }

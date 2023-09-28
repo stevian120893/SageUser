@@ -202,6 +202,34 @@
                     style="@style/Regular12"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/llPaymentReceipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order_upload_payment_receipt"
+                    style="@style/SemiBold20"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorGrayLine"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"/>
+                <ImageView
+                    android:id="@+id/ivAddPhotoReceipt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_add_photo"/>
+            </LinearLayout>
+
             <Button
                 android:id="@+id/btPay"
                 style="@style/ButtonText"

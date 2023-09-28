@@ -9,11 +9,12 @@ import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.dto.request.OrderRequest
 import com.mib.feature_home.dto.request.PayDanaRequest
-import com.mib.feature_home.dto.request.PayTransferRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
 import com.mib.feature_home.mapper.toDomainModel
 import com.mib.feature_home.service.HomeAuthenticatedService
+import com.mib.feature_home.utils.AppUtils
 import com.mib.lib_api.dto.NetworkResponse
+import okhttp3.MultipartBody
 
 class HomeWithAuthRepositoryImpl(
     service: () -> HomeAuthenticatedService
@@ -166,13 +167,13 @@ class HomeWithAuthRepositoryImpl(
 
     override suspend fun payTransfer(
         code: String,
-        referenceId: String,
+        referenceId: String?,
+        paymentReceiptImage: MultipartBody.Part?
     ): Pair<Void?, String?> {
-        val payTransferRequest = PayTransferRequest(
-            code = code,
-            referenceId = referenceId
+        val result = service.payTransfer(
+            AppUtils.createRequestBody(code),
+            paymentReceiptImage
         )
-        val result = service.payTransfer(payTransferRequest)
         return when (result) {
             is NetworkResponse.Success -> {
                 val item = result.value.data

@@ -1,6 +1,8 @@
 package com.mib.feature_home.contents.order_history_detail
 
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,20 +14,30 @@ import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_ORDER_SUCCEED
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
-import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.DONE
 import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.WAITING_FOR_PAYMENT
-import com.mib.feature_home.utils.dateToString
-import com.mib.feature_home.utils.stringToDate
+import com.mib.feature_home.utils.createEasyImage
 import com.mib.feature_home.utils.withThousandSeparator
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.quality
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import pl.aprilapps.easyphotopicker.DefaultCallback
+import pl.aprilapps.easyphotopicker.EasyImage
+import pl.aprilapps.easyphotopicker.MediaFile
+import pl.aprilapps.easyphotopicker.MediaSource
 
 @AndroidEntryPoint
 class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) {
 
     private var _binding: FragmentOrderHistoryDetailBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var easyImage: EasyImage
+    private var paymentReceiptImage: MultipartBody.Part? = null
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
@@ -55,6 +67,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        easyImage = createEasyImage(view.context)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
             initListener(view.context)
@@ -73,7 +86,11 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         }
 
         binding.btPay.setOnClickListener {
-            viewModel.payOrder(context)
+            viewModel.payOrder(context, paymentReceiptImage)
+        }
+
+        binding.ivAddPhotoReceipt.setOnClickListener {
+            viewModel.showUploadOptionDialog(this@OrderHistoryDetailFragment, easyImage)
         }
     }
 
@@ -100,6 +117,14 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                         binding.tvNotes.text = state.orderDetail?.note.toString()
                         binding.tvAddress.text = state.orderDetail?.address.toString()
 
+                        when(state.orderDetail?.usedPaymentMethod) {
+                            KEY_PAYMENT_METHOD_DANA -> {
+                                binding.llPaymentReceipt.visibility = View.GONE
+                            }
+                            KEY_PAYMENT_METHOD_TRANSFER -> {
+                                binding.llPaymentReceipt.visibility = View.VISIBLE
+                            }
+                        }
                         if(state.orderDetail?.status != WAITING_FOR_PAYMENT) {
                             binding.btPay.visibility = View.GONE
                         }
@@ -108,6 +133,32 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                 EVENT_ORDER_SUCCEED -> {
                     binding.llGiveRating.visibility = View.VISIBLE
                 }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode) {
+            34964, 34962 -> {
+                easyImage.handleActivityResult(requestCode, resultCode, data, requireActivity(), object: DefaultCallback() {
+                    override fun onMediaFilesPicked(imageFiles: Array<MediaFile>, source: MediaSource) {
+                        lifecycleScope.launchWhenResumed {
+                            val compressedFile = Compressor.compress(requireActivity(), imageFiles[0].file) {
+                                quality(50)
+                            }
+                            val myBitmap = BitmapFactory.decodeFile(imageFiles[0].file.absolutePath)
+
+                            binding.ivAddPhotoReceipt.setImageBitmap(myBitmap)
+                            paymentReceiptImage = MultipartBody.Part.createFormData(
+                                "payment_receipt_image",
+                                compressedFile.name,
+                                compressedFile.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+                            )
+                        }
+                    }
+                })
             }
         }
     }

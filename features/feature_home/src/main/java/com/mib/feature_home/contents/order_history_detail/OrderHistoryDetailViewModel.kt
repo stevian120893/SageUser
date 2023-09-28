@@ -2,11 +2,10 @@ package com.mib.feature_home.contents.order_history_detail
 
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
-import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_CASH
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
@@ -26,10 +25,12 @@ import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
+import pl.aprilapps.easyphotopicker.EasyImage
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class OrderHistoryDetailViewModel @Inject constructor(
@@ -85,7 +86,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-    fun payOrder(context: Context) {
+    fun payOrder(context: Context, paymentReceiptImage: MultipartBody.Part? = null) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             if(state.orderDetail?.code.isNullOrEmpty()) return@launch
@@ -104,11 +105,14 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     }
                 }
                 KEY_PAYMENT_METHOD_TRANSFER -> {
-                    val result = payTransferUseCase(orderId.orEmpty(), "")
+                    val result = payTransferUseCase(
+                        code = orderId.orEmpty(),
+                        paymentReceiptImage = paymentReceiptImage
+                    )
                     withContext(mainDispatcher) {
                         loadingDialog.dismiss()
                         result.first?.let {
-                            // TODO finish payment
+                            // TODO finish payment after upload payment receipt
                             state = state.copy(event = EVENT_SEND_RATING)
                         }
                         result.second?.let {
@@ -136,6 +140,10 @@ class OrderHistoryDetailViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
+        mediaEvent.postValue(fragment to easyImage)
     }
 
     data class ViewState(
