@@ -82,18 +82,19 @@ class ProductDetailViewModel @Inject constructor(
                         return
                     }
 
-                    val timeInMillis = AppUtils.convertDateToMillis(bookingDate)
+                    val bookingDateAndTime = "$bookingDate $bookingTime"
+                    val timeInMillis = AppUtils.convertDateToMillis(bookingDateAndTime)
                     if(timeInMillis.isEmpty()) {
                         toastEvent.postValue(context.getString(R.string.shared_res_please_fill_blank_space))
                         return
                     }
-                    bookOrder(timeInMillis, bookingTime, bookingAddress, bookingNote)
+                    bookOrder(timeInMillis, bookingAddress, bookingNote)
                 }
             }
         )
     }
 
-    private fun bookOrder(bookingDate: String, bookingTime: String, bookingAddress: String, bookingNote: String) {
+    private fun bookOrder(bookingDate: String, bookingAddress: String, bookingNote: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             val result = bookOrderUseCase(productCode.orEmpty(), bookingAddress, bookingDate, bookingNote)

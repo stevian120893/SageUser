@@ -9,7 +9,6 @@ import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFrag
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
-import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.DONE
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.feature_home.usecase.PayDanaUseCase
 import com.mib.feature_home.usecase.PayTransferUseCase
@@ -20,7 +19,6 @@ import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
-import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
@@ -36,7 +34,6 @@ import kotlin.coroutines.CoroutineContext
 class OrderHistoryDetailViewModel @Inject constructor(
     @IODispatcher private val ioDispatcher: CoroutineContext,
     @MainDispatcher private val mainDispatcher: CoroutineContext,
-    private val homeNavigation: HomeNavigation,
     private val getOrderDetailUseCase: GetOrderDetailUseCase,
     private val sendRatingUseCase: SendRatingUseCase,
     private val payDanaUseCase: PayDanaUseCase,
@@ -59,20 +56,11 @@ class OrderHistoryDetailViewModel @Inject constructor(
 
             withContext(mainDispatcher) {
                 result.first?.let {
-                    val isOrderDone = it.status == DONE
-                    state = if(isOrderDone) {
-                        state.copy(
-                            event = EVENT_ORDER_SUCCEED,
-                            isLoadOrderDetail = false,
-                            orderDetail = it
-                        )
-                    } else {
-                        state.copy(
-                            event = EVENT_UPDATE_ORDER_DETAIL,
-                            isLoadOrderDetail = false,
-                            orderDetail = it
-                        )
-                    }
+                    state = state.copy(
+                        event = EVENT_UPDATE_ORDER_DETAIL,
+                        isLoadOrderDetail = false,
+                        orderDetail = it
+                    )
                 }
                 result.second?.let {
                     toastEvent.postValue(it)
@@ -113,7 +101,6 @@ class OrderHistoryDetailViewModel @Inject constructor(
                         loadingDialog.dismiss()
                         result.first?.let {
                             // TODO finish payment after upload payment receipt
-                            state = state.copy(event = EVENT_SEND_RATING)
                         }
                         result.second?.let {
                             toastEvent.postValue(it)
@@ -133,7 +120,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
             withContext(mainDispatcher) {
                 loadingDialog.dismiss()
                 result.first?.let {
-                    state = state.copy(event = EVENT_SEND_RATING)
+                    // TODO after send rating
                 }
                 result.second?.let {
                     toastEvent.postValue(it)
@@ -155,7 +142,5 @@ class OrderHistoryDetailViewModel @Inject constructor(
     companion object {
         const val NO_EVENT = 1
         const val EVENT_UPDATE_ORDER_DETAIL = 2
-        const val EVENT_ORDER_SUCCEED = 3
-        const val EVENT_SEND_RATING = 4
     }
 }

@@ -209,6 +209,7 @@
                 android:orientation="vertical"
                 android:background="@color/white"
                 android:padding="@dimen/_16sdp"
+                android:visibility="gone"
                 android:layout_marginBottom="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_16sdp">
                 <TextView

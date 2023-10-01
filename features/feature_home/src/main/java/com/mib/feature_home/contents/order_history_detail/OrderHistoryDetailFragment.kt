@@ -11,9 +11,9 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.R
-import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_ORDER_SUCCEED
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.WAITING_FOR_PAYMENT
 import com.mib.feature_home.utils.createEasyImage
 import com.mib.feature_home.utils.withThousandSeparator
@@ -117,21 +117,31 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                         binding.tvNotes.text = state.orderDetail?.note.toString()
                         binding.tvAddress.text = state.orderDetail?.address.toString()
 
-                        when(state.orderDetail?.usedPaymentMethod) {
-                            KEY_PAYMENT_METHOD_DANA -> {
-                                binding.llPaymentReceipt.visibility = View.GONE
+                        when(state.orderDetail?.status) {
+                            OrderDetail.NEGOTIATING -> {
+                                binding.btPay.visibility = View.GONE
                             }
-                            KEY_PAYMENT_METHOD_TRANSFER -> {
-                                binding.llPaymentReceipt.visibility = View.VISIBLE
+                            WAITING_FOR_PAYMENT -> {
+                                if(state.orderDetail?.usedPaymentMethod == KEY_PAYMENT_METHOD_TRANSFER) {
+                                    binding.llPaymentReceipt.visibility = View.VISIBLE
+                                }
+                                binding.btPay.visibility = View.VISIBLE
                             }
-                        }
-                        if(state.orderDetail?.status != WAITING_FOR_PAYMENT) {
-                            binding.btPay.visibility = View.GONE
+                            OrderDetail.ONGOING -> {
+                                binding.btPay.visibility = View.GONE
+                            }
+                            OrderDetail.CANCEL -> {
+                                // nothing
+                            }
+                            OrderDetail.DONE -> {
+                                binding.btPay.visibility = View.GONE
+                                binding.llGiveRating.visibility = View.VISIBLE
+                            }
+                            else -> {
+                                binding.btPay.visibility = View.GONE
+                            }
                         }
                     }
-                }
-                EVENT_ORDER_SUCCEED -> {
-                    binding.llGiveRating.visibility = View.VISIBLE
                 }
             }
         }

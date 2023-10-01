@@ -352,10 +352,10 @@ class AppUtils {
         }
 
         fun convertDateToMillis(date: String): String {
-            val sdf = SimpleDateFormat("dd-MM-yyyy")
+            val sdf = SimpleDateFormat("dd-MM-yyyy hh:mm")
             val mDate = sdf.parse(date)
             val sec = mDate.time/1000
-            return sec.toString().orEmpty()
+            return sec.toString()
         }
 
         fun isPricePromo(promoPrice: String) : Boolean {
