@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mib.feature_home.adapter.OrderHistoryAdapter
 import com.mib.feature_home.databinding.FragmentContentInProgressBinding
 import com.mib.feature_home.domain.model.OrderHistory
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -136,8 +137,9 @@ class InProgressFragment : BaseFragment<InProgressViewModel>(0) {
     }
 
     private fun setupAdapter(items: List<OrderHistory>) {
+        val itemsFiltered = items.filter { it.status != OrderDetail.DONE && it.status != OrderDetail.CANCEL }
         orderHistoryAdapter = OrderHistoryAdapter(
-            itemList = items.toMutableList(),
+            itemList = itemsFiltered.toMutableList(),
             onItemClickListener = object : OrderHistoryAdapter.OnItemClickListener {
                 override fun onClick(item: OrderHistory) {
                     viewModel.goToOrderDetailScreen(findNavController(), item.code)

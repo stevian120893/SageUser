@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     tools:ignore="ResourceName"
     android:background="@color/activity_background">
     <LinearLayout
+        android:id="@+id/llTop"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -27,8 +27,11 @@
     </LinearLayout>
 
     <ScrollView
+        android:id="@+id/svContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/llTop"
+        android:layout_marginBottom="@dimen/_64sdp">
         <LinearLayout
             android:id="@+id/llContent"
             android:layout_width="match_parent"
@@ -179,30 +182,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/llGiveRating"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:orientation="vertical"
-                android:padding="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:layout_marginBottom="@dimen/_16sdp"
-                android:visibility="gone">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/give_rating"
-                    style="@style/SemiBold18"/>
-                <EditText
-                    android:id="@+id/etReview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/give_rating"
-                    android:layout_marginTop="@dimen/_3sdp"
-                    style="@style/Regular12"/>
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/llPaymentReceipt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -231,20 +210,6 @@
                     android:src="@drawable/ic_add_photo"/>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btPay"
-                style="@style/ButtonText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llDescription"
-                android:layout_marginStart="@dimen/_16sdp"
-                android:layout_marginTop="@dimen/_16sdp"
-                android:layout_marginEnd="@dimen/_16sdp"
-                android:layout_marginBottom="@dimen/_16sdp"
-                android:background="@drawable/bg_rounded_6"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:text="@string/shared_res_pay" />
-
             <TextView
                 android:id="@+id/tvNoData"
                 android:layout_width="match_parent"
@@ -255,6 +220,34 @@
                 android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/llAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/_16sdp"
+        android:visibility="gone"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btPay"
+            style="@style/ButtonText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/bg_rounded_6"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="@string/shared_res_pay" />
+        <Button
+            android:id="@+id/btGiveRating"
+            style="@style/ButtonText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:padding="@dimen/_5sdp"
+            android:background="@drawable/bg_rounded_6"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/shared_res_give_review" />
+    </RelativeLayout>
 
     <!--Shimmer-->
     <com.facebook.shimmer.ShimmerFrameLayout
@@ -271,4 +264,4 @@
             <include layout="@layout/shimmer_product_detail" />
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
-</LinearLayout>
+</RelativeLayout>

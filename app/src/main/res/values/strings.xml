@@ -4,4 +4,7 @@
 
     <string name="profile">Profil</string>
     <string name="edit">Ubah</string>
+    <string name="default_notification_channel_id">general</string>
+    <string name="app_notification_channel_id">sage_user</string>
+    <string name="notification_title">Hello</string>
 </resources>

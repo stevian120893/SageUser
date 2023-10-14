@@ -9,16 +9,18 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.mib.feature_home.*
-import com.mib.feature_home.`interface`.DialogOrderListener
-import com.mib.feature_home.`interface`.ListenerCityList
-import com.mib.feature_home.`interface`.ListenerTwoActions
+import com.mib.feature_home.interfaces.DialogOrderListener
+import com.mib.feature_home.interfaces.ListenerCityList
+import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.adapter.CityAdapter
 import com.mib.feature_home.domain.model.City
+import com.mib.feature_home.interfaces.GiveRatingListener
 import com.mib.feature_home.utils.utils_interface.DatePickerListener
 import com.mib.lib_navigation.DialogListener
 import com.mib.feature_home.utils.utils_interface.DialogOneButtonListener
@@ -203,6 +205,35 @@ class DialogUtils {
             btOrder.setOnClickListener {
                 alertDialog.dismiss()
                 dialogListener.order(etBookingDate.text.toString(), etBookingTime.text.toString(), etBookingAddress.text.toString(), etBookingNotes.text.toString())
+            }
+        }
+
+        fun showGiveReviewDialog(
+            context: Context?,
+            dialogListener: GiveRatingListener
+        ) {
+            val dialogBuilder = AlertDialog.Builder(context)
+            val inflater = context?.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val layoutView: View = inflater.inflate(R.layout.dialog_give_rating, null)
+            val ratingBar = layoutView.findViewById<RatingBar>(R.id.ratingBar)
+            val etReview = layoutView.findViewById<EditText>(R.id.etReview)
+            val btCancel = layoutView.findViewById<Button>(R.id.btCancel)
+            val btSend = layoutView.findViewById<Button>(R.id.btSend)
+
+            dialogBuilder.setView(layoutView)
+            val alertDialog = dialogBuilder.create()
+            alertDialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
+            alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            alertDialog.show()
+            btCancel.setOnClickListener {
+                alertDialog.dismiss()
+            }
+            btSend.setOnClickListener {
+                alertDialog.dismiss()
+                dialogListener.sendRating(
+                    ratingBar.rating.toInt().toString(),
+                    etReview.text.toString()
+                )
             }
         }
     }

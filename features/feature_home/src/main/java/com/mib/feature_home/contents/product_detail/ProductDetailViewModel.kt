@@ -2,11 +2,10 @@ package com.mib.feature_home.contents.product_detail
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.mib.feature_home.R
-import com.mib.feature_home.`interface`.DialogOrderListener
+import com.mib.feature_home.interfaces.DialogOrderListener
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.domain.model.ProductDetail
 import com.mib.feature_home.usecase.BookOrderUseCase
@@ -18,7 +17,6 @@ import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
-import com.mib.lib_navigation.DialogListener
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation

@@ -16,8 +16,8 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.mib.feature_home.`interface`.ListenerCityList
-import com.mib.feature_home.`interface`.ListenerTwoActions
+import com.mib.feature_home.interfaces.ListenerCityList
+import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category
 import com.mib.feature_home.domain.model.City
@@ -56,7 +56,6 @@ class HomeViewModel @Inject constructor(
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     private var locationRequest: LocationRequest? = null
     private var locationCallback: LocationCallback? = null
-    private lateinit var cities: List<City>
 
     fun getHomeContent() {
         state = state.copy(isLoadHome = true, event = EVENT_UPDATE_FIRST_ITEMS)
@@ -69,10 +68,10 @@ class HomeViewModel @Inject constructor(
                     state = state.copy(
                         banner = it.banners,
                         category = it.categories,
+                        cities = it.cities.orEmpty(),
                         event = EVENT_UPDATE_FIRST_ITEMS,
                         isLoadHome = false
                     )
-                    cities = it.cities.orEmpty()
                 }
                 result.second?.let {
                     state = state.copy(isLoadHome = false)
@@ -111,7 +110,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun chooseLocation(context: Context) {
-        DialogUtils.showDialogList(context, cities, object : ListenerCityList {
+        DialogUtils.showDialogList(context, state.cities, object : ListenerCityList {
             override fun action(city: City) {
                 state = state.copy(cityChosen = city, event = EVENT_UPDATE_LOCATION)
                 saveUserLocation()
@@ -132,16 +131,7 @@ class HomeViewModel @Inject constructor(
                 for (location in locationResult.locations) {
                     if (location != null) {
                         val completeAddress = getCompleteAddress(context, location.latitude, location.longitude)
-                        state = state.copy(
-                            location = Pair(
-                                Location(
-                                    latitude = location.latitude,
-                                    longitude = location.longitude
-                                ),
-                                completeAddress
-                            ),
-                            event = EVENT_UPDATE_LOCATION
-                        )
+                        updateLocation(location.latitude, location.longitude, completeAddress)
 
                         if (mFusedLocationClient != null) {
                             mFusedLocationClient!!.removeLocationUpdates(locationCallback!!)
@@ -159,11 +149,31 @@ class HomeViewModel @Inject constructor(
         getLocation(context)
     }
 
+    fun hasLocation() = accountPref.location
+
     private fun getCompleteAddress(context: Context, latitude: Double, longitude: Double): String {
         return try {
             AppUtils.getCompleteAddress(context, latitude, longitude)
         } catch (e: Exception) {
             ""
+        }
+    }
+
+    fun updateLocation(latitude: Double? = null, longitude: Double? = null, completeAddress: String?) {
+        state = if(latitude != null && longitude != null) {
+            state.copy(
+                location = Location(
+                    latitude = latitude,
+                    longitude = longitude
+                ),
+                completeAddress = completeAddress,
+                event = EVENT_UPDATE_LOCATION
+            )
+        } else {
+            state.copy(
+                completeAddress = completeAddress,
+                event = EVENT_UPDATE_LOCATION
+            )
         }
     }
 
@@ -187,7 +197,7 @@ class HomeViewModel @Inject constructor(
                                 if(isGPS) {
                                     getLocation(context)
                                 } else {
-                                    state = state.copy(location = null, event = EVENT_UPDATE_LOCATION)
+                                    state = state.copy(location = null, completeAddress = null, event = EVENT_UPDATE_LOCATION)
                                 }
                             }
                         })
@@ -196,7 +206,7 @@ class HomeViewModel @Inject constructor(
                     if(report.isAnyPermissionPermanentlyDenied) {
                         DialogUtils.showBottomDialogActivateLocationThroughSettings(context, object: ListenerTwoActions {
                             override fun firstAction() {
-                                state = state.copy(location = null, event = EVENT_UPDATE_LOCATION)
+                                state = state.copy(location = null, completeAddress = null, event = EVENT_UPDATE_LOCATION)
                             }
 
                             override fun secondAction() {
@@ -204,7 +214,7 @@ class HomeViewModel @Inject constructor(
                             }
                         })
                     }
-                    state = state.copy(location = null, event = EVENT_UPDATE_LOCATION)
+                    state = state.copy(location = null, completeAddress = null, event = EVENT_UPDATE_LOCATION)
                 }
             }
 
@@ -225,23 +235,14 @@ class HomeViewModel @Inject constructor(
                         mFusedLocationClient!!.lastLocation.addOnSuccessListener { location ->
                             if (location != null) {
                                 val completeAddress = getCompleteAddress(context, location.latitude, location.longitude)
-                                state = state.copy(
-                                    location = Pair(
-                                        Location(
-                                            latitude = location.latitude,
-                                            longitude = location.longitude
-                                        ),
-                                        completeAddress
-                                    ),
-                                    event = EVENT_UPDATE_LOCATION
-                                )
+                                updateLocation(location.latitude, location.longitude, completeAddress)
                             } else {
                                 mFusedLocationClient!!.requestLocationUpdates(locationRequest!!, locationCallback!!, null)
                             }
                         }
                     }
                 } else {
-                    state = state.copy(location = null, event = EVENT_UPDATE_LOCATION)
+                    state = state.copy(location = null, completeAddress = null, event = EVENT_UPDATE_LOCATION)
                 }
             }
 
@@ -255,7 +256,9 @@ class HomeViewModel @Inject constructor(
         var event: Int = NO_EVENT,
         var banner: List<Banner>? = null,
         var category: List<Category>? = null,
-        var location: Pair<Location?, String?>? = null,
+        var location: Location? = null,
+        var completeAddress: String? = null,
+        var cities: List<City>? = null,
         var cityChosen: City? = null,
         var isLoadHome: Boolean = false
     ) : BaseViewState

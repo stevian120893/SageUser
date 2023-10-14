@@ -13,7 +13,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.SettingsClient
-import com.mib.feature_home.`interface`.ListenerTwoActions
+import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.contents.bottom_menu.home.HomeFragment.Companion.GPS_REQUEST_CODE
 
 class Gps(private val context: Context) {

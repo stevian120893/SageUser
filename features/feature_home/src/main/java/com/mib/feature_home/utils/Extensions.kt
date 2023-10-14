@@ -75,7 +75,7 @@ fun Fragment.openGallery(easyImage: EasyImage) {
 
 fun EditText.openTimePicker(context: Context, timeDialogListener: TimeDialogListener) {
     val cal = Calendar.getInstance()
-    val mTimePicker = TimePickerDialog(context, { _, selectedHour, selectedMinute ->
+    val mTimePicker = TimePickerDialog(context, R.style.DialogTheme, { _, selectedHour, selectedMinute ->
             timeDialogListener.onFinishSelectTime(
                 convertDate(selectedHour) + ":" + convertDate(
                     selectedMinute
@@ -96,7 +96,7 @@ fun EditText.openDatePicker(context: Context, datePickerListener: DatePickerList
     val mDay: Int = c.get(Calendar.DAY_OF_MONTH) // current day
 
     // date picker dialog
-    val datePickerDialog = DatePickerDialog(context,
+    val datePickerDialog = DatePickerDialog(context, R.style.DialogTheme,
         { _, year, monthOfYear, dayOfMonth -> // set day of month , month and year value in the edit text
             datePickerListener.onFinishSelectDate(
                 "${convertDate(dayOfMonth)}-${convertDate((monthOfYear + 1))}-$year")

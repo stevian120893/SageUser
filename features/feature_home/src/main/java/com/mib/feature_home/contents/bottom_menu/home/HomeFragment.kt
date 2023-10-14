@@ -41,7 +41,12 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@HomeFragment, backPressedCallback)
-        viewModel.initGps(requireContext())
+        checkUserLocation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkUserLocation()
     }
 
     override fun onCreateView(
@@ -123,16 +128,34 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                         return@observe
                     }
 
-                    it.location?.let { location ->
-                        val cityName = location.second.orEmpty()
-                        if(cityName.lowercase().contains("jakarta")) {
-                            binding.tvLocation.text = getString(R.string.city_res_jakarta)
+                    it.completeAddress?.let { address ->
+                        val cityName = address.lowercase()
+                        val localCityName = if(cityName.contains(WEST_JAKARTA)) {
+                            WEST_JAKARTA
+                        } else if(cityName.contains(NORTH_JAKARTA)) {
+                            NORTH_JAKARTA
+                        } else if(cityName.contains(SOUTH_JAKARTA)) {
+                            SOUTH_JAKARTA
+                        } else if(cityName.contains(EAST_JAKARTA)) {
+                            EAST_JAKARTA
+                        } else if(cityName.contains(CENTRAL_JAKARTA)) {
+                            CENTRAL_JAKARTA
                         } else {
-                            binding.tvLocation.text = getString(R.string.home_out_of_area)
+                            getString(R.string.home_out_of_area)
                         }
+                        binding.tvLocation.text = AppUtils.capitalizeFirstLetter(localCityName)
                     }
                 }
             }
+        }
+    }
+
+    private fun checkUserLocation() {
+        val loc = viewModel.hasLocation()
+        if(loc.isNotEmpty()) {
+            viewModel.updateLocation(completeAddress = loc)
+        } else {
+            viewModel.initGps(requireContext())
         }
     }
 
@@ -168,5 +191,11 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
     companion object {
         const val GPS_REQUEST_CODE = 1001
         const val CATEGORY_ALL = "ALL"
+
+        private const val WEST_JAKARTA = "jakarta barat"
+        private const val NORTH_JAKARTA = "jakarta utara"
+        private const val SOUTH_JAKARTA = "jakarta selatan"
+        private const val EAST_JAKARTA = "jakarta timur"
+        private const val CENTRAL_JAKARTA = "jakarta pusat"
     }
 }

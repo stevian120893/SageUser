@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_20sdp"
-            android:text="@string/order_confirmation"
+            android:text="@string/shared_res_give_review"
             android:gravity="center"
             android:textColor="@color/textColorPrimary"
             android:layout_marginTop="@dimen/_20sdp"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_10sdp"
-            android:text="@string/order_confirmation_description"
+            android:text="@string/order_review_description"
             android:gravity="center"
             android:textColor="@color/colorGrayText"
             android:fontFamily="@font/font_poppins_regular"
@@ -42,41 +42,26 @@
             android:layout_marginLeft="@dimen/_10sdp"
             android:layout_marginRight="@dimen/_10sdp"/>
 
-        <EditText
-            android:id="@+id/etBookingDate"
-            style="@style/Regular14"
-            android:layout_width="match_parent"
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_18sdp"
-            android:focusable="false"
-            android:textCursorDrawable="@null"
-            android:hint="@string/order_confirmation_date" />
+            style="?android:attr/ratingBarStyleIndicator"
+            android:layout_gravity="center_vertical"
+            android:isIndicator="false"
+            android:theme="@style/RatingBar"
+            android:rating="5"
+            android:stepSize="1"
+            android:layout_marginTop="@dimen/_24sdp"/>
 
         <EditText
-            android:id="@+id/etBookingTime"
+            android:id="@+id/etReview"
             style="@style/Regular14"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:focusable="false"
-            android:textCursorDrawable="@null"
-            android:hint="@string/order_confirmation_time" />
-
-        <EditText
-            android:id="@+id/etBookingAddress"
-            style="@style/Regular14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:hint="@string/shared_res_address" />
-
-        <EditText
-            android:id="@+id/etBookingNotes"
-            style="@style/Regular14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:hint="@string/order_confirmation_notes" />
+            android:layout_marginTop="@dimen/_12sdp"
+            android:hint="@string/shared_res_review" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,10 +80,10 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:layout_weight="1"/>
             <Button
-                android:id="@+id/btOrder"
+                android:id="@+id/btSend"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/order"
+                android:text="@string/shared_res_send"
                 android:background="@drawable/bg_rounded_6"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"

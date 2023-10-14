@@ -315,4 +315,12 @@
         <item name="android:background">@drawable/rounded_dialog</item>
     </style>
 
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/colorGray1</item>
+        <item name="colorControlActivated">@color/yellow_rating</item>
+    </style>
 </resources>

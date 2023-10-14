@@ -22,18 +22,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_FROM
 import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_TITLE
 import com.mib.feature_home.utils.WebViewActivity.Companion.INTENT_EXTRA_WEBVIEW_URL
-import java.security.InvalidKeyException
-import java.security.NoSuchAlgorithmException
-import java.text.NumberFormat
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
-import javax.crypto.Mac
-import javax.crypto.spec.SecretKeySpec
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.internal.and
+import java.security.InvalidKeyException
+import java.security.NoSuchAlgorithmException
+import java.text.NumberFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 
 class AppUtils {
@@ -356,6 +355,11 @@ class AppUtils {
             val mDate = sdf.parse(date)
             val sec = mDate.time/1000
             return sec.toString()
+        }
+
+        fun capitalizeFirstLetter(text: String): String {
+            return text.substring(0, 1).uppercase(Locale.getDefault()) +
+                    text.substring(1).lowercase(Locale.getDefault())
         }
 
         fun isPricePromo(promoPrice: String) : Boolean {

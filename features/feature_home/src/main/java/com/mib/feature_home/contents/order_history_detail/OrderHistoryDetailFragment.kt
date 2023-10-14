@@ -92,6 +92,10 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         binding.ivAddPhotoReceipt.setOnClickListener {
             viewModel.showUploadOptionDialog(this@OrderHistoryDetailFragment, easyImage)
         }
+
+        binding.btGiveRating.setOnClickListener {
+            viewModel.showRatingDialog(context, findNavController())
+        }
     }
 
     private fun observeLiveData(context: Context) {
@@ -105,7 +109,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                         binding.llContent.visibility = View.VISIBLE
                         binding.sflProductDetail.visibility = View.GONE
 
-//                        Glide.with(this@ProductDetailFragment).load(state.productDetail?.imageUrl).into(binding.ivProduct)
+//                        Glide.with(this@ProductDetailFragment).load(state.orderDetail?.p).into(binding.ivProduct)
                         binding.tvOrderName.text = state.orderDetail?.detail?.product?.name.orEmpty()
                         binding.tvMerchantName.text = state.orderDetail?.merchant?.name.orEmpty()
                         binding.tvCityName.text = state.orderDetail?.address.orEmpty()
@@ -119,26 +123,35 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
                         when(state.orderDetail?.status) {
                             OrderDetail.NEGOTIATING -> {
+                                binding.llAction.visibility = View.GONE
                                 binding.btPay.visibility = View.GONE
+                                binding.btGiveRating.visibility = View.GONE
                             }
                             WAITING_FOR_PAYMENT -> {
+                                binding.llAction.visibility = View.VISIBLE
                                 if(state.orderDetail?.usedPaymentMethod == KEY_PAYMENT_METHOD_TRANSFER) {
                                     binding.llPaymentReceipt.visibility = View.VISIBLE
                                 }
                                 binding.btPay.visibility = View.VISIBLE
+                                binding.btGiveRating.visibility = View.GONE
                             }
                             OrderDetail.ONGOING -> {
+                                binding.llAction.visibility = View.GONE
                                 binding.btPay.visibility = View.GONE
+                                binding.btGiveRating.visibility = View.GONE
                             }
                             OrderDetail.CANCEL -> {
                                 // nothing
                             }
                             OrderDetail.DONE -> {
+                                binding.llAction.visibility = View.VISIBLE
                                 binding.btPay.visibility = View.GONE
-                                binding.llGiveRating.visibility = View.VISIBLE
+                                binding.btGiveRating.visibility = View.VISIBLE
                             }
                             else -> {
+                                binding.llAction.visibility = View.GONE
                                 binding.btPay.visibility = View.GONE
+                                binding.btGiveRating.visibility = View.GONE
                             }
                         }
                     }

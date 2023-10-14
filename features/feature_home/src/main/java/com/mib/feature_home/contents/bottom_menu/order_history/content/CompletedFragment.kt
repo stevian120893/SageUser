@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mib.feature_home.adapter.OrderHistoryAdapter
 import com.mib.feature_home.databinding.FragmentContentCompletedBinding
 import com.mib.feature_home.domain.model.OrderHistory
+import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.DONE
 import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -137,8 +139,9 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
     }
 
     private fun setupAdapter(items: List<OrderHistory>) {
+        val itemsFiltered = items.filter { it.status == DONE || it.status == OrderDetail.CANCEL }
         orderHistoryAdapter = OrderHistoryAdapter(
-            itemList = items.toMutableList(),
+            itemList = itemsFiltered.toMutableList(),
             onItemClickListener = object : OrderHistoryAdapter.OnItemClickListener {
                 override fun onClick(item: OrderHistory) {
                     // TODO

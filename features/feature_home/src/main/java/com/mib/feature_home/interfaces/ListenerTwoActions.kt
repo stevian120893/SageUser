@@ -1,4 +1,4 @@
-package com.mib.feature_home.`interface`
+package com.mib.feature_home.interfaces
 
 interface ListenerTwoActions {
     fun firstAction()

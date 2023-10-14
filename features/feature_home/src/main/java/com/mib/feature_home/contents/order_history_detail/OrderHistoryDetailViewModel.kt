@@ -5,15 +5,19 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.interfaces.DialogOrderListener
+import com.mib.feature_home.interfaces.GiveRatingListener
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.feature_home.usecase.PayDanaUseCase
 import com.mib.feature_home.usecase.PayTransferUseCase
 import com.mib.feature_home.usecase.SendRatingUseCase
 import com.mib.feature_home.utils.AppUtils
+import com.mib.feature_home.utils.DialogUtils
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
@@ -111,7 +115,17 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-    fun sendRating(review: String, rating: String) {
+    fun showRatingDialog(context: Context, navController: NavController) {
+        DialogUtils.showGiveReviewDialog(
+            context = context,
+            object : GiveRatingListener {
+                override fun sendRating(rating: String, review: String) {
+                    sendOrderRating(navController, rating, review)
+                }
+            }
+        )
+    }
+    private fun sendOrderRating(navController: NavController, review: String, rating: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             if(orderId.isNullOrEmpty()) return@launch
@@ -120,7 +134,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
             withContext(mainDispatcher) {
                 loadingDialog.dismiss()
                 result.first?.let {
-                    // TODO after send rating
+                    getOrderDetail(navController)
                 }
                 result.second?.let {
                     toastEvent.postValue(it)
