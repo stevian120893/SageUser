@@ -5,7 +5,7 @@ import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.sage_user.navigation.UnauthorizedErrorNavigationImpl
-import com.mib.sage_user.navigation.HomeNavigationImpl
+import com.mib.feature_home.navigation.HomeNavigationImpl
 import com.mib.sage_user.navigation.LoadingDialogNavigationImpl
 import dagger.Module
 import dagger.Provides

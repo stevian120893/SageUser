@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="homeFragment" type="id" />
+    <item name="categoryListFragment" type="id" />
+    <item name="subcategoryListFragment" type="id" />
+    <item name="productListFragment" type="id" />
+    <item name="productDetailFragment" type="id" />
+    <item name="loginFragment" type="id" />
+    <item name="registerFragment" type="id" />
+    <item name="loadingDialog" type="id" />
+    <item name="orderDetailFragment" type="id" />
+
+    <item name="action_homeFragment" type="id" />
+    <item name="action_categoryListFragment" type="id" />
+    <item name="action_subcategoryListFragment" type="id" />
+    <item name="action_productListFragment" type="id" />
+    <item name="action_productDetailFragment" type="id" />
+    <item name="action_login_fragment" type="id" />
+    <item name="action_register_fragment" type="id" />
+    <item name="action_loadingDialog" type="id" />
+    <item name="action_orderDetailFragment" type="id" />
+</resources>

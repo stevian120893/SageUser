@@ -41,6 +41,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     private val backPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            viewModel.onBackPressed(this@OrderHistoryDetailFragment)
             findNavController().popBackStack()
         }
     }
@@ -82,7 +83,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     private fun initListener(context: Context) {
         binding.ivBack.setOnClickListener {
-            findNavController().popBackStack()
+            viewModel.onBackPressed(this@OrderHistoryDetailFragment)
         }
 
         binding.btPay.setOnClickListener {
@@ -191,5 +192,6 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         const val KEY_PAYMENT_METHOD_DANA = "DANA"
         const val KEY_PAYMENT_METHOD_TRANSFER = "TRANSFER"
         const val KEY_PAYMENT_METHOD_CASH = "CASH"
+        const val KEY_IS_FROM_CHECKOUT = "KEY_IS_FROM_CHECKOUT"
     }
 }

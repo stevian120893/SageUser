@@ -1,8 +1,10 @@
 apply from: "$rootDir/gradle_scripts/lib.gradle"
 
 dependencies {
+    implementation "$appDependencies.inject"
     implementation "$appDependencies.kotlinStdlib"
     implementation "$appDependencies.sdp"
     api "$appDependencies.jetpackNavRuntime"
+    api "$appDependencies.jetpackNavFragmentKtx"
     api "$appDependencies.fragment"
 }

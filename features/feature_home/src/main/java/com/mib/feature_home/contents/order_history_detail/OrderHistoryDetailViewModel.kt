@@ -5,12 +5,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.mib.feature_home.R
+import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_IS_FROM_CHECKOUT
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_TRANSFER
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
-import com.mib.feature_home.interfaces.DialogOrderListener
 import com.mib.feature_home.interfaces.GiveRatingListener
 import com.mib.feature_home.usecase.GetOrderDetailUseCase
 import com.mib.feature_home.usecase.PayDanaUseCase
@@ -23,6 +23,7 @@ import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
+import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
@@ -42,15 +43,18 @@ class OrderHistoryDetailViewModel @Inject constructor(
     private val sendRatingUseCase: SendRatingUseCase,
     private val payDanaUseCase: PayDanaUseCase,
     private val payTransferUseCase: PayTransferUseCase,
+    private val homeNavigation: HomeNavigation,
     val loadingDialog: LoadingDialogNavigation,
     private val unauthorizedErrorNavigation: UnauthorizedErrorNavigation
 ) : BaseViewModel<OrderHistoryDetailViewModel.ViewState>(ViewState(NO_EVENT)) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
     private var orderId: String? = null
+    private var isFromCheckout: Boolean = false
 
     fun init(arg: Bundle?) {
         orderId = arg?.getString(KEY_ORDER_ID)
+        isFromCheckout = arg?.getBoolean(KEY_IS_FROM_CHECKOUT) ?: false
     }
 
     fun getOrderDetail(navController: NavController) {
@@ -125,6 +129,16 @@ class OrderHistoryDetailViewModel @Inject constructor(
             }
         )
     }
+
+    fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
+        mediaEvent.postValue(fragment to easyImage)
+    }
+
+    fun onBackPressed(fragment: Fragment) {
+        if(isFromCheckout) homeNavigation.goToHomeScreen(fragment.findNavController())
+        else fragment.findNavController().popBackStack()
+    }
+
     private fun sendOrderRating(navController: NavController, review: String, rating: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
@@ -141,10 +155,6 @@ class OrderHistoryDetailViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
-        mediaEvent.postValue(fragment to easyImage)
     }
 
     data class ViewState(

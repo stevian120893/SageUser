@@ -1,14 +1,15 @@
-package com.mib.sage_user.navigation
+package com.mib.feature_home.navigation
 
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import com.mib.feature_home.R
+import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_IS_FROM_CHECKOUT
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_CODE
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_NAME
 import com.mib.lib_navigation.HomeNavigation
-import com.mib.sage_user.R
 
 class HomeNavigationImpl : HomeNavigation {
     override fun goToHomeScreen(navController: NavController) {
@@ -80,11 +81,27 @@ class HomeNavigationImpl : HomeNavigation {
         navController: NavController,
         orderId: String
     ) {
+        val isFromCheckout = isFromCheckout(navController)
         navController.navigate(
             R.id.action_orderDetailFragment,
             bundleOf(
                 KEY_ORDER_ID to orderId,
+                KEY_IS_FROM_CHECKOUT to isFromCheckout,
             )
         )
+    }
+
+    private fun isFromCheckout(navController: NavController): Boolean {
+        val checkoutScreens =
+            intArrayOf(
+                R.id.productDetailFragment,
+            )
+
+        // TODO: hardcoded because the current dest is the dialog confirmation,
+        //  still can't found how to set an id to the dialog builder
+        val dialogConfirmationId = 2131296547
+
+        val currentId = navController.currentDestination?.id
+        return currentId != null && currentId == dialogConfirmationId
     }
 }

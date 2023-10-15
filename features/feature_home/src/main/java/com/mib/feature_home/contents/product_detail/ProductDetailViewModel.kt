@@ -1,13 +1,14 @@
 package com.mib.feature_home.contents.product_detail
 
-import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.R
-import com.mib.feature_home.interfaces.DialogOrderListener
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
 import com.mib.feature_home.domain.model.ProductDetail
+import com.mib.feature_home.interfaces.DialogOrderListener
 import com.mib.feature_home.usecase.BookOrderUseCase
 import com.mib.feature_home.usecase.GetProductDetailUseCase
 import com.mib.feature_home.utils.AppUtils
@@ -22,10 +23,10 @@ import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
@@ -70,29 +71,29 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun confirmOrder(context: Context) {
+    fun confirmOrder(fragment: Fragment) {
         DialogUtils.showOrderConfirmationDialog(
-            context = context,
+            context = fragment.context,
             object : DialogOrderListener {
                 override fun order(bookingDate: String, bookingTime: String, bookingAddress: String, bookingNote: String) {
                     if(bookingDate.isEmpty()) {
-                        toastEvent.postValue(context.getString(R.string.shared_res_please_fill_blank_space))
+                        toastEvent.postValue(fragment.context?.getString(R.string.shared_res_please_fill_blank_space))
                         return
                     }
 
                     val bookingDateAndTime = "$bookingDate $bookingTime"
                     val timeInMillis = AppUtils.convertDateToMillis(bookingDateAndTime)
                     if(timeInMillis.isEmpty()) {
-                        toastEvent.postValue(context.getString(R.string.shared_res_please_fill_blank_space))
+                        toastEvent.postValue(fragment.context?.getString(R.string.shared_res_please_fill_blank_space))
                         return
                     }
-                    bookOrder(timeInMillis, bookingAddress, bookingNote)
+                    bookOrder(fragment.findNavController(), timeInMillis, bookingAddress, bookingNote)
                 }
             }
         )
     }
 
-    private fun bookOrder(bookingDate: String, bookingAddress: String, bookingNote: String) {
+    private fun bookOrder(navController: NavController, bookingDate: String, bookingAddress: String, bookingNote: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             val result = bookOrderUseCase(productCode.orEmpty(), bookingAddress, bookingDate, bookingNote)
@@ -101,11 +102,20 @@ class ProductDetailViewModel @Inject constructor(
                 loadingDialog.dismiss()
                 result.first?.let {
                     state = state.copy(event = EVENT_ORDER_SUCCEED)
+                    goToOrderDetailScreen(navController, it.orderId.orEmpty())
                 }
                 result.second?.let {
                     toastEvent.postValue(it)
                 }
             }
+        }
+    }
+
+    private fun goToOrderDetailScreen(navController: NavController, orderId: String?) {
+        if(orderId != null) {
+            homeNavigation.goToOrderDetailScreen(navController = navController, orderId = orderId)
+        } else {
+            toastEvent.postValue("Error")
         }
     }
 
