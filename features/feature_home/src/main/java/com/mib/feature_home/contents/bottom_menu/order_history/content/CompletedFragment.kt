@@ -69,8 +69,10 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
     private fun observeLiveData() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             if(state.isLoadHistory) {
-                binding.llContent.visibility = View.GONE
-                binding.sflHistory.visibility = View.VISIBLE
+                if(state.shouldShowShimmer) {
+                    binding.llContent.visibility = View.GONE
+                    binding.sflHistory.visibility = View.VISIBLE
+                }
             } else {
                 if (binding.srlHistory.isRefreshing) binding.srlHistory.isRefreshing = false
 
@@ -94,6 +96,7 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
                         } else {
                             if(isLoadNextItem) {
                                 orderHistoryAdapter?.removeLoadingFooter()
+                                orderHistoryAdapter?.addList(paging.items.toMutableList())
                                 isLoadNextItem = false
                             } else {
                                 setupAdapter(paging.items)
@@ -144,7 +147,7 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
             itemList = itemsFiltered.toMutableList(),
             onItemClickListener = object : OrderHistoryAdapter.OnItemClickListener {
                 override fun onClick(item: OrderHistory) {
-                    // TODO
+                    viewModel.goToOrderDetailScreen(findNavController(), item.code)
                 }
             }
         )
@@ -157,8 +160,8 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
     }
 
     companion object {
+        const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val MAX_PAGINATION_ITEMS = 10
-        private const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
     }
 }

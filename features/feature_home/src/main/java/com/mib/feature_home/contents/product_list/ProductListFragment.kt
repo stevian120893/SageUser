@@ -136,52 +136,56 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
 
     private fun observeLiveData(context: Context) {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-            if(state.isLoadProducts) {
-                binding.llContent.visibility = View.GONE
-                binding.sflProduct.visibility = View.VISIBLE
-            } else {
-                if (binding.srlProduct.isRefreshing) binding.srlProduct.isRefreshing = false
-            }
-
             when (state.event) {
                 EVENT_UPDATE_SUBCATEGORY_NAME -> {
                     binding.tvSubcategoryName.text = state.subcategoryName
                     viewModel.fetchProducts(this@ProductListFragment, DEFAULT_NEXT_CURSOR_REQUEST)
                 }
                 EVENT_UPDATE_PRODUCT_LIST -> {
-                    binding.sflProduct.visibility = View.GONE
-                    binding.llContent.visibility = View.VISIBLE
-                    state.productsItemPaging?.let { productsItem ->
-                        if(productsItem.items?.isNotEmpty() == true) {
-                            binding.rvProduct.visibility = View.VISIBLE
-                            binding.llNoData.visibility = View.GONE
-                            nextCursor = productsItem.nextCursor
-                            val hasMoreItem = productsItem.nextCursor != null
-                            if(hasMoreItem) {
-                                val cursor = nextCursor?.toInt() ?: -1
-                                if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
-                                    productsAdapter?.removeLoadingFooter()
-                                    productsAdapter?.addList(productsItem.items.toMutableList())
-                                    isLoadNextItem = false
-                                } else { // first fetch
-                                    setupAdapter(context, productsItem.items)
+                    if(state.isLoadProducts) {
+                        if(state.shouldShowShimmer) {
+                            binding.llContent.visibility = View.GONE
+                            binding.sflProduct.visibility = View.VISIBLE
+                        }
+                    } else {
+                        if (binding.srlProduct.isRefreshing) binding.srlProduct.isRefreshing = false
+                        binding.sflProduct.visibility = View.GONE
+                        binding.llContent.visibility = View.VISIBLE
+                        state.productsItemPaging?.let { productsItem ->
+                            if (productsItem.items?.isNotEmpty() == true) {
+                                binding.rvProduct.visibility = View.VISIBLE
+                                binding.llNoData.visibility = View.GONE
+                                nextCursor = productsItem.nextCursor
+                                val hasMoreItem = productsItem.nextCursor != null
+                                if (hasMoreItem) {
+                                    val cursor = nextCursor?.toInt() ?: -1
+                                    if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
+                                        addNextItems(productsItem.items)
+                                    } else { // first fetch
+                                        setupAdapter(context, productsItem.items)
+                                    }
+                                } else {
+                                    if (isLoadNextItem) {
+                                        addNextItems(productsItem.items)
+                                    } else {
+                                        setupAdapter(context, productsItem.items)
+                                    }
                                 }
                             } else {
-                                if(isLoadNextItem) {
-                                    productsAdapter?.removeLoadingFooter()
-                                    isLoadNextItem = false
-                                } else {
-                                    setupAdapter(context, productsItem.items)
-                                }
+                                binding.rvProduct.visibility = View.GONE
+                                binding.llNoData.visibility = View.VISIBLE
                             }
-                        } else {
-                            binding.rvProduct.visibility = View.GONE
-                            binding.llNoData.visibility = View.VISIBLE
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun addNextItems(items: List<Product>) {
+        productsAdapter?.removeLoadingFooter()
+        productsAdapter?.addList(items.toMutableList())
+        isLoadNextItem = false
     }
 
     private fun setupAdapter(context: Context, products: List<Product>) {

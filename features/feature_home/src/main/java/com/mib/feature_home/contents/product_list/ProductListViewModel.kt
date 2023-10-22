@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_CATEGORY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_IS_SEARCH
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_CODE
@@ -60,7 +61,11 @@ class ProductListViewModel @Inject constructor(
     }
 
     fun fetchProducts(fragment: Fragment, nextCursor: String? = null, keySearch: String? = null) {
-        state = state.copy(isLoadProducts = true, event = NO_EVENT)
+        state = state.copy(
+            isLoadProducts = true,
+            event = EVENT_UPDATE_PRODUCT_LIST,
+            shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == DEFAULT_NEXT_CURSOR_REQUEST
+        )
         viewModelScope.launch(ioDispatcher) {
             val result = getProductsUseCase(nextCursor, categoryCode.orEmpty(), subcategoryCode.orEmpty(), keySearch)
 
@@ -106,6 +111,7 @@ class ProductListViewModel @Inject constructor(
 
     data class ViewState(
         var isLoadProducts: Boolean = false,
+        var shouldShowShimmer: Boolean = false,
         var productsItemPaging: ProductsItemPaging? = null,
         var subcategoryName: String? = null,
         var event: Int = NO_EVENT

@@ -146,9 +146,11 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                         if (binding.srlSubcategory.isRefreshing) binding.srlSubcategory.isRefreshing = false
 
                         if(it) {
-                            binding.srlSubcategory.visibility = View.GONE
-                            binding.sflSubcategory.visibility = View.VISIBLE
-                            binding.llNoData.visibility = View.GONE
+                            if(state.shouldShowShimmer) {
+                                binding.srlSubcategory.visibility = View.GONE
+                                binding.sflSubcategory.visibility = View.VISIBLE
+                                binding.llNoData.visibility = View.GONE
+                            } else {}
                         } else {
                             binding.sflSubcategory.visibility = View.GONE
                             state.subcategoriesItemPaging?.let { subcategoriesItem ->
@@ -169,6 +171,7 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
                                     } else {
                                         if(isLoadNextItem) {
                                             subcategoriesPagingAdapter?.removeLoadingFooter()
+                                            subcategoriesPagingAdapter?.addList(subcategoriesItem.items.toMutableList())
                                             isLoadNextItem = false
                                         } else {
                                             setupSubcategoryAdapter(subcategoriesItem.items)

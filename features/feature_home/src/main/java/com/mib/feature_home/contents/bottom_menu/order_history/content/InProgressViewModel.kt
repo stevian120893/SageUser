@@ -4,14 +4,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.contents.bottom_menu.order_history.content.InProgressFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.domain.model.OrderHistoryItemPaging
-import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.usecase.GetOrderHistoryUseCase
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
 import com.mib.lib_api.ApiConstants
 import com.mib.lib_auth.repository.SessionRepository
-import com.mib.lib_auth.usecase.LoginUseCase
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
@@ -19,10 +18,10 @@ import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class InProgressViewModel @Inject constructor(
@@ -38,7 +37,10 @@ class InProgressViewModel @Inject constructor(
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
     fun getOrderHistory(fragment: Fragment, nextCursor: String? = null) {
-        state = state.copy(isLoadHistory = true)
+        state = state.copy(
+            isLoadHistory = true,
+            shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == CompletedFragment.DEFAULT_NEXT_CURSOR_REQUEST
+        )
         viewModelScope.launch(ioDispatcher) {
             val result = getOrderHistoryUseCase(nextCursor)
 
@@ -75,6 +77,7 @@ class InProgressViewModel @Inject constructor(
 
     data class ViewState(
         var isLoadHistory: Boolean = false,
+        var shouldShowShimmer: Boolean = false,
         var orderHistoryItemPaging: OrderHistoryItemPaging? = null
     ) : BaseViewState
 }

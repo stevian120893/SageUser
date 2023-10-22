@@ -3,6 +3,9 @@ package com.mib.feature_home.contents.bottom_menu.promo
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.contents.bottom_menu.order_history.content.CompletedFragment
+import com.mib.feature_home.contents.product_list.ProductListFragment
+import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.usecase.GetPromoUseCase
 import com.mib.lib.mvvm.BaseViewModel
@@ -33,7 +36,10 @@ class PromoViewModel @Inject constructor(
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
     fun fetchPromo(fragment: Fragment, nextCursor: String? = null) {
-        state = state.copy(isLoadPromo = true)
+        state = state.copy(
+            isLoadPromo = true,
+            shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == CompletedFragment.DEFAULT_NEXT_CURSOR_REQUEST
+        )
         viewModelScope.launch(ioDispatcher) {
             val result = getPromoUseCase(nextCursor)
 
@@ -62,6 +68,7 @@ class PromoViewModel @Inject constructor(
 
     data class ViewState(
         var isLoadPromo: Boolean = false,
+        var shouldShowShimmer: Boolean = false,
         var promoItemPaging: PromoItemPaging? = null,
     ) : BaseViewState
 }

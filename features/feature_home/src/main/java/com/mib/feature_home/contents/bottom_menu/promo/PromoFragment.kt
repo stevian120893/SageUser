@@ -97,8 +97,10 @@ class PromoFragment : BaseFragment<PromoViewModel>(0) {
     private fun observeLiveData() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             if(state.isLoadPromo) {
-                binding.llContent.visibility = View.GONE
-                binding.sflPromo.visibility = View.VISIBLE
+                if(state.shouldShowShimmer) {
+                    binding.llContent.visibility = View.GONE
+                    binding.sflPromo.visibility = View.VISIBLE
+                }
             } else {
                 if (binding.srlPromo.isRefreshing) binding.srlPromo.isRefreshing = false
             }
@@ -115,7 +117,7 @@ class PromoFragment : BaseFragment<PromoViewModel>(0) {
                         val cursor = nextCursor?.toInt() ?: -1
                         if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
                             promoAdapter?.removeLoadingFooter()
-                            promoAdapter?.addList(paging.items?.toMutableList())
+                            promoAdapter?.addList(paging.items.toMutableList())
                             isLoadNextItem = false
                         } else { // first fetch
                             setupAdapter(paging.items)
@@ -123,6 +125,7 @@ class PromoFragment : BaseFragment<PromoViewModel>(0) {
                     } else {
                         if(isLoadNextItem) {
                             promoAdapter?.removeLoadingFooter()
+                            promoAdapter?.addList(paging.items.toMutableList())
                             isLoadNextItem = false
                         } else {
                             setupAdapter(paging.items)
@@ -149,8 +152,8 @@ class PromoFragment : BaseFragment<PromoViewModel>(0) {
     }
 
     companion object {
+        const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val MAX_PAGINATION_ITEMS = 10
-        private const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
     }
 }

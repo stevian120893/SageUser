@@ -109,45 +109,45 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
 
     private fun observeLiveData(context: Context) {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
-            state.isLoadSubcategories?.let {
-                if(it) {
-                    binding.llContent.visibility = View.GONE
-                    binding.sflSubcategory.visibility = View.VISIBLE
-                } else {
-                    if (binding.srlSubcategory.isRefreshing) binding.srlSubcategory.isRefreshing = false
-                }
-            }
-
             when (state.event) {
                 EVENT_UPDATE_LIST -> {
-                    binding.sflSubcategory.visibility = View.GONE
-                    binding.llContent.visibility = View.VISIBLE
-                    state.subcategoriesItemPaging?.let { subcategoriesItem ->
-                        if(subcategoriesItem.items?.isNotEmpty() == true) {
-                            binding.rvSubcategory.visibility = View.VISIBLE
-                            binding.llNoData.visibility = View.GONE
-                            nextCursor = subcategoriesItem.nextCursor
-                            val hasMoreItem = subcategoriesItem.nextCursor != null
-                            if(hasMoreItem) {
-                                val cursor = nextCursor?.toInt() ?: -1
-                                if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
-                                    subcategoriesPagingAdapter?.removeLoadingFooter()
-                                    subcategoriesPagingAdapter?.addList(subcategoriesItem.items?.toMutableList())
-                                    isLoadNextItem = false
-                                } else { // first fetch
-                                    subcategoriesItem.items?.let { setupAdapter(context, it) }
+                    if(state.isLoadSubcategories) {
+                        if(state.shouldShowShimmer) {
+                            binding.llContent.visibility = View.GONE
+                            binding.sflSubcategory.visibility = View.VISIBLE
+                        }
+                    } else {
+                        if (binding.srlSubcategory.isRefreshing) binding.srlSubcategory.isRefreshing = false
+                        binding.sflSubcategory.visibility = View.GONE
+                        binding.llContent.visibility = View.VISIBLE
+                        state.subcategoriesItemPaging?.let { subcategoriesItem ->
+                            if (subcategoriesItem.items?.isNotEmpty() == true) {
+                                binding.rvSubcategory.visibility = View.VISIBLE
+                                binding.llNoData.visibility = View.GONE
+                                nextCursor = subcategoriesItem.nextCursor
+                                val hasMoreItem = subcategoriesItem.nextCursor != null
+                                if (hasMoreItem) {
+                                    val cursor = nextCursor?.toInt() ?: -1
+                                    if (cursor > DEFAULT_NEXT_CURSOR_RESPONSE) {
+                                        subcategoriesPagingAdapter?.removeLoadingFooter()
+                                        subcategoriesPagingAdapter?.addList(subcategoriesItem.items.toMutableList())
+                                        isLoadNextItem = false
+                                    } else { // first fetch
+                                        setupAdapter(context, subcategoriesItem.items)
+                                    }
+                                } else {
+                                    if (isLoadNextItem) {
+                                        subcategoriesPagingAdapter?.removeLoadingFooter()
+                                        subcategoriesPagingAdapter?.addList(subcategoriesItem.items.toMutableList())
+                                        isLoadNextItem = false
+                                    } else {
+                                        setupAdapter(context, subcategoriesItem.items)
+                                    }
                                 }
                             } else {
-                                if(isLoadNextItem) {
-                                    subcategoriesPagingAdapter?.removeLoadingFooter()
-                                    isLoadNextItem = false
-                                } else {
-                                    subcategoriesItem.items?.let { setupAdapter(context, it) }
-                                }
+                                binding.rvSubcategory.visibility = View.GONE
+                                binding.llNoData.visibility = View.VISIBLE
                             }
-                        } else {
-                            binding.rvSubcategory.visibility = View.GONE
-                            binding.llNoData.visibility = View.VISIBLE
                         }
                     }
                 }
@@ -177,8 +177,8 @@ class SubcategoryListFragment : BaseFragment<SubcategoryListViewModel>(0) {
     }
 
     companion object {
+        const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val MAX_PAGINATION_ITEMS = 10
-        private const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
 
         const val KEY_CATEGORY_CODE = "key_category_code"

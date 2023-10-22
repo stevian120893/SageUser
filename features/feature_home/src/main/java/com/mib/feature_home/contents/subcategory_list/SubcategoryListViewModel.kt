@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_CODE
 import com.mib.feature_home.contents.subcategory_list.SubcategoryListFragment.Companion.KEY_CATEGORY_NAME
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
@@ -47,7 +48,11 @@ class SubcategoryListViewModel @Inject constructor(
     }
 
     fun fetchSubcategories(fragment: Fragment, nextCursor: String? = null) {
-        state = state.copy(isLoadSubcategories = true, event = NO_EVENT)
+        state = state.copy(
+            isLoadSubcategories = true,
+            event = EVENT_UPDATE_LIST,
+            shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == DEFAULT_NEXT_CURSOR_REQUEST
+        )
         viewModelScope.launch(ioDispatcher) {
             val result = getSubcategoriesUseCase(nextCursor, categoryCode)
 
@@ -92,7 +97,8 @@ class SubcategoryListViewModel @Inject constructor(
     }
 
     data class ViewState(
-        var isLoadSubcategories: Boolean? = null,
+        var isLoadSubcategories: Boolean = false,
+        var shouldShowShimmer: Boolean = false,
         var subcategoriesItemPaging: SubcategoriesItemPaging? = null,
         var categoryName: String? = null,
         var event: Int = NO_EVENT

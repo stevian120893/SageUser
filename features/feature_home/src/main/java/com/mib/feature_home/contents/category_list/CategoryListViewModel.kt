@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.contents.category_list.CategoryListFragment.Companion.KEY_CATEGORY_CODE
+import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.Category
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
@@ -21,10 +22,10 @@ import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_navigation.UnauthorizedErrorNavigation
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class CategoryListViewModel @Inject constructor(
@@ -83,7 +84,11 @@ class CategoryListViewModel @Inject constructor(
     }
 
     fun fetchSubcategories(fragment: Fragment, nextCursor: String? = null) {
-        state = state.copy(isLoadSubcategories = true, event = EVENT_UPDATE_SUBCATEGORY)
+        state = state.copy(
+            isLoadSubcategories = true,
+            event = EVENT_UPDATE_SUBCATEGORY,
+            shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == DEFAULT_NEXT_CURSOR_REQUEST
+        )
         viewModelScope.launch(ioDispatcher) {
             val result = getSubcategoriesUseCase(nextCursor, categoryCode)
 
@@ -139,6 +144,7 @@ class CategoryListViewModel @Inject constructor(
 
     data class ViewState(
         var isLoadSubcategories: Boolean? = null,
+        var shouldShowShimmer: Boolean = false,
         var subcategoriesItemPaging: SubcategoriesItemPaging? = null,
         var isLoadCategories: Boolean = false,
         val event: Int,

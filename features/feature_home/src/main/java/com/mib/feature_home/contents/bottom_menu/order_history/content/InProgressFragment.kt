@@ -68,8 +68,10 @@ class InProgressFragment : BaseFragment<InProgressViewModel>(0) {
     private fun observeLiveData() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             if(state.isLoadHistory) {
-                binding.llContent.visibility = View.GONE
-                binding.sflHistory.visibility = View.VISIBLE
+                if(state.shouldShowShimmer) {
+                    binding.llContent.visibility = View.GONE
+                    binding.sflHistory.visibility = View.VISIBLE
+                }
             } else {
                 if (binding.srlHistory.isRefreshing) binding.srlHistory.isRefreshing = false
                 binding.sflHistory.visibility = View.GONE
@@ -155,8 +157,8 @@ class InProgressFragment : BaseFragment<InProgressViewModel>(0) {
     }
 
     companion object {
+        const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val MAX_PAGINATION_ITEMS = 10
-        private const val DEFAULT_NEXT_CURSOR_REQUEST = "1"
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
     }
 }
