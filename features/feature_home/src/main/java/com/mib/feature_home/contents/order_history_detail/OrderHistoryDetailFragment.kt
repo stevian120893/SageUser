@@ -15,6 +15,7 @@ import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailView
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
 import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.WAITING_FOR_PAYMENT
+import com.mib.feature_home.utils.CustomUtils
 import com.mib.feature_home.utils.createEasyImage
 import com.mib.feature_home.utils.withThousandSeparator
 import com.mib.lib.mvvm.BaseFragment
@@ -76,6 +77,11 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getOrderDetail(findNavController())
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -114,6 +120,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                         binding.tvOrderName.text = state.orderDetail?.detail?.product?.name.orEmpty()
                         binding.tvMerchantName.text = state.orderDetail?.merchant?.name.orEmpty()
                         binding.tvCityName.text = state.orderDetail?.address.orEmpty()
+                        binding.tvStatus.text = CustomUtils.getUserFriendlyOrderStatusName(context, state.orderDetail?.status.orEmpty())
 
                         binding.tvDate.text = state.orderDetail?.bookingDate
                         binding.tvPrice.text = context.getString(R.string.currency_format, state.orderDetail?.totalPrice.toString().withThousandSeparator())
