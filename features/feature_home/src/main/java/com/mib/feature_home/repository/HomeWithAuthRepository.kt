@@ -37,7 +37,7 @@ interface HomeWithAuthRepository {
     ): Pair<OrderDetail?, String?>
 
     suspend fun sendRating(
-        orderId: String,
+        productId: String,
         rating: String,
         review: String
     ): Pair<Void?, String?>

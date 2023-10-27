@@ -126,12 +126,12 @@ class HomeWithAuthRepositoryImpl(
     }
 
     override suspend fun sendRating(
-        orderId: String,
+        productId: String,
         rating: String,
         review: String
     ): Pair<Void?, String?> {
         val sendRatingRequest = SendRatingRequest(
-            orderId = orderId,
+            productId = productId,
             rating = rating,
             review = review
         )

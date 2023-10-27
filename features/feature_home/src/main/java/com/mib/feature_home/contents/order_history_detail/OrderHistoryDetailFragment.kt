@@ -14,6 +14,7 @@ import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
 import com.mib.feature_home.domain.model.order_detail.OrderDetail
+import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.PENDING_PAYMENT_APPROVAL
 import com.mib.feature_home.domain.model.order_detail.OrderDetail.Companion.WAITING_FOR_PAYMENT
 import com.mib.feature_home.utils.CustomUtils
 import com.mib.feature_home.utils.createEasyImage
@@ -101,7 +102,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         }
 
         binding.btGiveRating.setOnClickListener {
-            viewModel.showRatingDialog(context, findNavController())
+            viewModel.showRatingDialog(this@OrderHistoryDetailFragment)
         }
     }
 
@@ -143,6 +144,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                                 binding.btPay.visibility = View.VISIBLE
                                 binding.btGiveRating.visibility = View.GONE
                             }
+                            PENDING_PAYMENT_APPROVAL -> {}
                             OrderDetail.ONGOING -> {
                                 binding.llAction.visibility = View.GONE
                                 binding.btPay.visibility = View.GONE

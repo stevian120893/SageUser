@@ -125,6 +125,7 @@
     <string name="shared_res_status">Status</string>
     <string name="shared_res_status_negotiating">Dalam penawaran</string>
     <string name="shared_res_status_waiting_for_payment">Menunggu pembayaran</string>
+    <string name="shared_res_status_pending_payment_approval">Menunggu penerimaan</string>
     <string name="shared_res_status_ongoing">Sedang dikerjakan</string>
     <string name="shared_res_status_cancel_order">Dibatalkan</string>
     <string name="shared_res_status_done">Selesai</string>
@@ -144,4 +145,5 @@
     <string name="order_confirmation_notes">Catatan</string>
     <string name="order_upload_payment_receipt">Unggah foto pembayaran</string>
     <string name="order_review_description">Anda dapat memberikan penilaian terhadap layanan order ini</string>
+    <string name="order_review_sent">Terima kasih untuk ulasan Anda!</string>
 </resources>

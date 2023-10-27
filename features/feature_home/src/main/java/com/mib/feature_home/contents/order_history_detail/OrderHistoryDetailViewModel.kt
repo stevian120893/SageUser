@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_IS_FROM_CHECKOUT
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_PAYMENT_METHOD_DANA
@@ -119,12 +120,12 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-    fun showRatingDialog(context: Context, navController: NavController) {
+    fun showRatingDialog(fragment: Fragment) {
         DialogUtils.showGiveReviewDialog(
-            context = context,
+            context = fragment.context,
             object : GiveRatingListener {
                 override fun sendRating(rating: String, review: String) {
-                    sendOrderRating(navController, rating, review)
+                    sendOrderRating(fragment, rating, review)
                 }
             }
         )
@@ -139,16 +140,17 @@ class OrderHistoryDetailViewModel @Inject constructor(
         else fragment.findNavController().popBackStack()
     }
 
-    private fun sendOrderRating(navController: NavController, review: String, rating: String) {
+    private fun sendOrderRating(fragment: Fragment, review: String, rating: String) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             if(orderId.isNullOrEmpty()) return@launch
 
-            val result = sendRatingUseCase(orderId.orEmpty(), rating, review)
+            val result = sendRatingUseCase(state.orderDetail?.detail?.product?.code.orEmpty(), rating, review)
             withContext(mainDispatcher) {
                 loadingDialog.dismiss()
                 result.first?.let {
-                    getOrderDetail(navController)
+                    toastEvent.postValue(fragment.context?.getString(R.string.order_review_sent))
+                    getOrderDetail(fragment.findNavController())
                 }
                 result.second?.let {
                     toastEvent.postValue(it)

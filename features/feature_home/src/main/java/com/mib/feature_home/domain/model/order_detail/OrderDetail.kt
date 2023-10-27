@@ -25,6 +25,7 @@ class OrderDetail (
         @StringDef(
             NEGOTIATING,
             WAITING_FOR_PAYMENT,
+            PENDING_PAYMENT_APPROVAL,
             ONGOING,
             CANCEL,
             DONE,
@@ -35,6 +36,7 @@ class OrderDetail (
 
         const val NEGOTIATING = "NEGOTIATING"
         const val WAITING_FOR_PAYMENT = "WAITING_FOR_PAYMENT"
+        const val PENDING_PAYMENT_APPROVAL = "PENDING_PAYMENT_APPROVAL"
         const val ONGOING = "ONGOING"
         const val CANCEL = "CANCEL"
         const val DONE = "DONE"

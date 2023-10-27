@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class SendRatingRequest(
     @SerializedName("code")
-    val orderId: String,
+    val productId: String,
     @SerializedName("review")
     val review: String,
     @SerializedName("star")
