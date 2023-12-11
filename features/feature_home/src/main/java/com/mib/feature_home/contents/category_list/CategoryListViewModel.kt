@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.contents.category_list.CategoryListFragment.Companion.KEY_CATEGORY_CODE
+import com.mib.feature_home.contents.category_list.CategoryListFragment.Companion.KEY_CITY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.domain.model.CategoriesItemPaging
 import com.mib.feature_home.domain.model.Category
@@ -41,9 +42,11 @@ class CategoryListViewModel @Inject constructor(
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
     var categoryCode: String? = null
+    private var cityCode: String? = null
 
     fun init(arg: Bundle?) {
         updateCategoryCode(arg?.getString(KEY_CATEGORY_CODE))
+        cityCode = arg?.getString(KEY_CITY_CODE)
     }
 
     fun updateCategoryCode(code: String?) {
@@ -113,7 +116,7 @@ class CategoryListViewModel @Inject constructor(
         }
     }
 
-    fun onClickProductItem(index: Int, category: Category) {
+    fun onClickCategoryItem(index: Int, category: Category) {
         state = state.copy(
             event = EVENT_SELECT_CATEGORY,
             selectedItem = category,
@@ -138,7 +141,8 @@ class CategoryListViewModel @Inject constructor(
             categoryCode,
             subcategoryCode,
             subcategoryName,
-            isSearch
+            isSearch,
+            cityCode
         )
     }
 

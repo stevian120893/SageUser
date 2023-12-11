@@ -17,11 +17,16 @@ import com.mib.feature_home.contents.bottom_menu.home.HomeViewModel.Companion.EV
 import com.mib.feature_home.databinding.FragmentHomeBinding
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category
+import com.mib.feature_home.domain.model.City
+import com.mib.feature_home.domain.model.City.Companion.JAKBAR_CODE
+import com.mib.feature_home.domain.model.City.Companion.JAKPUS_CODE
+import com.mib.feature_home.domain.model.City.Companion.JAKSEL_CODE
+import com.mib.feature_home.domain.model.City.Companion.JAKTIM_CODE
+import com.mib.feature_home.domain.model.City.Companion.JAKUT_CODE
 import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeViewModel>(0) {
 
@@ -33,19 +38,19 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
             activity?.finish()
         }
     }
-
     override fun initViewModel(firstInit: Boolean) {
         setViewModel(HomeViewModel::class.java)
     }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this@HomeFragment, backPressedCallback)
-        checkUserLocation()
+        viewModel.getHomeContent()
+        viewModel.setFirebaseToken()
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.getHomeContent()
         checkUserLocation()
     }
 
@@ -87,7 +92,7 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
         }
 
         binding.tvLocation.setOnClickListener {
-            viewModel.chooseLocation(context)
+            viewModel.showChooseLocationDialog(context)
         }
 
         binding.srlHome.setOnRefreshListener {
@@ -119,31 +124,30 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
                             })
                         binding.vpBanner.adapter = bannerAdapter
                         setupCategoryAdapter(it.category.orEmpty())
+                        checkUserLocation()
                     }
                 }
                 EVENT_UPDATE_LOCATION -> {
-                    viewModel.getHomeContent()
-                    if(it.cityChosen != null) {
-                        viewModel.getHomeContent() // based on city
-                        return@observe
-                    }
-
                     it.completeAddress?.let { address ->
                         val cityName = address.lowercase()
-                        val localCityName = if(cityName.contains(WEST_JAKARTA)) {
-                            WEST_JAKARTA
+                        val (localCityName, cityCode) = if(cityName.contains(WEST_JAKARTA)) {
+                            WEST_JAKARTA to JAKBAR_CODE
                         } else if(cityName.contains(NORTH_JAKARTA)) {
-                            NORTH_JAKARTA
+                            NORTH_JAKARTA to JAKUT_CODE
                         } else if(cityName.contains(SOUTH_JAKARTA)) {
-                            SOUTH_JAKARTA
+                            SOUTH_JAKARTA to JAKSEL_CODE
                         } else if(cityName.contains(EAST_JAKARTA)) {
-                            EAST_JAKARTA
+                            EAST_JAKARTA to JAKTIM_CODE
                         } else if(cityName.contains(CENTRAL_JAKARTA)) {
-                            CENTRAL_JAKARTA
+                            CENTRAL_JAKARTA to JAKPUS_CODE
                         } else {
-                            getString(R.string.home_out_of_area)
+                            getString(R.string.home_out_of_area) to ""
                         }
                         binding.tvLocation.text = AppUtils.capitalizeFirstLetter(localCityName)
+
+                        viewModel.chooseLocation(
+                            City(name = localCityName, code = cityCode)
+                        )
                     }
                 }
             }
@@ -164,14 +168,10 @@ class HomeFragment : BaseFragment<HomeViewModel>(0) {
             itemList = categories.toMutableList(),
             onItemClickListener = object : CategoriesAdapter.OnItemClickListener {
                 override fun onClick(category: Category) {
-                    if(category.categoryCode == CATEGORY_ALL) {
-                        viewModel.goToCategoryListScreen(findNavController())
-                    } else {
-                        viewModel.goToCategoryListScreen(
-                            findNavController(),
-                            category.categoryCode
-                        )
-                    }
+                    viewModel.goToCategoryListScreen(
+                        findNavController(),
+                        category.categoryCode
+                    )
                 }
             }
         )

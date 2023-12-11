@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -11,28 +12,34 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.mib.feature_home.contents.bottom_menu.home.HomeFragment.Companion.CATEGORY_ALL
 import com.mib.feature_home.interfaces.ListenerCityList
 import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category
 import com.mib.feature_home.domain.model.City
 import com.mib.feature_home.domain.model.Location
+import com.mib.feature_home.usecase.auth.SaveFcmTokenUseCase
 import com.mib.feature_home.usecase.home.GetHomeContentUseCase
 import com.mib.feature_home.utils.AppUtils
 import com.mib.feature_home.utils.DialogUtils
 import com.mib.feature_home.utils.Gps
 import com.mib.lib.mvvm.BaseViewModel
 import com.mib.lib.mvvm.BaseViewState
+import com.mib.lib_auth.repository.SessionRepository
 import com.mib.lib_coroutines.IODispatcher
 import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_pref.AccountPref
+import com.mib.lib_pref.SessionPref
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -46,8 +53,10 @@ class HomeViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineContext,
     private val homeNavigation: HomeNavigation,
     private val getHomeContentUseCase: GetHomeContentUseCase,
+    private val saveFcmTokenUseCase: SaveFcmTokenUseCase,
     val loadingDialog: LoadingDialogNavigation,
-    private val accountPref: AccountPref
+    private val accountPref: AccountPref,
+    private val sessionRepository: SessionRepository
 ) : BaseViewModel<HomeViewModel.ViewState>(ViewState()) {
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
@@ -81,12 +90,13 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun saveUserLocation() {
-        accountPref.location = state.cityChosen?.name.orEmpty()
-    }
-
     fun goToCategoryListScreen(navController: NavController, categoryCode: String? = null) {
-        homeNavigation.goToCategoryListScreen(navController, categoryCode)
+        val category = if(categoryCode != CATEGORY_ALL) categoryCode else null
+        homeNavigation.goToCategoryListScreen(
+            navController = navController,
+            categoryCode = category,
+            cityCode = state.cityChosen?.code
+        )
     }
 
     fun goToSubcategoryListScreen(navController: NavController, categoryCode: String, categoryName: String) {
@@ -105,17 +115,22 @@ class HomeViewModel @Inject constructor(
             categoryCode,
             subcategoryCode,
             subcategoryName,
-            isSearch
+            isSearch,
+            state.cityChosen?.code
         )
     }
 
-    fun chooseLocation(context: Context) {
+    fun showChooseLocationDialog(context: Context) {
         DialogUtils.showDialogList(context, state.cities, object : ListenerCityList {
             override fun action(city: City) {
-                state = state.copy(cityChosen = city, event = EVENT_UPDATE_LOCATION)
-                saveUserLocation()
+                updateLocation(completeAddress = city.name)
             }
         })
+    }
+
+    fun chooseLocation(city: City) {
+        state = state.copy(cityChosen = city, event = NO_EVENT)
+        accountPref.location = state.cityChosen?.name.orEmpty()
     }
 
     fun initGps(context: Context) {
@@ -151,14 +166,6 @@ class HomeViewModel @Inject constructor(
 
     fun hasLocation() = accountPref.location
 
-    private fun getCompleteAddress(context: Context, latitude: Double, longitude: Double): String {
-        return try {
-            AppUtils.getCompleteAddress(context, latitude, longitude)
-        } catch (e: Exception) {
-            ""
-        }
-    }
-
     fun updateLocation(latitude: Double? = null, longitude: Double? = null, completeAddress: String?) {
         state = if(latitude != null && longitude != null) {
             state.copy(
@@ -174,6 +181,40 @@ class HomeViewModel @Inject constructor(
                 completeAddress = completeAddress,
                 event = EVENT_UPDATE_LOCATION
             )
+        }
+    }
+
+    fun setFirebaseToken() {
+        val isLoggedIn = !sessionRepository.getAccessToken().isNullOrBlank()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("TAG", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            if(isLoggedIn) {
+                // TODO check if the token is the same with the saved local one, if not then call save token API
+                if(sessionRepository.getFcmToken() != token)
+                    saveFcmToken(token)
+            }
+        })
+    }
+
+    private fun saveFcmToken(token: String) {
+        viewModelScope.launch(ioDispatcher) {
+            saveFcmTokenUseCase.invoke(token)
+        }
+    }
+
+    private fun getCompleteAddress(context: Context, latitude: Double, longitude: Double): String {
+        return try {
+            AppUtils.getCompleteAddress(context, latitude, longitude)
+        } catch (e: Exception) {
+            ""
         }
     }
 

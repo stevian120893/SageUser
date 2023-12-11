@@ -5,6 +5,7 @@ import com.mib.feature_home.domain.model.Home
 import com.mib.feature_home.domain.model.ProductsItemPaging
 import com.mib.feature_home.domain.model.PromoItemPaging
 import com.mib.feature_home.domain.model.SubcategoriesItemPaging
+import com.mib.feature_home.dto.request.SetFcmTokenRequest
 import com.mib.feature_home.dto.request.VerificationCodeRequest
 import com.mib.feature_home.mapper.toDomainModel
 import com.mib.feature_home.service.HomeService
@@ -75,9 +76,10 @@ class HomeRepositoryImpl(
         cursor: String?,
         categoryCode: String?,
         subcategoryCode: String?,
-        searchKey: String?
+        searchKey: String?,
+        cityCode: String?
     ): Pair<ProductsItemPaging, String?> {
-        val result = service.getProducts(cursor, categoryCode, subcategoryCode, searchKey)
+        val result = service.getProducts(cursor, categoryCode, subcategoryCode, searchKey, cityCode)
         return when (result) {
             is NetworkResponse.Success -> {
                 val items = result.value.data?.map { it.toDomainModel() } ?: emptyList()
@@ -147,6 +149,22 @@ class HomeRepositoryImpl(
             email = email
         )
         val result = service.sendCode(verificationCodeRequest)
+        return when (result) {
+            is NetworkResponse.Success -> {
+                val item = result.value.data
+                item to null
+            }
+            else -> {
+                null to result.getErrorMessage()
+            }
+        }
+    }
+
+    override suspend fun saveFcmToken(fcmToken: String): Pair<Void?, String?> {
+        val setFcmTokenRequest = SetFcmTokenRequest(
+            fcmToken = fcmToken
+        )
+        val result = service.setFcmToken(setFcmTokenRequest)
         return when (result) {
             is NetworkResponse.Success -> {
                 val item = result.value.data

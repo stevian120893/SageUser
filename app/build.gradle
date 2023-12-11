@@ -107,5 +107,5 @@ dependencies {
 //    implementation "$appDependencies.firebaseConfig"
     implementation "$appDependencies.firebaseCrashlytic"
 //    implementation "$appDependencies.firebaseCore"
-    implementation "$appDependencies.firebaseMessaging"
+//    implementation "$appDependencies.firebaseMessaging"
 }

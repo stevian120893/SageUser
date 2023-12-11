@@ -38,7 +38,8 @@
                     android:layout_height="@dimen/_36sdp"
                     android:src="@drawable/ic_icon"
                     android:tint="@color/white"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    tools:ignore="UseAppTint" />
 
             </RelativeLayout>
 

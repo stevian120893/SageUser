@@ -16,7 +16,8 @@ interface HomeRepository {
         cursor: String?,
         categoryCode: String?,
         subcategoryCode: String?,
-        searchKey: String?
+        searchKey: String?,
+        cityCode: String?
     ): Pair<ProductsItemPaging, String?>
     suspend fun getPromos(
         cursor: String?
@@ -32,5 +33,8 @@ interface HomeRepository {
     ): Pair<TokenResponse?, String?>
     suspend fun sendCode(
         email: String
+    ): Pair<Void?, String?>
+    suspend fun saveFcmToken(
+        fcmToken: String
     ): Pair<Void?, String?>
 }

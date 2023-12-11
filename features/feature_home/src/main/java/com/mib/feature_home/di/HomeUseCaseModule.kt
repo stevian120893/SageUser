@@ -15,6 +15,7 @@ import com.mib.feature_home.usecase.PayDanaUseCase
 import com.mib.feature_home.usecase.PayTransferUseCase
 import com.mib.feature_home.usecase.RegisterUseCase
 import com.mib.feature_home.usecase.SendRatingUseCase
+import com.mib.feature_home.usecase.auth.SaveFcmTokenUseCase
 import com.mib.feature_home.usecase.auth.SendCodeUseCase
 import com.mib.feature_home.usecase.home.GetHomeContentUseCase
 import com.mib.lib_auth.repository.SessionRepository
@@ -104,5 +105,10 @@ object HomeUseCaseModule {
     @Provides
     fun providePayTransferUseCase(repo: HomeWithAuthRepository): PayTransferUseCase {
         return PayTransferUseCase(repo)
+    }
+
+    @Provides
+    fun provideSaveFcmTokenUseCase(repo: HomeRepository): SaveFcmTokenUseCase {
+        return SaveFcmTokenUseCase(repo)
     }
 }

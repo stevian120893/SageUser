@@ -9,7 +9,8 @@ class GetProductsUseCase(private val homeRepository: HomeRepository) {
         categoryCode: String,
         subcategoryCode: String,
         searchKey: String? = null,
+        cityCode: String? = null
     ): Pair<ProductsItemPaging, String?> {
-        return homeRepository.getProducts(cursor, categoryCode, subcategoryCode, searchKey)
+        return homeRepository.getProducts(cursor, categoryCode, subcategoryCode, searchKey, cityCode)
     }
 }

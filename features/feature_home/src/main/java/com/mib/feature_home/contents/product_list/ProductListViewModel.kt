@@ -3,12 +3,12 @@ package com.mib.feature_home.contents.product_list
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.DEFAULT_NEXT_CURSOR_REQUEST
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_CATEGORY_CODE
+import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_CITY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_IS_SEARCH
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_CODE
 import com.mib.feature_home.contents.product_list.ProductListFragment.Companion.KEY_SUBCATEGORY_NAME
@@ -44,16 +44,19 @@ class ProductListViewModel @Inject constructor(
 
     override val toastEvent: SingleLiveEvent<String> = SingleLiveEvent()
 
+
+    var isSearch: Boolean = false
+    private var cityCode: String? = null
     private var categoryCode: String? = null
     private var subcategoryCode: String? = null
     private var subcategoryName: String? = null
-    var isSearch: Boolean = false
 
     fun init(arg: Bundle?) {
         categoryCode = arg?.getString(KEY_CATEGORY_CODE).orEmpty()
         subcategoryCode = arg?.getString(KEY_SUBCATEGORY_CODE).orEmpty()
         subcategoryName = arg?.getString(KEY_SUBCATEGORY_NAME).orEmpty()
         isSearch = arg?.getBoolean(KEY_IS_SEARCH) ?: false
+        cityCode = arg?.getString(KEY_CITY_CODE).orEmpty()
     }
 
     fun updateSubcategoryName() {
@@ -67,7 +70,7 @@ class ProductListViewModel @Inject constructor(
             shouldShowShimmer = !nextCursor.isNullOrEmpty() && nextCursor == DEFAULT_NEXT_CURSOR_REQUEST
         )
         viewModelScope.launch(ioDispatcher) {
-            val result = getProductsUseCase(nextCursor, categoryCode.orEmpty(), subcategoryCode.orEmpty(), keySearch)
+            val result = getProductsUseCase(nextCursor, categoryCode.orEmpty(), subcategoryCode.orEmpty(), keySearch, cityCode)
 
             withContext(mainDispatcher) {
                 result.first.items?.let {
@@ -93,7 +96,7 @@ class ProductListViewModel @Inject constructor(
         v?.let { AppUtils.hideKeyboard(it, fragment.context) }
         fetchProducts(
             fragment = fragment,
-            nextCursor = ProductListFragment.DEFAULT_NEXT_CURSOR_REQUEST,
+            nextCursor = DEFAULT_NEXT_CURSOR_REQUEST,
             keySearch = searchKey
         )
     }

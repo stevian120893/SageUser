@@ -62,18 +62,19 @@ class DialogUtils {
             val dialogBuilder = AlertDialog.Builder(context)
             val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val layoutView: View = inflater.inflate(R.layout.dialog_list, null)
+            dialogBuilder.setView(layoutView)
+            val alertDialog = dialogBuilder.create()
 
             val rvList = layoutView.findViewById<RecyclerView>(R.id.rvLocation)
             rvList.layoutManager = LinearLayoutManager(context)
             val adapter = CityAdapter(cityList.orEmpty(), object : CityAdapter.OnItemClickListener {
                 override fun onClick(city: City) {
                     listener.action(city)
+                    alertDialog.dismiss()
                 }
             })
             rvList.adapter = adapter
 
-            dialogBuilder.setView(layoutView)
-            val alertDialog = dialogBuilder.create()
             alertDialog.window!!.attributes.windowAnimations = R.style.DialogAnimation
             alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
             alertDialog.show()

@@ -1,6 +1,7 @@
 package com.mib.feature_home.service
 
 import com.mib.feature_home.dto.request.VerificationCodeRequest
+import com.mib.feature_home.dto.request.SetFcmTokenRequest
 import com.mib.feature_home.dto.response.CategoryResponse
 import com.mib.feature_home.dto.response.HomeResponse
 import com.mib.feature_home.dto.response.CityResponse
@@ -40,6 +41,7 @@ interface HomeService {
         @Query("category_code") categoryCode: String?,
         @Query("subcategory_code") subcategoryCode: String?,
         @Query("search") search: String?,
+        @Query("city_code") cityCode: String?,
     ): NetworkResponse<ApiResponse<List<ProductResponse>>>
 
     @GET("/promo/list")
@@ -66,4 +68,9 @@ interface HomeService {
 
     @GET("/public/cities")
     suspend fun getLocations(): NetworkResponse<ApiResponse<List<CityResponse>>>
+
+    @POST("/site/set-fcm")
+    suspend fun setFcmToken(
+        @Body body: SetFcmTokenRequest
+    ): NetworkResponse<ApiResponse<Void>>
 }

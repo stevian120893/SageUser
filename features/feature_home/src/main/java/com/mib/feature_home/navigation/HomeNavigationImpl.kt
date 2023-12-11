@@ -3,6 +3,7 @@ package com.mib.feature_home.navigation
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import com.mib.feature_home.R
+import com.mib.feature_home.contents.category_list.CategoryListFragment
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_IS_FROM_CHECKOUT
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailFragment.Companion.KEY_ORDER_ID
 import com.mib.feature_home.contents.product_detail.ProductDetailFragment.Companion.KEY_PRODUCT_CODE
@@ -17,12 +18,14 @@ class HomeNavigationImpl : HomeNavigation {
     }
     override fun goToCategoryListScreen(
         navController: NavController,
-        categoryCode: String?
+        categoryCode: String?,
+        cityCode: String?
     ) {
         navController.navigate(
             R.id.action_categoryListFragment,
             bundleOf(
-                KEY_CATEGORY_CODE to categoryCode,
+                CategoryListFragment.KEY_CATEGORY_CODE to categoryCode,
+                CategoryListFragment.KEY_CITY_CODE to cityCode
             )
         )
     }
@@ -44,7 +47,8 @@ class HomeNavigationImpl : HomeNavigation {
         categoryCode: String?,
         subcategoryCode: String?,
         subcategoryName: String?,
-        isSearch: Boolean
+        isSearch: Boolean,
+        cityCode: String?
     ) {
         navController.navigate(
             R.id.action_productListFragment,
@@ -52,7 +56,8 @@ class HomeNavigationImpl : HomeNavigation {
                 ProductListFragment.KEY_CATEGORY_CODE to categoryCode,
                 ProductListFragment.KEY_SUBCATEGORY_CODE to subcategoryCode,
                 ProductListFragment.KEY_SUBCATEGORY_NAME to subcategoryName,
-                ProductListFragment.KEY_IS_SEARCH to isSearch
+                ProductListFragment.KEY_IS_SEARCH to isSearch,
+                ProductListFragment.KEY_CITY_CODE to cityCode
             )
         )
     }

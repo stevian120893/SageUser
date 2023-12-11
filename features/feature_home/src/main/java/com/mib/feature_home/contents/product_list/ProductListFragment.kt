@@ -217,5 +217,6 @@ class ProductListFragment : BaseFragment<ProductListViewModel>(0) {
         const val KEY_SUBCATEGORY_CODE = "key_subcategory_code"
         const val KEY_SUBCATEGORY_NAME = "key_subcategory_name"
         const val KEY_IS_SEARCH = "key_is_search"
+        const val KEY_CITY_CODE = "key_city_code"
     }
 }

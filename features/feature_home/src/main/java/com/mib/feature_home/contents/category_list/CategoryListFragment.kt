@@ -216,7 +216,7 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
             itemList = categories.toMutableList(),
             onItemClickListener = object : CategoryHorizontalAdapter.OnItemClickListener {
                 override fun onClick(category: Category, pos: Int) {
-                   viewModel.onClickProductItem(pos, category)
+                   viewModel.onClickCategoryItem(pos, category)
                 }
             }
         )
@@ -246,5 +246,6 @@ class CategoryListFragment : BaseFragment<CategoryListViewModel>(0) {
         private const val DEFAULT_NEXT_CURSOR_RESPONSE = 2
 
         const val KEY_CATEGORY_CODE = "key_category_code"
+        const val KEY_CITY_CODE = "key_city_code"
     }
 }

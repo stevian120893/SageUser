@@ -8,8 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.mib.lib_auth.repository.SessionRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -30,7 +28,7 @@ class MainActivity : FragmentActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.colorAccent)
         setContentView(R.layout.activity_main)
         setupNavGraph()
-        setFirebaseToken()
+//        setFirebaseToken()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -78,24 +76,25 @@ class MainActivity : FragmentActivity() {
         navHostFragment.navController.graph = navGraph
     }
 
-    private fun setFirebaseToken() {
-        val isLoggedIn = !sessionRepository.getAccessToken().isNullOrBlank()
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-//                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-
-            // Log and toast
-            if(isLoggedIn) {
-                // TODO check if the token is the same with the saved local one, if not then call save token API
-            }
-        })
-    }
-
+//    private fun setFirebaseToken() {
+//        val isLoggedIn = !sessionRepository.getAccessToken().isNullOrBlank()
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+////                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+//                return@OnCompleteListener
+//            }
+//
+//            // Get new FCM registration token
+//            val token = task.result
+//
+//            // Log and toast
+//            if(isLoggedIn) {
+//                // TODO check if the token is the same with the saved local one, if not then call save token API
+//                if(SharedPreferenceHelper.getFcmToken(this@MainActivity) != fcmToken)
+//                    mPresenter.saveFcmToken(fcmToken)
+//            }
+//        })
+//    }
 
     public override fun onResume() {
         super.onResume()
