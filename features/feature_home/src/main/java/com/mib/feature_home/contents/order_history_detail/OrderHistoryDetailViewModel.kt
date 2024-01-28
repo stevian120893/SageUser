@@ -83,7 +83,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
         }
     }
 
-    fun payOrder(context: Context, paymentReceiptImage: MultipartBody.Part? = null) {
+    fun payOrder(fragment: Fragment, paymentReceiptImage: MultipartBody.Part? = null) {
         loadingDialog.show()
         viewModelScope.launch(ioDispatcher) {
             if(state.orderDetail?.code.isNullOrEmpty()) return@launch
@@ -94,7 +94,7 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     withContext(mainDispatcher) {
                         loadingDialog.dismiss()
                         result.first?.let {
-                            AppUtils.goToWebView(context, KEY_PAYMENT_METHOD_DANA, it.paymentUrl, "")
+                            AppUtils.goToWebView(fragment.context, KEY_PAYMENT_METHOD_DANA, it.paymentUrl, "")
                         }
                         result.second?.let {
                             toastEvent.postValue(it)
@@ -102,17 +102,23 @@ class OrderHistoryDetailViewModel @Inject constructor(
                     }
                 }
                 KEY_PAYMENT_METHOD_TRANSFER -> {
-                    val result = payTransferUseCase(
-                        code = orderId.orEmpty(),
-                        paymentReceiptImage = paymentReceiptImage
-                    )
-                    withContext(mainDispatcher) {
+                    if(paymentReceiptImage == null) {
+                        toastEvent.postValue(fragment.context?.getString(R.string.order_pay_transfer_failed_receipt_not_uploaded))
                         loadingDialog.dismiss()
-                        result.first?.let {
-                            // TODO finish payment after upload payment receipt
-                        }
-                        result.second?.let {
-                            toastEvent.postValue(it)
+                    } else {
+                        val result = payTransferUseCase(
+                            code = orderId.orEmpty(),
+                            paymentReceiptImage = paymentReceiptImage
+                        )
+                        withContext(mainDispatcher) {
+                            loadingDialog.dismiss()
+                            result.first?.let {
+                                toastEvent.postValue(fragment.context?.getString(R.string.order_pay_transfer_success_upload))
+                                getOrderDetail(fragment.findNavController())
+                            }
+                            result.second?.let {
+                                toastEvent.postValue(it)
+                            }
                         }
                     }
                 }

@@ -165,7 +165,7 @@ class WebViewActivity : Activity() {
     }
 
     companion object {
-        fun newIntent(context: Context): Intent {
+        fun newIntent(context: Context?): Intent {
             return Intent(context, WebViewActivity::class.java)
         }
         const val INTENT_EXTRA_WEBVIEW_URL = "webview_url"

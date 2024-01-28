@@ -46,7 +46,6 @@ class CategoriesAdapter(
                 }
             }
             itemBinding.tvCategory.text = category.categoryName
-
             itemBinding.llAdapterParent.setOnClickListener {
                 adapterListener.onClick(category)
             }

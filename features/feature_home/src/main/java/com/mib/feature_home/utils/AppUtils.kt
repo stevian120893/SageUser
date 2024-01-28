@@ -76,12 +76,12 @@ class AppUtils {
             }
         }
 
-        fun goToWebView(mContext: Context, title: String, url: String, from: String) {
+        fun goToWebView(mContext: Context?, title: String, url: String, from: String) {
             val intent = WebViewActivity.newIntent(mContext)
             intent.putExtra(INTENT_EXTRA_WEBVIEW_TITLE, title)
             intent.putExtra(INTENT_EXTRA_WEBVIEW_URL, url)
             intent.putExtra(INTENT_EXTRA_WEBVIEW_FROM, from)
-            mContext.startActivity(intent)
+            mContext?.startActivity(intent)
         }
 
         fun launchMarket(context: Context) {

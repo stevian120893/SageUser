@@ -146,4 +146,6 @@
     <string name="order_upload_payment_receipt">Unggah foto pembayaran</string>
     <string name="order_review_description">Anda dapat memberikan penilaian terhadap layanan order ini</string>
     <string name="order_review_sent">Terima kasih untuk ulasan Anda!</string>
+    <string name="order_pay_transfer_failed_receipt_not_uploaded">Harap unggah bukti pembayaran Anda</string>
+    <string name="order_pay_transfer_success_upload">Terima kasih untuk pembayaran Anda, harap tunggu konfirmasinya ya!</string>
 </resources>

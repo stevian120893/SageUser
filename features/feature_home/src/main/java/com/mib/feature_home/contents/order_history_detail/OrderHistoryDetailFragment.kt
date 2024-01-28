@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mib.feature_home.R
@@ -73,7 +74,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         easyImage = createEasyImage(view.context)
         viewModel.loadingDialog.subscribe(this, false)
         lifecycleScope.launch {
-            initListener(view.context)
+            initListener()
             observeLiveData(view.context)
         }
     }
@@ -88,13 +89,13 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         _binding = null
     }
 
-    private fun initListener(context: Context) {
+    private fun initListener() {
         binding.ivBack.setOnClickListener {
             viewModel.onBackPressed(this@OrderHistoryDetailFragment)
         }
 
         binding.btPay.setOnClickListener {
-            viewModel.payOrder(context, paymentReceiptImage)
+            viewModel.payOrder(this@OrderHistoryDetailFragment, paymentReceiptImage)
         }
 
         binding.ivAddPhotoReceipt.setOnClickListener {
@@ -144,7 +145,9 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                                 binding.btPay.visibility = View.VISIBLE
                                 binding.btGiveRating.visibility = View.GONE
                             }
-                            PENDING_PAYMENT_APPROVAL -> {}
+                            PENDING_PAYMENT_APPROVAL -> {
+
+                            }
                             OrderDetail.ONGOING -> {
                                 binding.llAction.visibility = View.GONE
                                 binding.btPay.visibility = View.GONE
