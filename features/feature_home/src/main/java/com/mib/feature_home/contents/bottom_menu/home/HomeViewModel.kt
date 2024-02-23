@@ -20,12 +20,12 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.mib.feature_home.contents.bottom_menu.home.HomeFragment.Companion.CATEGORY_ALL
-import com.mib.feature_home.interfaces.ListenerCityList
-import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.domain.model.Banner
 import com.mib.feature_home.domain.model.Category
 import com.mib.feature_home.domain.model.City
 import com.mib.feature_home.domain.model.Location
+import com.mib.feature_home.interfaces.ListenerCityList
+import com.mib.feature_home.interfaces.ListenerTwoActions
 import com.mib.feature_home.usecase.auth.SaveFcmTokenUseCase
 import com.mib.feature_home.usecase.home.GetHomeContentUseCase
 import com.mib.feature_home.utils.AppUtils
@@ -39,13 +39,12 @@ import com.mib.lib_coroutines.MainDispatcher
 import com.mib.lib_navigation.HomeNavigation
 import com.mib.lib_navigation.LoadingDialogNavigation
 import com.mib.lib_pref.AccountPref
-import com.mib.lib_pref.SessionPref
 import com.mib.lib_util.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -206,7 +205,17 @@ class HomeViewModel @Inject constructor(
 
     private fun saveFcmToken(token: String) {
         viewModelScope.launch(ioDispatcher) {
-            saveFcmTokenUseCase.invoke(token)
+            val result = saveFcmTokenUseCase(token)
+
+            withContext(mainDispatcher) {
+                result.first?.let {
+                    sessionRepository.saveFcmToken(token)
+                }
+                result.second?.let {
+                    // failed to save fcm token to server
+                    toastEvent.postValue(it)
+                }
+            }
         }
     }
 

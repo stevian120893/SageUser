@@ -27,6 +27,7 @@ import com.mib.feature_home.utils.AppUtils
 import com.mib.lib.mvvm.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeViewModel>(0) {
 

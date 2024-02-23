@@ -94,6 +94,10 @@ class LoginFragment : BaseFragment<LoginViewModel>(0) {
             binding.etPassword.setSelection(binding.etPassword.length())
             isShown = !isShown
         }
+
+        binding.ivBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun observeLiveData() {
