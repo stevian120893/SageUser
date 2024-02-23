@@ -1,3 +1,36 @@
+# Android
+/.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+
+# Keystore files
+*.jks
+
+# External native build folder generated in Android Studio 2.2 and later
+/cmake-build
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Android Studio
+/.idea/caches
+/.idea/codeStyles
+/.idea/shelf
+/.idea/dictionaries
+/.idea/gradle.xml
+/.idea/assetWizardSettings.xml
+
 # Built application files
 *.apk
 *.ap_
@@ -98,9 +131,6 @@ lint/tmp/
 .project
 .classpath
 org.eclipse.buildship.core.prefs
-
-local.properties
-.DS_Store
 
 *.lock
 *.bin
