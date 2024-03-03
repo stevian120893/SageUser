@@ -159,20 +159,4 @@ class HomeRepositoryImpl(
             }
         }
     }
-
-    override suspend fun saveFcmToken(fcmToken: String): Pair<Void?, String?> {
-        val setFcmTokenRequest = SetFcmTokenRequest(
-            fcmToken = fcmToken
-        )
-        val result = service.setFcmToken(setFcmTokenRequest)
-        return when (result) {
-            is NetworkResponse.Success -> {
-                val item = result.value.data
-                item to null
-            }
-            else -> {
-                null to result.getErrorMessage()
-            }
-        }
-    }
 }

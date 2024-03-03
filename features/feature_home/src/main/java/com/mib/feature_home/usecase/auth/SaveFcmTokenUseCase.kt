@@ -1,11 +1,11 @@
 package com.mib.feature_home.usecase.auth
 
-import com.mib.feature_home.repository.HomeRepository
+import com.mib.feature_home.repository.HomeWithAuthRepository
 
-class SaveFcmTokenUseCase(private val homeRepository: HomeRepository) {
+class SaveFcmTokenUseCase(private val homeWithAuthRepository: HomeWithAuthRepository) {
     suspend operator fun invoke(
         fcmToken: String
     ): Pair<Void?, String?> {
-        return homeRepository.saveFcmToken(fcmToken)
+        return homeWithAuthRepository.saveFcmToken(fcmToken)
     }
 }

@@ -26,7 +26,24 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        showNotification(remoteMessage.data["title"], remoteMessage.data["description"])
+        if (remoteMessage.data.isNotEmpty()) {
+            Log.d(TAG, "Message data payload: ${remoteMessage.data}")
+
+            // Extract data fields and show notification
+            val title = remoteMessage.data["title"]
+            val description = remoteMessage.data["description"]
+            showNotification(title, description)
+        } else {
+            // Check if message contains notification payload
+            remoteMessage.notification?.let {
+                Log.d(TAG, "Message Notification Body: ${it.body}")
+
+                // Extract data fields from notification payload
+                val title = it.title
+                val description = it.body
+                showNotification(title, description)
+            }
+        }
     }
 
     private fun showNotification(title: String?, desc: String?) {

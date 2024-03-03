@@ -196,7 +196,6 @@ class HomeViewModel @Inject constructor(
 
             // Log and toast
             if(isLoggedIn) {
-                // TODO check if the token is the same with the saved local one, if not then call save token API
                 if(sessionRepository.getFcmToken() != token)
                     saveFcmToken(token)
             }

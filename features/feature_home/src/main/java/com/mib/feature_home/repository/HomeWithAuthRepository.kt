@@ -51,4 +51,8 @@ interface HomeWithAuthRepository {
         referenceId: String? = null,
         paymentReceiptImage: MultipartBody.Part?
     ): Pair<Void?, String?>
+
+    suspend fun saveFcmToken(
+        fcmToken: String
+    ): Pair<Void?, String?>
 }

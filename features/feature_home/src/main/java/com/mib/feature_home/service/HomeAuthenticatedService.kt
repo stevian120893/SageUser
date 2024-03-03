@@ -3,6 +3,7 @@ package com.mib.feature_home.service
 import com.mib.feature_home.dto.request.OrderRequest
 import com.mib.feature_home.dto.request.PayDanaRequest
 import com.mib.feature_home.dto.request.SendRatingRequest
+import com.mib.feature_home.dto.request.SetFcmTokenRequest
 import com.mib.feature_home.dto.response.OrderHistoryResponse
 import com.mib.feature_home.dto.response.OrderResponse
 import com.mib.feature_home.dto.response.PayDanaResponse
@@ -67,5 +68,10 @@ interface HomeAuthenticatedService {
     suspend fun payTransfer(
         @Part("code") code: RequestBody?,
         @Part paymentReceiptImage: MultipartBody.Part?
+    ): NetworkResponse<ApiResponse<Void>>
+
+    @POST("/site/set-fcm")
+    suspend fun setFcmToken(
+        @Body body: SetFcmTokenRequest
     ): NetworkResponse<ApiResponse<Void>>
 }

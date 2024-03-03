@@ -68,9 +68,4 @@ interface HomeService {
 
     @GET("/public/cities")
     suspend fun getLocations(): NetworkResponse<ApiResponse<List<CityResponse>>>
-
-    @POST("/site/set-fcm")
-    suspend fun setFcmToken(
-        @Body body: SetFcmTokenRequest
-    ): NetworkResponse<ApiResponse<Void>>
 }

@@ -108,7 +108,7 @@ object HomeUseCaseModule {
     }
 
     @Provides
-    fun provideSaveFcmTokenUseCase(repo: HomeRepository): SaveFcmTokenUseCase {
+    fun provideSaveFcmTokenUseCase(repo: HomeWithAuthRepository): SaveFcmTokenUseCase {
         return SaveFcmTokenUseCase(repo)
     }
 }

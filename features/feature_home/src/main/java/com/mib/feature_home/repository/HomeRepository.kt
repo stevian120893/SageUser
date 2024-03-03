@@ -34,7 +34,4 @@ interface HomeRepository {
     suspend fun sendCode(
         email: String
     ): Pair<Void?, String?>
-    suspend fun saveFcmToken(
-        fcmToken: String
-    ): Pair<Void?, String?>
 }
