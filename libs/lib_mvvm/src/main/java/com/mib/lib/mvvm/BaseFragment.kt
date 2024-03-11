@@ -113,14 +113,14 @@ abstract class BaseFragment<T : ViewModel>(@LayoutRes protected val contentLayou
 
     open fun initViewModel(firstInit: Boolean) {}
 
-    fun showToast(message: String) {
+    private fun showToast(message: String) {
         if (message.isBlank()) return
         context?.let {
             Toast.makeText(it, message, Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
+    private fun showUploadOptionDialog(fragment: Fragment, easyImage: EasyImage) {
         DialogUtils.showDialogWithTwoButtons(
             fragment.context,
             fragment.context?.getString(R.string.upload_image).orEmpty(),
