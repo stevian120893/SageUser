@@ -8,9 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.mib.feature_home.R
 import com.mib.feature_home.contents.order_history_detail.OrderHistoryDetailViewModel.Companion.EVENT_UPDATE_ORDER_DETAIL
 import com.mib.feature_home.databinding.FragmentOrderHistoryDetailBinding
@@ -81,7 +81,6 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
     override fun onResume() {
         super.onResume()
-        viewModel.getOrderDetail(findNavController())
     }
 
     override fun onDestroyView() {
@@ -133,9 +132,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
 
                         when(state.orderDetail?.status) {
                             OrderDetail.NEGOTIATING -> {
-                                binding.llAction.visibility = View.GONE
-                                binding.btPay.visibility = View.GONE
-                                binding.btGiveRating.visibility = View.GONE
+                                makeActionGone()
                             }
                             WAITING_FOR_PAYMENT -> {
                                 binding.llAction.visibility = View.VISIBLE
@@ -146,12 +143,16 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                                 binding.btGiveRating.visibility = View.GONE
                             }
                             PENDING_PAYMENT_APPROVAL -> {
-
+                                if(state.orderDetail?.usedPaymentMethod == KEY_PAYMENT_METHOD_TRANSFER) {
+                                    binding.llPaymentReceipt.visibility = View.VISIBLE
+                                    Glide.with(this@OrderHistoryDetailFragment)
+                                        .load(state.orderDetail?.paymentReceiptImage).into(binding.ivAddPhotoReceipt)
+                                    binding.ivAddPhotoReceipt.isEnabled = false
+                                }
+                                makeActionGone()
                             }
                             OrderDetail.ONGOING -> {
-                                binding.llAction.visibility = View.GONE
-                                binding.btPay.visibility = View.GONE
-                                binding.btGiveRating.visibility = View.GONE
+                                makeActionGone()
                             }
                             OrderDetail.CANCEL -> {
                                 // nothing
@@ -162,9 +163,7 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
                                 binding.btGiveRating.visibility = View.VISIBLE
                             }
                             else -> {
-                                binding.llAction.visibility = View.GONE
-                                binding.btPay.visibility = View.GONE
-                                binding.btGiveRating.visibility = View.GONE
+                                makeActionGone()
                             }
                         }
                     }
@@ -173,9 +172,14 @@ class OrderHistoryDetailFragment : BaseFragment<OrderHistoryDetailViewModel>(0) 
         }
     }
 
+    private fun makeActionGone() {
+        binding.llAction.visibility = View.GONE
+        binding.btPay.visibility = View.GONE
+        binding.btGiveRating.visibility = View.GONE
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         when(requestCode) {
             34964, 34962 -> {
                 easyImage.handleActivityResult(requestCode, resultCode, data, requireActivity(), object: DefaultCallback() {

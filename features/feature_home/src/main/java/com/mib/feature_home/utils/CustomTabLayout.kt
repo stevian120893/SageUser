@@ -46,9 +46,7 @@ class CustomTabLayout: FrameLayout {
     var tabMode = TAB_MODE_EQUAL
 
     interface OnTabSelectedListener {
-
         fun onTabSelected(position: Int)
-
     }
 
     constructor(context: Context): this(context, null)

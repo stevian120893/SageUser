@@ -66,6 +66,12 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
         }
     }
 
+    fun refreshFragment () {
+        if(viewModel.isLoggedIn()) viewModel.getOrderHistory(this@CompletedFragment,
+            InProgressFragment.DEFAULT_NEXT_CURSOR_REQUEST
+        )
+    }
+
     private fun observeLiveData() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             if(state.isLoadHistory) {
@@ -147,6 +153,7 @@ class CompletedFragment : BaseFragment<CompletedViewModel>(0) {
             itemList = itemsFiltered.toMutableList(),
             onItemClickListener = object : OrderHistoryAdapter.OnItemClickListener {
                 override fun onClick(item: OrderHistory) {
+                    viewModel.removeData()
                     viewModel.goToOrderDetailScreen(findNavController(), item.code)
                 }
             }

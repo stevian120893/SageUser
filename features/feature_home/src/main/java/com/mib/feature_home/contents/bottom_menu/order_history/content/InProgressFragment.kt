@@ -65,6 +65,10 @@ class InProgressFragment : BaseFragment<InProgressViewModel>(0) {
         }
     }
 
+    fun refreshFragment () {
+        if(viewModel.isLoggedIn()) viewModel.getOrderHistory(this@InProgressFragment, DEFAULT_NEXT_CURSOR_REQUEST)
+    }
+
     private fun observeLiveData() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) { state ->
             if(state.isLoadHistory) {

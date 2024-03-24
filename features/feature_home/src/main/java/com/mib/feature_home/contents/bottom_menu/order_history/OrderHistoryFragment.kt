@@ -1,6 +1,7 @@
 package com.mib.feature_home.contents.bottom_menu.order_history
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,6 +51,11 @@ class OrderHistoryFragment : Fragment() {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.vpHistory.currentItem = 0
+    }
+
     private fun initUi() {
         val adapter = TabAdapter(childFragmentManager, lifecycle)
         adapter.addFragment(InProgressFragment(), getString(R.string.active))
@@ -58,8 +64,22 @@ class OrderHistoryFragment : Fragment() {
         binding.vpHistory.isUserInputEnabled = false
 
         binding.vpHistory.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
+                when(position) {
+                    0 -> {
+                        val fragment = childFragmentManager.findFragmentByTag("f$position") as? InProgressFragment
+                        fragment?.refreshFragment()
+                    }
+                    else -> {
+                        val fragment = childFragmentManager.findFragmentByTag("f$position") as? CompletedFragment
+                        fragment?.refreshFragment()
+                    }
+                }
             }
         })
 

@@ -75,6 +75,12 @@ class CompletedViewModel @Inject constructor(
         homeNavigation.goToOrderDetailScreen(navController = navController, orderId = orderId)
     }
 
+    fun removeData() {
+        state = state.copy(
+            orderHistoryItemPaging = null
+        )
+    }
+
     data class ViewState(
         var isLoadHistory: Boolean = false,
         var shouldShowShimmer: Boolean = false,

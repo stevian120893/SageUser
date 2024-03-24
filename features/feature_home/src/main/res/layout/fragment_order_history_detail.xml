@@ -100,7 +100,9 @@
                     android:id="@+id/ivAddPhotoReceipt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
+                    android:maxHeight="300dp"
+                    android:adjustViewBounds="true"
                     android:src="@drawable/ic_add_photo"/>
             </LinearLayout>
 

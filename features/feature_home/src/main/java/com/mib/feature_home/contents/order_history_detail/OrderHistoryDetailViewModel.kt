@@ -1,6 +1,5 @@
 package com.mib.feature_home.contents.order_history_detail
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewModelScope
@@ -113,8 +112,8 @@ class OrderHistoryDetailViewModel @Inject constructor(
                         withContext(mainDispatcher) {
                             loadingDialog.dismiss()
                             result.first?.let {
-                                toastEvent.postValue(fragment.context?.getString(R.string.order_pay_transfer_success_upload))
                                 getOrderDetail(fragment.findNavController())
+                                toastEvent.postValue(fragment.context?.getString(R.string.order_pay_transfer_success_upload))
                             }
                             result.second?.let {
                                 toastEvent.postValue(it)
